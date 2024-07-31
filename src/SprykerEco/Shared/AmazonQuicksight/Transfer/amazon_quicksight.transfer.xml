@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<transfers xmlns="spryker:transfer-01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="spryker:transfer-01 http://static.spryker.com/transfer-01.xsd">
+
+    <transfer name="QuicksightUser" strict="true">
+        <property name="idQuicksightUser" type="int"/>
+        <property name="fkUser" type="int"/>
+        <property name="role" type="string"/>
+        <property name="arn" type="string"/>
+        <property name="principalId" type="string"/>
+        <property name="uuid" type="string"/>
+        <property name="createdAt" type="string"/>
+        <property name="updatedAt" type="string"/>
+    </transfer>
+
+</transfers>
