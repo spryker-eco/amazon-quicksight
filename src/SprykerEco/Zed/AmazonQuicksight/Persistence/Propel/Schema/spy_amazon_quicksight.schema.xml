@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<database xmlns="spryker:schema-01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="zed" xsi:schemaLocation="spryker:schema-01 https://static.spryker.com/schema-01.xsd" namespace="Orm\Zed\AmazonQuicksight\Persistence" package="src.Orm.Zed.AmazonQuicksight.Persistence">
+
+    <table name="spy_quicksight_user" idMethod="native">
+        <column name="id_quicksight_user" required="true" type="INTEGER" autoIncrement="true" primaryKey="true"/>
+        <column name="fk_user" required="true" type="INTEGER"/>
+        <column name="arn" required="true" type="VARCHAR" size="255"/>
+        <column name="principal_id" required="true" type="VARCHAR" size="255"/>
+        <column name="role" required="true" type="VARCHAR" size="255"/>
+        <column name="uuid" required="false" type="VARCHAR" size="255"/>
+
+        <index name="spy_quicksight_user-fk_user">
+            <index-column name="fk_user"/>
+        </index>
+
+        <foreign-key name="spy_quicksight_user-fk_user" foreignTable="spy_user" phpName="User" refPhpName="QuicksightUser">
+            <reference foreign="id_user" local="fk_user"/>
+        </foreign-key>
+
+        <id-method-parameter value="spy_quicksight_user_pk_seq"/>
+
+        <behavior name="uuid">
+            <parameter name="key_columns" value="id_quicksight_user.fk_user.arn.principal_id"/>
+        </behavior>
+        <behavior name="timestampable"/>
+    </table>
+
+</database>
