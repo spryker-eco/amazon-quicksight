@@ -14,14 +14,14 @@ interface AmazonQuicksightToAwsQuicksightClientInterface
     /**
      * @param array<string, mixed> $registerUserRequestData
      *
-     * @return \Aws\ResultInterface
+     * @return \Aws\ResultInterface<string, mixed>
      */
     public function registerUser(array $registerUserRequestData): ResultInterface;
 
     /**
      * @param array<string, mixed> $generateEmbedUrlRequestData
      *
-     * @return \Aws\ResultInterface
+     * @return \Aws\ResultInterface<string, mixed>
      */
     public function generateEmbedUrlForRegisteredUser(array $generateEmbedUrlRequestData): ResultInterface;
 }
