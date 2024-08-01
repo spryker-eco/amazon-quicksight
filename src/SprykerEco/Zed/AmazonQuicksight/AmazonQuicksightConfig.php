@@ -14,6 +14,11 @@ use SprykerEco\Shared\AmazonQuicksight\AmazonQuicksightConstants;
 class AmazonQuicksightConfig extends AbstractBundleConfig
 {
     /**
+     * @var string
+     */
+    protected const QUICKSIGHT_USER_REGISTER_NAMESPACE = 'default';
+
+    /**
      * Specification:
      * - Returns the ID for the AWS account that contains your Amazon QuickSight account.
      *
@@ -36,7 +41,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
      */
     public function getQuicksightUserRegisterNamespace(): string
     {
-        return 'default';
+        return static::QUICKSIGHT_USER_REGISTER_NAMESPACE;
     }
 
     /**
