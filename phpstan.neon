@@ -2,5 +2,5 @@ parameters:
     level: 8
     paths:
         - src/
-    ignoreErrors:
-        - '#Class Orm\\.+\\AmazonQuicksight\\.+ not found#'
+    excludePaths:
+        - src/SprykerEco/Zed/AmazonQuicksight/Persistence/Propel/Abstract*.php
