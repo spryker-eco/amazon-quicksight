@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2016-present Spryker Systems GmbH. All rights reserved.
+ * MIT License
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
@@ -20,7 +20,7 @@ interface AmazonQuicksightConstants
      *
      * @var string
      */
-    public const AWS_ACCOUNT_ID = 'QUICKSIGHT:AWS_ACCOUNT_ID';
+    public const AWS_ACCOUNT_ID = 'AMAZON_QUICKSIGHT:AWS_ACCOUNT_ID';
 
     /**
      * Specification:
@@ -30,7 +30,7 @@ interface AmazonQuicksightConstants
      *
      * @var string
      */
-    public const AWS_REGION = 'QUICKSIGHT:AWS_REGION';
+    public const AWS_REGION = 'AMAZON_QUICKSIGHT:AWS_REGION';
 
     /**
      * Specification:
@@ -40,17 +40,17 @@ interface AmazonQuicksightConstants
      *
      * @var string
      */
-    public const AWS_CREDENTIALS_KEY = 'QUICKSIGHT:AWS_CREDENTIALS_KEY';
+    public const AWS_CREDENTIALS_KEY = 'AMAZON_QUICKSIGHT:AWS_CREDENTIALS_KEY';
 
     /**
      * Specification:
-     * - AWS access key ID.
+     * - AWS access key secret.
      *
      * @api
      *
      * @var string
      */
-    public const AWS_CREDENTIALS_SECRET = 'QUICKSIGHT:AWS_CREDENTIALS_SECRET';
+    public const AWS_CREDENTIALS_SECRET = 'AMAZON_QUICKSIGHT:AWS_CREDENTIALS_SECRET';
 
     /**
      * Specification:
@@ -60,5 +60,5 @@ interface AmazonQuicksightConstants
      *
      * @var string
      */
-    public const AWS_CREDENTIALS_TOKEN = 'QUICKSIGHT:AWS_CREDENTIALS_TOKEN';
+    public const AWS_CREDENTIALS_TOKEN = 'AMAZON_QUICKSIGHT:AWS_CREDENTIALS_TOKEN';
 }
