@@ -19,6 +19,33 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     protected const QUICKSIGHT_USER_REGISTER_NAMESPACE = 'default';
 
     /**
+     * @var string
+     */
+    protected const QUICKSIGHT_USER_ROLE_READER = 'READER';
+
+    /**
+     * @var string
+     */
+    protected const QUICKSIGHT_USER_ROLE_AUTHOR = 'AUTHOR';
+
+    /**
+     * Specification:
+     * - Returns the list of available Quicksight user roles.
+     * - The list of available roles can be found here: {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_User.html#QS-Type-User-Role}
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getQuicksightUserRoles(): array
+    {
+        return [
+            static::QUICKSIGHT_USER_ROLE_READER,
+            static::QUICKSIGHT_USER_ROLE_AUTHOR,
+        ];
+    }
+
+    /**
      * Specification:
      * - Returns the ID for the AWS account that contains your Amazon QuickSight account.
      *
@@ -73,5 +100,18 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
         }
 
         return $quicksightClientConfiguration;
+    }
+
+    /**
+     * Specification:
+     * - Defines if updating quicksight user role via user form is enabled.
+     *
+     * @api
+     *
+     * @return bool
+     */
+    public function isQuicksightUserRoleUpdateEnabled(): bool
+    {
+        return false;
     }
 }
