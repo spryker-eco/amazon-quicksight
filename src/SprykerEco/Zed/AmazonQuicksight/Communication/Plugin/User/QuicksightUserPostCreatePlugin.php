@@ -5,14 +5,21 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerEco\Zed\AmazonQuicksight\Business;
+namespace SprykerEco\Zed\AmazonQuicksight\Communication\Plugin\User;
 
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
+use Spryker\Zed\Kernel\Communication\AbstractPlugin;
+use Spryker\Zed\UserExtension\Dependency\Plugin\UserPostCreatePluginInterface;
 
-interface AmazonQuicksightFacadeInterface
+/**
+ * @method \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig getConfig()
+ * @method \SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightFacadeInterface getFacade()
+ * @method \SprykerEco\Zed\AmazonQuicksight\Communication\AmazonQuicksightCommunicationFactory getFactory()
+ */
+class QuicksightUserPostCreatePlugin extends AbstractPlugin implements UserPostCreatePluginInterface
 {
     /**
-     * Specification:
+     * {@inheritDoc}
      * - Expects `UserCollectionResponseTransfer.users.quicksightUser.role` to be set.
      * - Sends request to AWS API to register Quicksight users. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_RegisterUser.html}.
      * - Adds errors to `UserCollectionResponseTransfer.errors` if Quicksight user registration failed.
@@ -25,7 +32,8 @@ interface AmazonQuicksightFacadeInterface
      *
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
-    public function createQuicksightUsersForUserTransfers(
-        UserCollectionResponseTransfer $userCollectionResponseTransfer
-    ): UserCollectionResponseTransfer;
+    public function postCreate(UserCollectionResponseTransfer $userCollectionResponseTransfer): UserCollectionResponseTransfer
+    {
+        return $this->getFacade()->createQuicksightUsersForUserTransfers($userCollectionResponseTransfer);
+    }
 }

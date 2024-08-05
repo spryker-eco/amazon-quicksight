@@ -8,6 +8,7 @@
 namespace SprykerEco\Zed\AmazonQuicksight\Persistence;
 
 use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
+use SprykerEco\Zed\AmazonQuicksight\Persistence\Propel\Mapper\QuicksightUserMapper;
 
 /**
  * @method \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig getConfig()
@@ -16,4 +17,11 @@ use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
  */
 class AmazonQuicksightPersistenceFactory extends AbstractPersistenceFactory
 {
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Persistence\Propel\Mapper\QuicksightUserMapper
+     */
+    public function createQuicksightUserMapper(): QuicksightUserMapper
+    {
+        return new QuicksightUserMapper();
+    }
 }

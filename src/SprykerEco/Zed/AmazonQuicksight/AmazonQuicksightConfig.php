@@ -16,7 +16,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     /**
      * @var string
      */
-    protected const QUICKSIGHT_USER_REGISTER_NAMESPACE = 'default';
+    protected const QUICKSIGHT_REGISTER_USER_NAMESPACE = 'default';
 
     /**
      * @var string
@@ -66,9 +66,9 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
      *
      * @return string
      */
-    public function getQuicksightUserRegisterNamespace(): string
+    public function getQuicksightRegisterUserNamespace(): string
     {
-        return static::QUICKSIGHT_USER_REGISTER_NAMESPACE;
+        return static::QUICKSIGHT_REGISTER_USER_NAMESPACE;
     }
 
     /**
