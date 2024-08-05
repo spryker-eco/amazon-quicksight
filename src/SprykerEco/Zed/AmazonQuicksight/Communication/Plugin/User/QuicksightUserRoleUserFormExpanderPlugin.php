@@ -16,7 +16,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  * @method \SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightFacadeInterface getFacade()
  * @method \SprykerEco\Zed\AmazonQuicksight\Communication\AmazonQuicksightCommunicationFactory getFactory()
  */
-class QuicksightUserFormExpanderPlugin extends AbstractPlugin implements UserFormExpanderPluginInterface
+class QuicksightUserRoleUserFormExpanderPlugin extends AbstractPlugin implements UserFormExpanderPluginInterface
 {
     /**
      * {@inheritDoc}

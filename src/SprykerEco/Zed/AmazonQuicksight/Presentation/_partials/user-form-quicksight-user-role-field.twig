@@ -4,6 +4,6 @@
     {{ form_errors(userForm.quicksight_user_role) }}
     {{ form_widget(userForm.quicksight_user_role) }}
     <div class="form-note">
-        {{ userForm.quicksight_user_role.vars.help | raw }}
+        {{ userForm.quicksight_user_role.vars.help | trans | raw }}
     </div>
 </div>

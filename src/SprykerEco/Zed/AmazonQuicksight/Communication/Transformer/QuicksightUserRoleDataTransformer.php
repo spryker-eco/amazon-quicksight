@@ -9,6 +9,9 @@ namespace SprykerEco\Zed\AmazonQuicksight\Communication\Transformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 
+/**
+ * @implements \Symfony\Component\Form\DataTransformerInterface<array<string, mixed>, array<string, mixed>>
+ */
 class QuicksightUserRoleDataTransformer implements DataTransformerInterface
 {
     /**

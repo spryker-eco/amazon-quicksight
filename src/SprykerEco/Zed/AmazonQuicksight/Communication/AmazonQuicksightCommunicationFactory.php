@@ -8,11 +8,11 @@
 namespace SprykerEco\Zed\AmazonQuicksight\Communication;
 
 use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
-use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
+use SprykerEco\Zed\AmazonQuicksight\Communication\DataProvider\QuicksightUserFormDataProvider;
+use SprykerEco\Zed\AmazonQuicksight\Communication\DataProvider\QuicksightUserFormDataProviderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Communication\Expander\QuicksightUserFormExpander;
 use SprykerEco\Zed\AmazonQuicksight\Communication\Expander\QuicksightUserFormExpanderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Communication\Transformer\QuicksightUserRoleDataTransformer;
-use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToTranslatorFacadeInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 
 /**
@@ -30,13 +30,13 @@ class AmazonQuicksightCommunicationFactory extends AbstractCommunicationFactory
     {
         return new QuicksightUserFormExpander(
             $this->createQuicksightUserRoleDataTransformer(),
+            $this->createQuicksightUserFormDataProvider(),
             $this->getConfig(),
-            $this->getTranslatorFacade(),
         );
     }
 
     /**
-     * @return \Symfony\Component\Form\DataTransformerInterface
+     * @return \Symfony\Component\Form\DataTransformerInterface<array<string, mixed>, array<string, mixed>>
      */
     public function createQuicksightUserRoleDataTransformer(): DataTransformerInterface
     {
@@ -44,10 +44,10 @@ class AmazonQuicksightCommunicationFactory extends AbstractCommunicationFactory
     }
 
     /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToTranslatorFacadeInterface
+     * @return \SprykerEco\Zed\AmazonQuicksight\Communication\DataProvider\QuicksightUserFormDataProviderInterface
      */
-    public function getTranslatorFacade(): AmazonQuicksightToTranslatorFacadeInterface
+    public function createQuicksightUserFormDataProvider(): QuicksightUserFormDataProviderInterface
     {
-        return $this->getProvidedDependency(AmazonQuicksightDependencyProvider::FACADE_TRANSLATOR);
+        return new QuicksightUserFormDataProvider($this->getConfig());
     }
 }

@@ -31,7 +31,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     /**
      * Specification:
      * - Returns the list of available Quicksight user roles.
-     * - The list of available roles can be found here: {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_User.html#QS-Type-User-Role}
+     * - The list of available roles can be found here: {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_User.html#QS-Type-User-Role}.
      *
      * @api
      *
