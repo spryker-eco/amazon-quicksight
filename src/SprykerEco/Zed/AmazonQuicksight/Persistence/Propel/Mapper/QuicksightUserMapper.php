@@ -9,18 +9,18 @@ namespace SprykerEco\Zed\AmazonQuicksight\Persistence\Propel\Mapper;
 
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUser;
-use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\Collection;
 
 class QuicksightUserMapper
 {
     /**
-     * @param \Propel\Runtime\Collection\ObjectCollection<\Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUser> $quicksightUserEntities
+     * @param \Propel\Runtime\Collection\Collection<\Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUser> $quicksightUserEntities
      * @param list<\Generated\Shared\Transfer\QuicksightUserTransfer> $quicksightUserTransfers
      *
      * @return list<\Generated\Shared\Transfer\QuicksightUserTransfer>
      */
     public function mapQuicksightUserEntitiesToQuicksightUserTransfers(
-        ObjectCollection $quicksightUserEntities,
+        Collection $quicksightUserEntities,
         array $quicksightUserTransfers
     ): array {
         foreach ($quicksightUserEntities as $quicksightUserEntity) {
