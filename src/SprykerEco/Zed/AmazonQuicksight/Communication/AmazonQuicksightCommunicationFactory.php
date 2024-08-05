@@ -8,6 +8,12 @@
 namespace SprykerEco\Zed\AmazonQuicksight\Communication;
 
 use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
+use SprykerEco\Zed\AmazonQuicksight\Communication\DataProvider\QuicksightUserFormDataProvider;
+use SprykerEco\Zed\AmazonQuicksight\Communication\DataProvider\QuicksightUserFormDataProviderInterface;
+use SprykerEco\Zed\AmazonQuicksight\Communication\Expander\QuicksightUserFormExpander;
+use SprykerEco\Zed\AmazonQuicksight\Communication\Expander\QuicksightUserFormExpanderInterface;
+use SprykerEco\Zed\AmazonQuicksight\Communication\Transformer\QuicksightUserRoleDataTransformer;
+use Symfony\Component\Form\DataTransformerInterface;
 
 /**
  * @method \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig getConfig()
@@ -17,4 +23,31 @@ use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
  */
 class AmazonQuicksightCommunicationFactory extends AbstractCommunicationFactory
 {
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Communication\Expander\QuicksightUserFormExpanderInterface
+     */
+    public function createQuicksightUserFormExpander(): QuicksightUserFormExpanderInterface
+    {
+        return new QuicksightUserFormExpander(
+            $this->createQuicksightUserRoleDataTransformer(),
+            $this->createQuicksightUserFormDataProvider(),
+            $this->getConfig(),
+        );
+    }
+
+    /**
+     * @return \Symfony\Component\Form\DataTransformerInterface<array<string, mixed>, array<string, mixed>>
+     */
+    public function createQuicksightUserRoleDataTransformer(): DataTransformerInterface
+    {
+        return new QuicksightUserRoleDataTransformer();
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Communication\DataProvider\QuicksightUserFormDataProviderInterface
+     */
+    public function createQuicksightUserFormDataProvider(): QuicksightUserFormDataProviderInterface
+    {
+        return new QuicksightUserFormDataProvider($this->getConfig());
+    }
 }
