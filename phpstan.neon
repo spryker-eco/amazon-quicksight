@@ -5,9 +5,11 @@ parameters:
     excludePaths:
         - src/SprykerEco/Zed/AmazonQuicksight/Persistence/Propel/Abstract*.php
     ignoreErrors:
+        - '#Call to method .+ on an unknown class .+Transfer#'
         - '#Parameter .+ of method .+ has invalid typehint type .+Transfer#'
         - '#Return typehint of method .+ has invalid type .+Transfer#'
         - '#Instantiated class .+Transfer not found#'
         - '#Return typehint of method .+ has invalid type Orm\\.+#'
         - '#Call to method .+\(\) on an unknown class Orm\\.+#'
         - '#Call to static method create\(\) on an unknown class .+Query.#'
+        - '#Parameter \$.+ of method .+ has invalid typehint type Orm\\.+#'
