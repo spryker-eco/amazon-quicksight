@@ -25,7 +25,7 @@ class QuicksightUserFormExpander implements QuicksightUserFormExpanderInterface
     /**
      * @var string
      */
-    protected const PLACEHOLDER_QUICKSIGHT_USER_ROLE = 'Choose user role';
+    protected const PLACEHOLDER_QUICKSIGHT_USER_ROLE = 'Select user role';
 
     /**
      * @var string
@@ -89,7 +89,6 @@ class QuicksightUserFormExpander implements QuicksightUserFormExpanderInterface
             $quicksightUserRole = $data[static::KEY_QUICKSIGHT_USER][static::KEY_ROLE] ?? null;
 
             $event->getForm()->add(static::FIELD_QUICKSIGHT_USER_ROLE, ChoiceType::class, [
-                'label' => static::PLACEHOLDER_QUICKSIGHT_USER_ROLE,
                 'required' => false,
                 'choices' => $this->getQuicksightUserRoleChoices(),
                 'placeholder' => static::PLACEHOLDER_QUICKSIGHT_USER_ROLE,
