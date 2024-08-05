@@ -8,6 +8,8 @@
 namespace SprykerEco\Zed\AmazonQuicksight\Business;
 
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
+use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpander;
+use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpanderInterface;
 
 /**
  * @method \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig getConfig()
@@ -16,4 +18,11 @@ use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
  */
 class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
 {
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpanderInterface
+     */
+    public function createUserExpander(): UserExpanderInterface
+    {
+        return new UserExpander($this->getRepository());
+    }
 }

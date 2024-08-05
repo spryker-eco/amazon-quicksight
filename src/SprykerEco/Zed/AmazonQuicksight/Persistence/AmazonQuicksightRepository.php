@@ -14,4 +14,24 @@ use Spryker\Zed\Kernel\Persistence\AbstractRepository;
  */
 class AmazonQuicksightRepository extends AbstractRepository implements AmazonQuicksightRepositoryInterface
 {
+    /**
+     * @param list<int> $userIds
+     *
+     * @return list<\Generated\Shared\Transfer\QuicksightUserTransfer>
+     */
+    public function getQuicksightUsersByUserIds(array $userIds): array
+    {
+        $quicksightUserEntities = $this->getFactory()
+            ->getQuicksightUserQuery()
+            ->filterByFkUser_In($userIds)
+            ->find();
+
+        if (!$quicksightUserEntities->count()) {
+            return [];
+        }
+
+        return $this->getFactory()
+            ->createQuicksightUserMapper()
+            ->mapQuicksightUserEntitiesToQuicksightUserTransfers($quicksightUserEntities, []);
+    }
 }

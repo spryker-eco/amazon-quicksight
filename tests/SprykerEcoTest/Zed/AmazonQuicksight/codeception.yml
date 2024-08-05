@@ -7,6 +7,18 @@ paths:
 coverage:
     enabled: true
     remote: false
-    whitelist:
-        include:
-            - '../../../../src/*'
+    whitelist: { include: ['../../../../src/*'] }
+
+suites:
+    Business:
+        path: .
+        actor: AmazonQuicksightTester
+        modules:
+            enabled:
+                - Asserts
+                - \SprykerTest\Zed\Testify\Helper\Business\BusinessHelper
+                - \SprykerTest\Shared\Testify\Helper\DataCleanupHelper
+                - \SprykerTest\Shared\Testify\Helper\Environment
+                - \SprykerTest\Shared\Testify\Helper\LocatorHelper
+                - \SprykerTest\Shared\Propel\Helper\TransactionHelper
+                - \SprykerTest\Shared\User\Helper\UserDataHelper

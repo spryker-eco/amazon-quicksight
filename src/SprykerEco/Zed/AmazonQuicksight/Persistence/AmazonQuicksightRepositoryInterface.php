@@ -9,4 +9,10 @@ namespace SprykerEco\Zed\AmazonQuicksight\Persistence;
 
 interface AmazonQuicksightRepositoryInterface
 {
+    /**
+     * @param list<int> $userIds
+     *
+     * @return list<\Generated\Shared\Transfer\QuicksightUserTransfer>
+     */
+    public function getQuicksightUsersByUserIds(array $userIds): array;
 }
