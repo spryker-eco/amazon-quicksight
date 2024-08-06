@@ -13,6 +13,8 @@ use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClient
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreator;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreatorInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpander;
+use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpanderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatter;
 use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatterInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapper;
@@ -26,6 +28,14 @@ use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQui
  */
 class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
 {
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpanderInterface
+     */
+    public function createUserExpander(): UserExpanderInterface
+    {
+        return new UserExpander($this->getRepository());
+    }
+
     /**
      * @return \SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreatorInterface
      */

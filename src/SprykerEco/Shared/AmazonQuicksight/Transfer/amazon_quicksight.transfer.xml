@@ -18,6 +18,7 @@
     </transfer>
 
     <transfer name="User">
+        <property name="idUser" type="int"/>
         <property name="quicksightUser" type="QuicksightUser" strict="true"/>
         <property name="idUser" type="int"/>
         <property name="username" type="string"/>
@@ -40,6 +41,10 @@
     <transfer name="Error">
         <property name="message" type="string"/>
         <property name="entityIdentifier" type="string"/>
+    </transfer>
+
+    <transfer name="UserCollection" strict="true">
+        <property name="users" type="User[]" singular="user"/>
     </transfer>
 
 </transfers>
