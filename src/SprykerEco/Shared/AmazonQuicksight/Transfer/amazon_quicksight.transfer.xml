@@ -13,7 +13,12 @@
     </transfer>
 
     <transfer name="User">
+        <property name="idUser" type="int"/>
         <property name="quicksightUser" type="QuicksightUser" strict="true"/>
+    </transfer>
+
+    <transfer name="UserCollection" strict="true">
+        <property name="users" type="User[]" singular="user"/>
     </transfer>
 
 </transfers>
