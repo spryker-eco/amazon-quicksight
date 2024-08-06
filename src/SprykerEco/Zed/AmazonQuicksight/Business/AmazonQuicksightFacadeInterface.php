@@ -13,8 +13,8 @@ interface AmazonQuicksightFacadeInterface
 {
     /**
      * Specification:
+     * - Requires `UserTransfer.idUser` for each user in `UserCollectionTransfer` to be set.
      * - Iterates over `UserCollectionTransfer.users`.
-     * - Requires `UserTransfer.idUser` for each user in collection to be set.
      * - Finds Quicksight users by `UserTransfer.idUser` in DB.
      * - Populates `UserTransfer.quicksightUser` in collection with found Quicksight users.
      *
@@ -24,7 +24,7 @@ interface AmazonQuicksightFacadeInterface
      *
      * @return \Generated\Shared\Transfer\UserCollectionTransfer
      */
-    public function expandUserCollectionWithQuicksightUser(
+    public function expandUserCollectionWithQuicksightUsers(
         UserCollectionTransfer $userCollectionTransfer
     ): UserCollectionTransfer;
 }

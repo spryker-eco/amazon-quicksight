@@ -33,7 +33,7 @@ class UserExpander implements UserExpanderInterface
     public function expandUserCollectionWithQuicksightUser(
         UserCollectionTransfer $userCollectionTransfer
     ): UserCollectionTransfer {
-        $userIds = $this->getUserIds($userCollectionTransfer);
+        $userIds = $this->extractUserIds($userCollectionTransfer);
         $quicksightUserTransfers = $this->amazonQuicksightRepository->getQuicksightUsersByUserIds($userIds);
 
         if (!$quicksightUserTransfers) {
@@ -57,7 +57,7 @@ class UserExpander implements UserExpanderInterface
      *
      * @return list<int>
      */
-    protected function getUserIds(UserCollectionTransfer $userCollectionTransfer): array
+    protected function extractUserIds(UserCollectionTransfer $userCollectionTransfer): array
     {
         $userIds = [];
         foreach ($userCollectionTransfer->getUsers() as $userTransfer) {

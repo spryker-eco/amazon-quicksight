@@ -16,7 +16,7 @@ use Spryker\Zed\UserExtension\Dependency\Plugin\UserExpanderPluginInterface;
  * @method \SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightFacadeInterface getFacade()
  * @method \SprykerEco\Zed\AmazonQuicksight\Communication\AmazonQuicksightCommunicationFactory getFactory()
  */
-class QuicksightUserUserExpanderPlugin extends AbstractPlugin implements UserExpanderPluginInterface
+class QuicksightUserExpanderPlugin extends AbstractPlugin implements UserExpanderPluginInterface
 {
     /**
      * {@inheritDoc}
@@ -33,6 +33,6 @@ class QuicksightUserUserExpanderPlugin extends AbstractPlugin implements UserExp
      */
     public function expand(UserCollectionTransfer $userCollectionTransfer): UserCollectionTransfer
     {
-        return $this->getFacade()->expandUserCollectionWithQuicksightUser($userCollectionTransfer);
+        return $this->getFacade()->expandUserCollectionWithQuicksightUsers($userCollectionTransfer);
     }
 }

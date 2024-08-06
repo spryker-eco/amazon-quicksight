@@ -9,7 +9,7 @@
         <property name="role" dataBuilderRule="lexify('??????????')"/>
         <property name="arn" dataBuilderRule="lexify('??????????')"/>
         <property name="principalId" dataBuilderRule="lexify('??????????')"/>
-        <property name="uuid" dataBuilderRule="unique()->uuid()"/>
+        <property name="uuid" dataBuilderRule="lexify('??????????')"/>
     </transfer>
 
 </transfers>

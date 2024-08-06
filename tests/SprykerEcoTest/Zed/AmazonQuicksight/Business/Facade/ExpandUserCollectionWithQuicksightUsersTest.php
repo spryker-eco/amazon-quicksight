@@ -11,7 +11,7 @@ use Codeception\Test\Unit;
 use Generated\Shared\Transfer\UserCollectionTransfer;
 use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightTester;
 
-class ExpandUserCollectionWithQuicksightUserTest extends Unit
+class ExpandUserCollectionWithQuicksightUsersTest extends Unit
 {
     /**
      * @var \SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightTester
@@ -30,7 +30,7 @@ class ExpandUserCollectionWithQuicksightUserTest extends Unit
         $userCollectionTransfer = (new UserCollectionTransfer())->addUser($userTransfer1);
 
         // Act
-        $this->tester->getFacade()->expandUserCollectionWithQuicksightUser($userCollectionTransfer);
+        $this->tester->getFacade()->expandUserCollectionWithQuicksightUsers($userCollectionTransfer);
 
         // Assert
         $this->assertNull($userCollectionTransfer->getUsers()->offsetGet(0)->getQuicksightUser());
@@ -51,7 +51,7 @@ class ExpandUserCollectionWithQuicksightUserTest extends Unit
             ->addUser($userTransfer2);
 
         // Act
-        $this->tester->getFacade()->expandUserCollectionWithQuicksightUser($userCollectionTransfer);
+        $this->tester->getFacade()->expandUserCollectionWithQuicksightUsers($userCollectionTransfer);
 
         // Assert
         $this->assertSame(
@@ -78,7 +78,7 @@ class ExpandUserCollectionWithQuicksightUserTest extends Unit
             ->addUser($userTransfer2);
 
         // Act
-        $this->tester->getFacade()->expandUserCollectionWithQuicksightUser($userCollectionTransfer);
+        $this->tester->getFacade()->expandUserCollectionWithQuicksightUsers($userCollectionTransfer);
 
         // Assert
         $this->assertNull($userCollectionTransfer->getUsers()->offsetGet(0)->getQuicksightUser());
