@@ -9,6 +9,7 @@ parameters:
         - '#Parameter .+ of method .+ has invalid typehint type .+Transfer#'
         - '#Return typehint of method .+ has invalid type .+Transfer#'
         - '#Instantiated class .+Transfer not found#'
+        - '#Instantiated class Orm\\Zed\\AmazonQuicksight\\Persistence\\.+ not found.+#'
         - '#Return typehint of method .+ has invalid type Orm\\.+#'
         - '#Call to method .+\(\) on an unknown class Orm\\.+#'
         - '#Call to static method create\(\) on an unknown class .+Query.#'
