@@ -14,7 +14,9 @@
     },
     "require-dev": {
         "phpstan/phpstan": "*",
-        "spryker/code-sniffer": "*"
+        "spryker/code-sniffer": "*",
+        "spryker/propel": "*",
+        "spryker/testify": "*"
     },
     "autoload": {
         "psr-4": {

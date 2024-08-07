@@ -7,6 +7,14 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Persistence;
 
+use Generated\Shared\Transfer\QuicksightUserTransfer;
+
 interface AmazonQuicksightEntityManagerInterface
 {
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightUserTransfer
+     */
+    public function createQuicksightUser(QuicksightUserTransfer $quicksightUserTransfer): QuicksightUserTransfer;
 }

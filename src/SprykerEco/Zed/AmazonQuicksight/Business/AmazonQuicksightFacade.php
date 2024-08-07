@@ -7,6 +7,7 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business;
 
+use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionTransfer;
 use Spryker\Zed\Kernel\Business\AbstractFacade;
 
@@ -30,5 +31,22 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
         UserCollectionTransfer $userCollectionTransfer
     ): UserCollectionTransfer {
         return $this->getFactory()->createUserExpander()->expandUserCollectionWithQuicksightUser($userCollectionTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\UserCollectionResponseTransfer $userCollectionResponseTransfer
+     *
+     * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
+     */
+    public function createQuicksightUsersForUserCollectionResponse(
+        UserCollectionResponseTransfer $userCollectionResponseTransfer
+    ): UserCollectionResponseTransfer {
+        return $this->getFactory()
+            ->createQuicksightUserCreator()
+            ->createQuicksightUsersForUserCollectionResponse($userCollectionResponseTransfer);
     }
 }

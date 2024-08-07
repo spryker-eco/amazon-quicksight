@@ -34,12 +34,25 @@ class QuicksightUserMapper
     }
 
     /**
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
+     * @param \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUser $quicksightUserEntity
+     *
+     * @return \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUser
+     */
+    public function mapQuicksightUserTransferToQuicksightUserEntity(
+        QuicksightUserTransfer $quicksightUserTransfer,
+        SpyQuicksightUser $quicksightUserEntity
+    ): SpyQuicksightUser {
+        return $quicksightUserEntity->fromArray($quicksightUserTransfer->modifiedToArray());
+    }
+
+    /**
      * @param \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUser $quicksightUserEntity
      * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
      *
      * @return \Generated\Shared\Transfer\QuicksightUserTransfer
      */
-    protected function mapQuicksightUserEntityToQuicksightUserTransfer(
+    public function mapQuicksightUserEntityToQuicksightUserTransfer(
         SpyQuicksightUser $quicksightUserEntity,
         QuicksightUserTransfer $quicksightUserTransfer
     ): QuicksightUserTransfer {
