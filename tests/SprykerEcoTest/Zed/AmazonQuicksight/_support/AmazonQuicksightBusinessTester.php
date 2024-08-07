@@ -11,6 +11,8 @@ use Codeception\Actor;
 use Generated\Shared\DataBuilder\QuicksightUserBuilder;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserTransfer;
+use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUser;
+use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUserQuery;
 
 /**
  * Inherited Methods
@@ -45,5 +47,25 @@ class AmazonQuicksightBusinessTester extends Actor
                 QuicksightUserTransfer::ROLE => $quicksightUserRole,
             ]))->build(),
         ]);
+    }
+
+    /**
+     * @param int $idUser
+     *
+     * @return \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUser|null
+     */
+    public function findQuicksightUserByIdUser(int $idUser): ?SpyQuicksightUser
+    {
+        return $this->getQuicksightUserQuery()
+            ->filterByFkUser($idUser)
+            ->findOne();
+    }
+
+    /**
+     * @return \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUserQuery
+     */
+    protected function getQuicksightUserQuery(): SpyQuicksightUserQuery
+    {
+        return SpyQuicksightUserQuery::create();
     }
 }

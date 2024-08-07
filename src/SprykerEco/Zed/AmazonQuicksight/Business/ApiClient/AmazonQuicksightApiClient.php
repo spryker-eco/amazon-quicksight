@@ -14,7 +14,7 @@ use Generated\Shared\Transfer\QuicksightUserRegisterResponseTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
 use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatterInterface;
-use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapperInterface;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
 
 class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
@@ -42,10 +42,13 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
     protected AmazonQuicksightConfig $amazonQuicksightConfig;
 
     /**
-     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapperInterface
      */
-    protected AmazonQuicksightMapperInterface $amazonQuicksightMapper;
+    protected QuicksightUserMapperInterface $quicksightUserMapper;
 
+    /**
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatterInterface
+     */
     protected AmazonQuicksightRequestDataFormatterInterface $amazonQuicksightRequestDataFormatter;
 
     /**
@@ -55,18 +58,18 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
 
     /**
      * @param \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig $amazonQuicksightConfig
-     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface $amazonQuicksightMapper
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapperInterface $quicksightUserMapper
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatterInterface $amazonQuicksightRequestDataFormatter
      * @param \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface $amazonQuicksightToAwsQuicksightClient
      */
     public function __construct(
         AmazonQuicksightConfig $amazonQuicksightConfig,
-        AmazonQuicksightMapperInterface $amazonQuicksightMapper,
+        QuicksightUserMapperInterface $quicksightUserMapper,
         AmazonQuicksightRequestDataFormatterInterface $amazonQuicksightRequestDataFormatter,
         AmazonQuicksightToAwsQuicksightClientInterface $amazonQuicksightToAwsQuicksightClient
     ) {
         $this->amazonQuicksightConfig = $amazonQuicksightConfig;
-        $this->amazonQuicksightMapper = $amazonQuicksightMapper;
+        $this->quicksightUserMapper = $quicksightUserMapper;
         $this->amazonQuicksightRequestDataFormatter = $amazonQuicksightRequestDataFormatter;
         $this->amazonQuicksightToAwsQuicksightClient = $amazonQuicksightToAwsQuicksightClient;
     }
@@ -79,7 +82,7 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
     public function registerUser(UserTransfer $userTransfer): QuicksightUserRegisterResponseTransfer
     {
         $quicksightUserRegisterRequestTransfer = $this->createQuicksightUserRegisterRequestTransfer();
-        $quicksightUserRegisterRequestTransfer = $this->amazonQuicksightMapper->mapUserTransferToQuicksightUserRegisterRequestTransfer(
+        $quicksightUserRegisterRequestTransfer = $this->quicksightUserMapper->mapUserTransferToQuicksightUserRegisterRequestTransfer(
             $userTransfer,
             $quicksightUserRegisterRequestTransfer,
         );
@@ -103,7 +106,7 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
             );
         }
 
-        $quicksightUserTransfer = $this->amazonQuicksightMapper->mapQuicksightUserDataToQuicksightUserTransfer(
+        $quicksightUserTransfer = $this->quicksightUserMapper->mapQuicksightUserDataToQuicksightUserTransfer(
             $response->get(static::RESPONSE_KEY_USER),
             $userTransfer->getQuicksightUserOrFail(),
         );

@@ -44,7 +44,7 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
      *
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
-    public function createQuicksightUsersForUserTransfers(
+    public function createQuicksightUsersForUserCollectionResponse(
         UserCollectionResponseTransfer $userCollectionResponseTransfer
     ): UserCollectionResponseTransfer {
         $userTransfersWithQuicksightUserRole = $this->extractUserTransfersWithQuicksightUserRole(
