@@ -17,7 +17,7 @@ use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
 use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester;
 
-class CreateQuicksightUsersForUserTransfersTest extends Unit
+class CreateQuicksightUsersForUserCollectionResponseTest extends Unit
 {
     /**
      * @uses \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::QUICKSIGHT_USER_ROLE_READER
