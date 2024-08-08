@@ -33,7 +33,7 @@
         {
             "type": "git",
             "url": "git@github.com:spryker/spryker.git"
-        },
+        }
     ],
     "minimum-stability": "dev",
     "prefer-stable": true,
