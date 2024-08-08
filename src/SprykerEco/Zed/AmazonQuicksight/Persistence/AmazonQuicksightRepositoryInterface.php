@@ -7,6 +7,9 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Persistence;
 
+use Generated\Shared\Transfer\QuicksightUserCollectionTransfer;
+use Generated\Shared\Transfer\QuicksightUserCriteriaTransfer;
+
 interface AmazonQuicksightRepositoryInterface
 {
     /**
@@ -15,4 +18,13 @@ interface AmazonQuicksightRepositoryInterface
      * @return list<\Generated\Shared\Transfer\QuicksightUserTransfer>
      */
     public function getQuicksightUsersByUserIds(array $userIds): array;
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightUserCriteriaTransfer $quicksightUserCriteriaTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightUserCollectionTransfer
+     */
+    public function getQuicksightUserCollection(
+        QuicksightUserCriteriaTransfer $quicksightUserCriteriaTransfer
+    ): QuicksightUserCollectionTransfer;
 }

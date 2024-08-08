@@ -17,4 +17,11 @@ interface AmazonQuicksightEntityManagerInterface
      * @return \Generated\Shared\Transfer\QuicksightUserTransfer
      */
     public function createQuicksightUser(QuicksightUserTransfer $quicksightUserTransfer): QuicksightUserTransfer;
+
+    /**
+     * @param list<int> $quicksightUserIds
+     *
+     * @return void
+     */
+    public function deleteQuicksightUsers(array $quicksightUserIds): void;
 }

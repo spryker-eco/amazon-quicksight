@@ -13,12 +13,16 @@ use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClient
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreator;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreatorInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Deleter\QuicksightUserDeleter;
+use SprykerEco\Zed\AmazonQuicksight\Business\Deleter\QuicksightUserDeleterInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpander;
 use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpanderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatter;
 use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatterInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapper;
 use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapperInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Reader\QuicksightUserReader;
+use SprykerEco\Zed\AmazonQuicksight\Business\Reader\QuicksightUserReaderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
 
 /**
@@ -44,6 +48,26 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
         return new QuicksightUserCreator(
             $this->createAmazonQuicksightApiClient(),
             $this->getEntityManager(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Reader\QuicksightUserReaderInterface
+     */
+    public function createQuicksightUserReader(): QuicksightUserReaderInterface
+    {
+        return new QuicksightUserReader($this->getRepository());
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Deleter\QuicksightUserDeleterInterface
+     */
+    public function createQuicksightUserDeleter(): QuicksightUserDeleterInterface
+    {
+        return new QuicksightUserDeleter(
+            $this->createQuicksightUserReader(),
+            $this->getEntityManager(),
+            $this->createAmazonQuicksightApiClient(),
         );
     }
 

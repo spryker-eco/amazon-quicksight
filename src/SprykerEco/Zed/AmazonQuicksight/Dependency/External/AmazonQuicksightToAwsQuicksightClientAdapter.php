@@ -44,4 +44,14 @@ class AmazonQuicksightToAwsQuicksightClientAdapter implements AmazonQuicksightTo
     {
         return $this->quicksightClient->generateEmbedUrlForRegisteredUser($generateEmbedUrlRequestData);
     }
+
+    /**
+     * @param array<string, mixed> $deleteUserRequestData
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function deleteUserByPrincipalId(array $deleteUserRequestData): ResultInterface
+    {
+        return $this->quicksightClient->deleteUserByPrincipalId($deleteUserRequestData);
+    }
 }

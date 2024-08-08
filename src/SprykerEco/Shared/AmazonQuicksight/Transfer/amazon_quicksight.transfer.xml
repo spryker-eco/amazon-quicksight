@@ -12,9 +12,29 @@
         <property name="updatedAt" type="string"/>
     </transfer>
 
+    <transfer name="QuicksightUserCriteria" strict="true">
+        <property name="quicksightUserConditions" type="QuicksightUserConditions"/>
+    </transfer>
+
+    <transfer name="QuicksightUserConditions" strict="true">
+        <property name="quicksightUserIds" type="int[]" singular="idQuicksightUser"/>
+    </transfer>
+
+    <transfer name="QuicksightUserCollectionDeleteCriteria" strict="true">
+        <property name="quicksightUserIds" type="int[]" singular="idQuicksightUser"/>
+    </transfer>
+
+    <transfer name="QuicksightUserCollection" strict="true">
+        <property name="quicksightUsers" type="QuicksightUser[]" singular="quicksightUser"/>
+    </transfer>
+
+    <transfer name="QuicksightUserCollectionResponse" strict="true">
+        <property name="quicksightUsers" type="QuicksightUser[]" singular="quicksightUser"/>
+        <property name="errors" type="Error[]" singular="error"/>
+    </transfer>
+
     <transfer name="UserCollectionResponse" strict="true">
         <property name="users" type="User[]" singular="user"/>
-        <property name="errors" type="Error[]" singular="error"/>
     </transfer>
 
     <transfer name="User">
@@ -29,6 +49,11 @@
         <property name="quicksightUser" type="QuicksightUser"/>
     </transfer>
 
+    <transfer name="QuicksightDeleteUserResponse" strict="true">
+        <property name="errors" type="Error[]" singular="error"/>
+        <property name="quicksightUser" type="QuicksightUser"/>
+    </transfer>
+
     <transfer name="QuicksightUserRegisterRequest" strict="true">
         <property name="awsAccountId" type="string"/>
         <property name="email" type="string" />
@@ -36,6 +61,12 @@
         <property name="namespace" type="string"/>
         <property name="userRole" type="string" />
         <property name="userName" type="string"/>
+    </transfer>
+
+    <transfer name="QuicksightDeleteUserRequest" strict="true">
+        <property name="awsAccountId" type="string"/>
+        <property name="principalId" type="string" />
+        <property name="namespace" type="string"/>
     </transfer>
 
     <transfer name="Error">

@@ -9,8 +9,11 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business\ApiClient;
 
 use Aws\QuickSight\Exception\QuickSightException;
 use Generated\Shared\Transfer\ErrorTransfer;
+use Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer;
+use Generated\Shared\Transfer\QuicksightDeleteUserResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserRegisterResponseTransfer;
+use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
 use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatterInterface;
@@ -115,12 +118,51 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
     }
 
     /**
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightDeleteUserResponseTransfer
+     */
+    public function deleteUser(QuicksightUserTransfer $quicksightUserTransfer): QuicksightDeleteUserResponseTransfer
+    {
+        $quicksightUserDeleteRequestTransfer = $this->createQuicksightUserDeleteRequestTransfer();
+        $quicksightUserDeleteRequestTransfer = $this->quicksightUserMapper->mapQuicksightUserTransferToQuicksightDeleteUserRequestTransfer(
+            $quicksightUserTransfer,
+            $quicksightUserDeleteRequestTransfer,
+        );
+
+        $requestData = $this->amazonQuicksightRequestDataFormatter->formatRequestData(
+            $quicksightUserDeleteRequestTransfer->toArray(true, true),
+        );
+
+        $quicksightDeleteUserResponseTransfer = new QuicksightDeleteUserResponseTransfer();
+        try {
+            $this->amazonQuicksightToAwsQuicksightClient->deleteUserByPrincipalId($requestData);
+        } catch (QuickSightException $quickSightException) {
+            return $quicksightDeleteUserResponseTransfer->addError(
+                (new ErrorTransfer())->setMessage($quickSightException->getAwsErrorMessage()),
+            );
+        }
+
+        return $quicksightDeleteUserResponseTransfer->setQuicksightUser($quicksightUserTransfer);
+    }
+
+    /**
      * @return \Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer
      */
     protected function createQuicksightUserRegisterRequestTransfer(): QuicksightUserRegisterRequestTransfer
     {
         return (new QuicksightUserRegisterRequestTransfer())
             ->setIdentityType(static::QUICKSIGHT_USER_IDENTITY_TYPE)
+            ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
+            ->setNamespace($this->amazonQuicksightConfig->getQuicksightRegisterUserNamespace());
+    }
+
+    /**
+     * @return \Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer
+     */
+    protected function createQuicksightUserDeleteRequestTransfer(): QuicksightDeleteUserRequestTransfer
+    {
+        return (new QuicksightDeleteUserRequestTransfer())
             ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
             ->setNamespace($this->amazonQuicksightConfig->getQuicksightRegisterUserNamespace());
     }

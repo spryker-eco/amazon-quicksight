@@ -33,4 +33,17 @@ class AmazonQuicksightEntityManager extends AbstractEntityManager implements Ama
             ->createQuicksightUserMapper()
             ->mapQuicksightUserEntityToQuicksightUserTransfer($quicksightUserEntity, $quicksightUserTransfer);
     }
+
+    /**
+     * @param list<int> $quicksightUserIds
+     *
+     * @return void
+     */
+    public function deleteQuicksightUsers(array $quicksightUserIds): void
+    {
+        $this->getFactory()
+            ->getQuicksightUserQuery()
+            ->filterByIdQuicksightUser_In($quicksightUserIds)
+            ->delete();
+    }
 }

@@ -7,6 +7,8 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business;
 
+use Generated\Shared\Transfer\QuicksightUserCollectionDeleteCriteriaTransfer;
+use Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionTransfer;
 use Spryker\Zed\Kernel\Business\AbstractFacade;
@@ -48,5 +50,22 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
         return $this->getFactory()
             ->createQuicksightUserCreator()
             ->createQuicksightUsersForUserCollectionResponse($userCollectionResponseTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\QuicksightUserCollectionDeleteCriteriaTransfer $quicksightUserCollectionDeleteCriteriaTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
+     */
+    public function deleteQuicksightUserCollection(
+        QuicksightUserCollectionDeleteCriteriaTransfer $quicksightUserCollectionDeleteCriteriaTransfer
+    ): QuicksightUserCollectionResponseTransfer {
+        return $this->getFactory()
+            ->createQuicksightUserDeleter()
+            ->deleteQuicksightUserCollection($quicksightUserCollectionDeleteCriteriaTransfer);
     }
 }
