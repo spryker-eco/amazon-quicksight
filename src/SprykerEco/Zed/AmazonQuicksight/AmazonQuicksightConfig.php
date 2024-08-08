@@ -29,6 +29,11 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     protected const QUICKSIGHT_USER_ROLE_AUTHOR = 'AUTHOR';
 
     /**
+     * @var string
+     */
+    protected const QUICKSIGHT_CONSOLE_INITIAL_PATH = '/start';
+
+    /**
      * Specification:
      * - Returns the list of available Quicksight user roles.
      * - The list of available roles can be found here: {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_User.html#QS-Type-User-Role}.
@@ -113,5 +118,18 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     public function isQuicksightUserRoleUpdateEnabled(): bool
     {
         return false;
+    }
+
+    /**
+     * Specification:
+     * - Provides the starting path for the QuickSight console.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getQuicksightConsoleInitialPath(): string
+    {
+        return static::QUICKSIGHT_CONSOLE_INITIAL_PATH;
     }
 }

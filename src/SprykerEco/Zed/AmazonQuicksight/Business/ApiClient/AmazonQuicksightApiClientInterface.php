@@ -7,6 +7,7 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business\ApiClient;
 
+use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUserRegisterResponseTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 
@@ -18,4 +19,11 @@ interface AmazonQuicksightApiClientInterface
      * @return \Generated\Shared\Transfer\QuicksightUserRegisterResponseTransfer
      */
     public function registerUser(UserTransfer $userTransfer): QuicksightUserRegisterResponseTransfer;
+
+    /**
+     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer
+     */
+    public function generateEmbedUrlForRegisteredUser(UserTransfer $userTransfer): QuicksightGenerateEmbedUrlResponseTransfer;
 }

@@ -9,14 +9,14 @@ namespace SprykerEcoTest\Zed\AmazonQuicksight\Business\Facade;
 
 use Codeception\Test\Unit;
 use Generated\Shared\Transfer\UserCollectionTransfer;
-use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightTester;
+use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester;
 
 class ExpandUserCollectionWithQuicksightUsersTest extends Unit
 {
     /**
-     * @var \SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightTester
+     * @var \SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester
      */
-    protected AmazonQuicksightTester $tester;
+    protected AmazonQuicksightBusinessTester $tester;
 
     /**
      * @return void
