@@ -9,6 +9,7 @@ namespace SprykerEcoTest\Zed\AmazonQuicksight;
 
 use Codeception\Actor;
 use Generated\Shared\DataBuilder\QuicksightUserBuilder;
+use Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUser;
@@ -65,6 +66,16 @@ class AmazonQuicksightBusinessTester extends Actor
                 QuicksightUserTransfer::ROLE => $quicksightUserRole,
             ]))->build(),
         ]);
+    }
+
+    /**
+     * @return \Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer
+     */
+    public function createValidAnalyticsEmbedUrlRequestTransfer(): AnalyticsEmbedUrlRequestTransfer
+    {
+        return (new AnalyticsEmbedUrlRequestTransfer())->setUser(
+            (new UserTransfer())->setQuicksightUser((new QuicksightUserTransfer())->setArn('arn')),
+        );
     }
 
     /**
