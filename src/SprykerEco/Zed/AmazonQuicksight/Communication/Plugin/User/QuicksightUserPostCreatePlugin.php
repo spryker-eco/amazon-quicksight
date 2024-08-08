@@ -21,6 +21,7 @@ class QuicksightUserPostCreatePlugin extends AbstractPlugin implements UserPostC
     /**
      * {@inheritDoc}
      * - Expects `UserCollectionResponseTransfer.users.quicksightUser.role` to be set.
+     * - Does nothing if `UserTransfer.quicksightUser.role` is not set.
      * - Sends request to AWS API to register Quicksight users. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_RegisterUser.html}.
      * - Adds errors to `UserCollectionResponseTransfer.errors` if Quicksight user registration failed.
      * - Persists successfully registered Quicksight users in the database.
@@ -34,6 +35,6 @@ class QuicksightUserPostCreatePlugin extends AbstractPlugin implements UserPostC
      */
     public function postCreate(UserCollectionResponseTransfer $userCollectionResponseTransfer): UserCollectionResponseTransfer
     {
-        return $this->getFacade()->createQuicksightUsersForUserTransfers($userCollectionResponseTransfer);
+        return $this->getFacade()->createQuicksightUsersForUserCollectionResponse($userCollectionResponseTransfer);
     }
 }

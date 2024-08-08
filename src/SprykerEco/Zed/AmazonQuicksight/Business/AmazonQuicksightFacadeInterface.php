@@ -34,6 +34,7 @@ interface AmazonQuicksightFacadeInterface
     /**
      * Specification:
      * - Expects `UserCollectionResponseTransfer.users.quicksightUser.role` to be set.
+     * - Does nothing if `UserTransfer.quicksightUser.role` is not set.
      * - Sends request to AWS API to register Quicksight users. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_RegisterUser.html}.
      * - Adds errors to `UserCollectionResponseTransfer.errors` if Quicksight user registration failed.
      * - Persists successfully registered Quicksight users in the database.
@@ -45,7 +46,7 @@ interface AmazonQuicksightFacadeInterface
      *
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
-    public function createQuicksightUsersForUserTransfers(
+    public function createQuicksightUsersForUserCollectionResponse(
         UserCollectionResponseTransfer $userCollectionResponseTransfer
     ): UserCollectionResponseTransfer;
 

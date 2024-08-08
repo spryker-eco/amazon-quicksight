@@ -19,8 +19,8 @@ use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpander;
 use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpanderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatter;
 use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatterInterface;
-use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapper;
-use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapper;
+use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapperInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightEmbedUrlMapper;
 use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightEmbedUrlMapperInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Provider\AnalyticsEmbedUrlProvider;
@@ -60,7 +60,7 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     {
         return new AmazonQuicksightApiClient(
             $this->getConfig(),
-            $this->createAmazonQuicksightMapper(),
+            $this->createQuicksightUserMapper(),
             $this->createQuicksightEmbedUrlMapper(),
             $this->createAmazonQuicksightRequestDataFormatter(),
             $this->getAwsQuicksightClient(),
@@ -68,11 +68,11 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapperInterface
      */
-    public function createAmazonQuicksightMapper(): AmazonQuicksightMapperInterface
+    public function createQuicksightUserMapper(): QuicksightUserMapperInterface
     {
-        return new AmazonQuicksightMapper();
+        return new QuicksightUserMapper();
     }
 
     /**

@@ -11,7 +11,7 @@ use Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 
-interface AmazonQuicksightMapperInterface
+class QuicksightUserMapper implements QuicksightUserMapperInterface
 {
     /**
      * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
@@ -22,7 +22,12 @@ interface AmazonQuicksightMapperInterface
     public function mapUserTransferToQuicksightUserRegisterRequestTransfer(
         UserTransfer $userTransfer,
         QuicksightUserRegisterRequestTransfer $quicksightUserRegisterRequestTransfer
-    ): QuicksightUserRegisterRequestTransfer;
+    ): QuicksightUserRegisterRequestTransfer {
+        return $quicksightUserRegisterRequestTransfer
+            ->setEmail($userTransfer->getUsernameOrFail())
+            ->setUserName($userTransfer->getUsernameOrFail())
+            ->setUserRole(strtoupper($userTransfer->getQuicksightUserOrFail()->getRoleOrFail()));
+    }
 
     /**
      * @param array<string, mixed> $quicksightUserData
@@ -33,5 +38,7 @@ interface AmazonQuicksightMapperInterface
     public function mapQuicksightUserDataToQuicksightUserTransfer(
         array $quicksightUserData,
         QuicksightUserTransfer $quicksightUserTransfer
-    ): QuicksightUserTransfer;
+    ): QuicksightUserTransfer {
+        return $quicksightUserTransfer->fromArray($quicksightUserData, true);
+    }
 }
