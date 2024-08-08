@@ -22,8 +22,8 @@ class QuicksightAnalyticsEmbedUrlProviderPlugin extends AbstractPlugin implement
     /**
      * {@inheritDoc}
      * - Requires `AnalyticsEmbedUrlRequestTransfer.user` and `AnalyticsEmbedUrlRequestTransfer.user.idUser` to be set.
-     * - Returns true if Quicksight user with the provided user ID exists in DB.
-     * - Returns false otherwise.
+     * - Returns `true` if Quicksight user with the provided user ID exists in DB.
+     * - Returns `false` otherwise.
      *
      * @api
      *
