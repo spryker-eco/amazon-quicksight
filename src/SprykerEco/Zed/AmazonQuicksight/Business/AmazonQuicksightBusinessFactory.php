@@ -20,6 +20,7 @@ use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDa
 use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapper;
 use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapperInterface;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface;
 
 /**
  * @method \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig getConfig()
@@ -42,8 +43,9 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     public function createQuicksightUserCreator(): QuicksightUserCreatorInterface
     {
         return new QuicksightUserCreator(
-            $this->createAmazonQuicksightApiClient(),
             $this->getEntityManager(),
+            $this->createAmazonQuicksightApiClient(),
+            $this->getMessengerFacade(),
         );
     }
 
@@ -82,5 +84,13 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     public function getAwsQuicksightClient(): AmazonQuicksightToAwsQuicksightClientInterface
     {
         return $this->getProvidedDependency(AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT);
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface
+     */
+    public function getMessengerFacade(): AmazonQuicksightToMessengerFacadeInterface
+    {
+        return $this->getProvidedDependency(AmazonQuicksightDependencyProvider::FACADE_MESSENGER);
     }
 }

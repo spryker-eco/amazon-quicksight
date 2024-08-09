@@ -8,9 +8,11 @@
 namespace SprykerEco\Zed\AmazonQuicksight\Business\Creator;
 
 use ArrayObject;
+use Generated\Shared\Transfer\MessageTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Spryker\Zed\Kernel\Persistence\EntityManager\TransactionTrait;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface;
 
 class QuicksightUserCreator implements QuicksightUserCreatorInterface
@@ -18,9 +20,9 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
     use TransactionTrait;
 
     /**
-     * @var \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface
+     * @var string
      */
-    protected AmazonQuicksightApiClientInterface $amazonQuicksightApiClient;
+    protected const ERROR_MESSAGE_USER_REGISTRATION_FAILED = 'The user role for Analytics could not be set. Please try again later.';
 
     /**
      * @var \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface
@@ -28,15 +30,28 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
     protected AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager;
 
     /**
-     * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface $amazonQuicksightApiClient
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface
+     */
+    protected AmazonQuicksightApiClientInterface $amazonQuicksightApiClient;
+
+    /**
+     * @var \SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface
+     */
+    protected AmazonQuicksightToMessengerFacadeInterface $messengerFacade;
+
+    /**
      * @param \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface $amazonQuicksightApiClient
+     * @param \SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface $messengerFacade
      */
     public function __construct(
+        AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager,
         AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
-        AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager
+        AmazonQuicksightToMessengerFacadeInterface $messengerFacade
     ) {
-        $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
         $this->amazonQuicksightEntityManager = $amazonQuicksightEntityManager;
+        $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
+        $this->messengerFacade = $messengerFacade;
     }
 
     /**
@@ -56,7 +71,7 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
         }
 
         return $this->getTransactionHandler()->handleTransaction(function () use ($userCollectionResponseTransfer, $userTransfersWithQuicksightUserRole) {
-            return $this->executeCreateQuicksightUsersForUsersTransaction(
+            return $this->executeCreateQuicksightUsersForUserCollectionResponseTransaction(
                 $userCollectionResponseTransfer,
                 $userTransfersWithQuicksightUserRole,
             );
@@ -69,7 +84,7 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
      *
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
-    protected function executeCreateQuicksightUsersForUsersTransaction(
+    protected function executeCreateQuicksightUsersForUserCollectionResponseTransaction(
         UserCollectionResponseTransfer $userCollectionResponseTransfer,
         array $userTransfers
     ): UserCollectionResponseTransfer {
@@ -80,6 +95,10 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
                     $userCollectionResponseTransfer,
                     $quicksightUserRegisterResponseTransfer->getErrors(),
                     $entityIdentifier,
+                );
+
+                $this->messengerFacade->addErrorMessage(
+                    (new MessageTransfer())->setValue(static::ERROR_MESSAGE_USER_REGISTRATION_FAILED),
                 );
 
                 continue;
