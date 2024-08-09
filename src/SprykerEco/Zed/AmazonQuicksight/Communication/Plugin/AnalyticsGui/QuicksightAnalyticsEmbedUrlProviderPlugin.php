@@ -52,6 +52,6 @@ class QuicksightAnalyticsEmbedUrlProviderPlugin extends AbstractPlugin implement
      */
     public function getEmbedUrl(AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer): AnalyticsEmbedUrlResponseTransfer
     {
-        return $this->getFacade()->getAnalyticsEmbedUrl($analyticsEmbedUrlRequestTransfer);
+        return $this->getFacade()->getQuicksightAnalyticsEmbedUrl($analyticsEmbedUrlRequestTransfer);
     }
 }

@@ -38,6 +38,6 @@ class QuicksightAnalyticsEmbedUrlProviderChecker implements QuicksightAnalyticsE
         $quicksightUserTransfers = $this->amazonQuicksightRepository
             ->getQuicksightUsersByUserIds([$userTransfer->getIdUserOrFail()]);
 
-        return count($quicksightUserTransfers) > 0;
+        return $quicksightUserTransfers !== [];
     }
 }

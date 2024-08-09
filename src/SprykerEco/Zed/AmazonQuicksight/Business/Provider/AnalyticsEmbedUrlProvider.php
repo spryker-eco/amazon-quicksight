@@ -10,7 +10,7 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business\Provider;
 use Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
-use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightEmbedUrlMapperInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface;
 
 class AnalyticsEmbedUrlProvider implements AnalyticsEmbedUrlProviderInterface
 {
@@ -20,20 +20,20 @@ class AnalyticsEmbedUrlProvider implements AnalyticsEmbedUrlProviderInterface
     protected AmazonQuicksightApiClientInterface $amazonQuicksightApiClient;
 
     /**
-     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightEmbedUrlMapperInterface
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface
      */
-    protected QuicksightEmbedUrlMapperInterface $quicksightEmbedUrlMapper;
+    protected AmazonQuicksightMapperInterface $amazonQuicksightMapper;
 
     /**
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface $amazonQuicksightApiClient
-     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightEmbedUrlMapperInterface $quicksightEmbedUrlMapper
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface $amazonQuicksightMapper
      */
     public function __construct(
         AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
-        QuicksightEmbedUrlMapperInterface $quicksightEmbedUrlMapper
+        AmazonQuicksightMapperInterface $amazonQuicksightMapper
     ) {
         $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
-        $this->quicksightEmbedUrlMapper = $quicksightEmbedUrlMapper;
+        $this->amazonQuicksightMapper = $amazonQuicksightMapper;
     }
 
     /**
@@ -48,7 +48,7 @@ class AnalyticsEmbedUrlProvider implements AnalyticsEmbedUrlProviderInterface
             $analyticsEmbedUrlRequestTransfer->getUserOrFail(),
         );
 
-        return $this->quicksightEmbedUrlMapper
+        return $this->amazonQuicksightMapper
             ->mapQuicksightGenerateEmbedUrlResponseTransferToAnalyticsEmbedUrlResponseTransfer(
                 $quicksightGenerateEmbedUrlResponseTransfer,
                 new AnalyticsEmbedUrlResponseTransfer(),

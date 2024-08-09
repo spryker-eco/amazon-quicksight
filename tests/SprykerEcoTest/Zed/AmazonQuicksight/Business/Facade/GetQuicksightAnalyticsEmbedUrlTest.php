@@ -7,19 +7,16 @@
 
 namespace SprykerEcoTest\Zed\AmazonQuicksight\Business\Facade;
 
-use Aws\QuickSight\Exception\QuickSightException;
 use Aws\Result;
-use Aws\ResultInterface;
 use Codeception\Test\Unit;
 use Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use Spryker\Shared\Kernel\Transfer\Exception\NullValueException;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
-use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
 use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester;
 
-class GetAnalyticsEmbedUrlTest extends Unit
+class GetQuicksightAnalyticsEmbedUrlTest extends Unit
 {
     /*
      * @var string
@@ -34,7 +31,7 @@ class GetAnalyticsEmbedUrlTest extends Unit
      *
      * @var string
      */
-    protected const ERROR_MESSAGE_EMBED_URL_GENERATION_FAILED = 'Failed to generate Embed URL user.';
+    protected const ERROR_MESSAGE_EMBED_URL_GENERATION_FAILED = 'Failed to generate embed URL.';
 
     /**
      * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClient::RESPONSE_KEY_EMBED_URL
@@ -62,18 +59,19 @@ class GetAnalyticsEmbedUrlTest extends Unit
         $analyticsEmbedUrlRequestTransfer = $this->tester->createValidAnalyticsEmbedUrlRequestTransfer();
         $this->tester->setDependency(
             AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
-            $this->getAwsQuicksightClientMockWithSuccessfulResponse(
+            $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(
                 new Result([
                     'RequestId' => time(),
                     static::RESPONSE_KEY_EMBED_URL => static::EMBED_URL_TEST,
                 ]),
+                'generateEmbedUrlForRegisteredUser',
             ),
         );
 
         // Act
         $analyticsEmbedUrlResponseTransfer = $this->tester
             ->getFacade()
-            ->getAnalyticsEmbedUrl($analyticsEmbedUrlRequestTransfer);
+            ->getQuicksightAnalyticsEmbedUrl($analyticsEmbedUrlRequestTransfer);
 
         // Assert
         $this->assertNotNull($analyticsEmbedUrlResponseTransfer->getEmbedUrl());
@@ -90,15 +88,16 @@ class GetAnalyticsEmbedUrlTest extends Unit
         $analyticsEmbedUrlRequestTransfer = $this->tester->createValidAnalyticsEmbedUrlRequestTransfer();
         $this->tester->setDependency(
             AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
-            $this->getAwsQuicksightClientMockWithErrorResponse(
-                $this->getQuicksightExceptionMock(static::ERROR_MESSAGE_GENERATE_EMBED_URL_FOR_REGISTERED_USER_FAILED),
+            $this->tester->getAwsQuicksightClientMockWithErrorResponse(
+                $this->tester->getQuicksightExceptionMock(static::ERROR_MESSAGE_GENERATE_EMBED_URL_FOR_REGISTERED_USER_FAILED),
+                'generateEmbedUrlForRegisteredUser',
             ),
         );
 
         // Act
         $analyticsEmbedUrlResponseTransfer = $this->tester
             ->getFacade()
-            ->getAnalyticsEmbedUrl($analyticsEmbedUrlRequestTransfer);
+            ->getQuicksightAnalyticsEmbedUrl($analyticsEmbedUrlRequestTransfer);
 
         // Assert
         $this->assertNull($analyticsEmbedUrlResponseTransfer->getEmbedUrl());
@@ -118,13 +117,13 @@ class GetAnalyticsEmbedUrlTest extends Unit
         $analyticsEmbedUrlRequestTransfer = $this->tester->createValidAnalyticsEmbedUrlRequestTransfer();
         $this->tester->setDependency(
             AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
-            $this->getAwsQuicksightClientMockWithSuccessfulResponse(new Result()),
+            $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(new Result(), 'generateEmbedUrlForRegisteredUser'),
         );
 
         // Act
         $analyticsEmbedUrlResponseTransfer = $this->tester
             ->getFacade()
-            ->getAnalyticsEmbedUrl($analyticsEmbedUrlRequestTransfer);
+            ->getQuicksightAnalyticsEmbedUrl($analyticsEmbedUrlRequestTransfer);
 
         // Assert
         $this->assertNull($analyticsEmbedUrlResponseTransfer->getEmbedUrl());
@@ -149,7 +148,7 @@ class GetAnalyticsEmbedUrlTest extends Unit
         $this->expectException(NullValueException::class);
 
         // Act
-        $this->tester->getFacade()->getAnalyticsEmbedUrl($analyticsEmbedUrlRequestTransfer);
+        $this->tester->getFacade()->getQuicksightAnalyticsEmbedUrl($analyticsEmbedUrlRequestTransfer);
     }
 
     /**
@@ -165,58 +164,5 @@ class GetAnalyticsEmbedUrlTest extends Unit
                     ->setUser((new UserTransfer())->setQuicksightUser(new QuicksightUserTransfer())),
             ],
         ];
-    }
-
-    /**
-     * @param \Aws\ResultInterface $result
-     *
-     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getAwsQuicksightClientMockWithSuccessfulResponse(
-        ResultInterface $result
-    ): AmazonQuicksightToAwsQuicksightClientInterface {
-        $awsQuicksightClientMock = $this->getAwsQuicksightClientMock();
-        $awsQuicksightClientMock->method('generateEmbedUrlForRegisteredUser')
-            ->willReturn($result);
-
-        return $awsQuicksightClientMock;
-    }
-
-    /**
-     * @param \Aws\QuickSight\Exception\QuickSightException $quickSightException
-     *
-     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getAwsQuicksightClientMockWithErrorResponse(
-        QuickSightException $quickSightException
-    ): AmazonQuicksightToAwsQuicksightClientInterface {
-        $awsQuicksightClientMock = $this->getAwsQuicksightClientMock();
-        $awsQuicksightClientMock->method('generateEmbedUrlForRegisteredUser')
-            ->willThrowException($quickSightException);
-
-        return $awsQuicksightClientMock;
-    }
-
-    /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getAwsQuicksightClientMock(): AmazonQuicksightToAwsQuicksightClientInterface
-    {
-        return $this->getMockBuilder(AmazonQuicksightToAwsQuicksightClientInterface::class)->getMock();
-    }
-
-    /**
-     * @param string $message
-     *
-     * @return \Aws\QuickSight\Exception\QuickSightException|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getQuicksightExceptionMock(string $message): QuickSightException
-    {
-        $quicksightExceptionMock = $this->getMockBuilder(QuickSightException::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quicksightExceptionMock->method('getAwsErrorMessage')->willReturn($message);
-
-        return $quicksightExceptionMock;
     }
 }

@@ -68,8 +68,9 @@ interface AmazonQuicksightFacadeInterface
 
     /**
      * Specification:
-     * - Requires `AnalyticsEmbedUrlRequestTransfer.user`, `AnalyticsEmbedUrlRequestTransfer.user.quicksightUser`
-     * and `AnalyticsEmbedUrlRequestTransfer.user.quicksightUser.arn` to be set.
+     * - Requires `AnalyticsEmbedUrlRequestTransfer.user` to be set.
+     * - Requires `AnalyticsEmbedUrlRequestTransfer.user.quicksightUser` to be set.
+     * - Requires `AnalyticsEmbedUrlRequestTransfer.user.quicksightUser.arn` to be set.
      * - Sends request to AWS API to generate an embed URL for a registered Quicksight user. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_GenerateEmbedUrlForRegisteredUser.html}.
      * - Adds errors to `AnalyticsEmbedUrlResponseTransfer.errors` if Quicksight embed URL generation failed.
      * - Populates `AnalyticsEmbedUrlResponseTransfer.embedUrl.url` with the generated embed URL.
@@ -80,7 +81,7 @@ interface AmazonQuicksightFacadeInterface
      *
      * @return \Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer
      */
-    public function getAnalyticsEmbedUrl(
+    public function getQuicksightAnalyticsEmbedUrl(
         AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
     ): AnalyticsEmbedUrlResponseTransfer;
 }

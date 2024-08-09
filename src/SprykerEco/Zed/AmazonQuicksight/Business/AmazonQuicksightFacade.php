@@ -78,7 +78,7 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
      *
      * @return \Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer
      */
-    public function getAnalyticsEmbedUrl(
+    public function getQuicksightAnalyticsEmbedUrl(
         AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
     ): AnalyticsEmbedUrlResponseTransfer {
         return $this->getFactory()

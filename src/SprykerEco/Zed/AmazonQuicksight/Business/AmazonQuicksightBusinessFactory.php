@@ -19,10 +19,8 @@ use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpander;
 use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpanderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatter;
 use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatterInterface;
-use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightEmbedUrlMapper;
-use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightEmbedUrlMapperInterface;
-use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapper;
-use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapperInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapper;
+use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Provider\AnalyticsEmbedUrlProvider;
 use SprykerEco\Zed\AmazonQuicksight\Business\Provider\AnalyticsEmbedUrlProviderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
@@ -60,27 +58,18 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     {
         return new AmazonQuicksightApiClient(
             $this->getConfig(),
-            $this->createQuicksightUserMapper(),
-            $this->createQuicksightEmbedUrlMapper(),
+            $this->createAmazonQuicksightMapper(),
             $this->createAmazonQuicksightRequestDataFormatter(),
             $this->getAwsQuicksightClient(),
         );
     }
 
     /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapperInterface
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface
      */
-    public function createQuicksightUserMapper(): QuicksightUserMapperInterface
+    public function createAmazonQuicksightMapper(): AmazonQuicksightMapperInterface
     {
-        return new QuicksightUserMapper();
-    }
-
-    /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightEmbedUrlMapperInterface
-     */
-    public function createQuicksightEmbedUrlMapper(): QuicksightEmbedUrlMapperInterface
-    {
-        return new QuicksightEmbedUrlMapper();
+        return new AmazonQuicksightMapper();
     }
 
     /**
@@ -106,7 +95,7 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     {
         return new AnalyticsEmbedUrlProvider(
             $this->createAmazonQuicksightApiClient(),
-            $this->createQuicksightEmbedUrlMapper(),
+            $this->createAmazonQuicksightMapper(),
         );
     }
 

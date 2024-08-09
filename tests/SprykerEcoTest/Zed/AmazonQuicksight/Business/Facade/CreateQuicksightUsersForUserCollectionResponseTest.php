@@ -7,14 +7,12 @@
 
 namespace SprykerEcoTest\Zed\AmazonQuicksight\Business\Facade;
 
-use Aws\QuickSight\Exception\QuickSightException;
 use Aws\Result;
 use Aws\ResultInterface;
 use Codeception\Test\Unit;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
-use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
 use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester;
 
 class CreateQuicksightUsersForUserCollectionResponseTest extends Unit
@@ -53,8 +51,9 @@ class CreateQuicksightUsersForUserCollectionResponseTest extends Unit
 
         $this->tester->setDependency(
             AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
-            $this->getAwsQuicksightClientMockWithSuccessfulResponse(
+            $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(
                 $this->createRegisterUserSuccessfulResponse($userTransfer),
+                'registerUser',
             ),
         );
 
@@ -89,8 +88,9 @@ class CreateQuicksightUsersForUserCollectionResponseTest extends Unit
 
         $this->tester->setDependency(
             AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
-            $this->getAwsQuicksightClientMockWithErrorResponse(
-                $this->getQuicksightExceptionMock(static::ERROR_MESSAGE_QUICKSIGHT_USER_REGISTER_FAILURE),
+            $this->tester->getAwsQuicksightClientMockWithErrorResponse(
+                $this->tester->getQuicksightExceptionMock(static::ERROR_MESSAGE_QUICKSIGHT_USER_REGISTER_FAILURE),
+                'registerUser',
             ),
         );
 
@@ -127,7 +127,7 @@ class CreateQuicksightUsersForUserCollectionResponseTest extends Unit
 
         $this->tester->setDependency(
             AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
-            $this->getAwsQuicksightClientMockWithSuccessfulResponse(new Result()),
+            $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(new Result(), 'registerUser'),
         );
 
         $userCollectionResponseTransfer = (new UserCollectionResponseTransfer())->addUser($userTransfer);
@@ -161,7 +161,7 @@ class CreateQuicksightUsersForUserCollectionResponseTest extends Unit
         // Arrange
         $userTransfer = $this->tester->haveUser();
 
-        $awsQuicksightClientMock = $this->getAwsQuicksightClientMock();
+        $awsQuicksightClientMock = $this->tester->getAwsQuicksightClientMock();
         $awsQuicksightClientMock->expects($this->never())->method('registerUser');
         $this->tester->setDependency(
             AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
@@ -198,56 +198,5 @@ class CreateQuicksightUsersForUserCollectionResponseTest extends Unit
         ];
 
         return new Result($responseData);
-    }
-
-    /**
-     * @param \Aws\ResultInterface $result
-     *
-     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getAwsQuicksightClientMockWithSuccessfulResponse(ResultInterface $result): AmazonQuicksightToAwsQuicksightClientInterface
-    {
-        $awsQuicksightClientMock = $this->getAwsQuicksightClientMock();
-        $awsQuicksightClientMock->method('registerUser')
-            ->willReturn($result);
-
-        return $awsQuicksightClientMock;
-    }
-
-    /**
-     * @param \Aws\QuickSight\Exception\QuickSightException $quickSightException
-     *
-     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getAwsQuicksightClientMockWithErrorResponse(QuickSightException $quickSightException): AmazonQuicksightToAwsQuicksightClientInterface
-    {
-        $awsQuicksightClientMock = $this->getAwsQuicksightClientMock();
-        $awsQuicksightClientMock->method('registerUser')
-            ->willThrowException($quickSightException);
-
-        return $awsQuicksightClientMock;
-    }
-
-    /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getAwsQuicksightClientMock(): AmazonQuicksightToAwsQuicksightClientInterface
-    {
-        return $this->getMockBuilder(AmazonQuicksightToAwsQuicksightClientInterface::class)->getMock();
-    }
-
-    /**
-     * @param string $message
-     *
-     * @return \Aws\QuickSight\Exception\QuickSightException|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getQuicksightExceptionMock(string $message): QuickSightException
-    {
-        $quicksightExceptionMock = $this->getMockBuilder(QuickSightException::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quicksightExceptionMock->method('getAwsErrorMessage')->willReturn($message);
-
-        return $quicksightExceptionMock;
     }
 }
