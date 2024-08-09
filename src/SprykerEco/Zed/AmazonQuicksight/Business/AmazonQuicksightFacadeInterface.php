@@ -7,6 +7,8 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business;
 
+use Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer;
+use Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionTransfer;
 
@@ -47,4 +49,39 @@ interface AmazonQuicksightFacadeInterface
     public function createQuicksightUsersForUserCollectionResponse(
         UserCollectionResponseTransfer $userCollectionResponseTransfer
     ): UserCollectionResponseTransfer;
+
+    /**
+     * Specification:
+     * - Requires `AnalyticsEmbedUrlRequestTransfer.user` and `AnalyticsEmbedUrlRequestTransfer.user.idUser` to be set.
+     * - Returns `true` if Quicksight user with the provided user ID exists in DB.
+     * - Returns `false` otherwise.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
+     *
+     * @return bool
+     */
+    public function isQuicksightAnalyticsEmbedUrlProviderApplicable(
+        AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
+    ): bool;
+
+    /**
+     * Specification:
+     * - Requires `AnalyticsEmbedUrlRequestTransfer.user` to be set.
+     * - Requires `AnalyticsEmbedUrlRequestTransfer.user.quicksightUser` to be set.
+     * - Requires `AnalyticsEmbedUrlRequestTransfer.user.quicksightUser.arn` to be set.
+     * - Sends request to AWS API to generate an embed URL for a registered Quicksight user. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_GenerateEmbedUrlForRegisteredUser.html}.
+     * - Adds errors to `AnalyticsEmbedUrlResponseTransfer.errors` if Quicksight embed URL generation failed.
+     * - Populates `AnalyticsEmbedUrlResponseTransfer.embedUrl.url` with the generated embed URL.
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer
+     */
+    public function getQuicksightAnalyticsEmbedUrl(
+        AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
+    ): AnalyticsEmbedUrlResponseTransfer;
 }

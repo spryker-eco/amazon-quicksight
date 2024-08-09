@@ -7,6 +7,8 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business;
 
+use Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer;
+use Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionTransfer;
 use Spryker\Zed\Kernel\Business\AbstractFacade;
@@ -48,5 +50,39 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
         return $this->getFactory()
             ->createQuicksightUserCreator()
             ->createQuicksightUsersForUserCollectionResponse($userCollectionResponseTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
+     *
+     * @return bool
+     */
+    public function isQuicksightAnalyticsEmbedUrlProviderApplicable(
+        AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
+    ): bool {
+        return $this->getFactory()
+            ->createQuicksightAnalyticsEmbedUrlProviderChecker()
+            ->isQuicksightAnalyticsEmbedUrlProviderApplicable($analyticsEmbedUrlRequestTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer
+     */
+    public function getQuicksightAnalyticsEmbedUrl(
+        AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
+    ): AnalyticsEmbedUrlResponseTransfer {
+        return $this->getFactory()
+            ->createAnalyticsEmbedUrlProvider()
+            ->getAnalyticsEmbedUrl($analyticsEmbedUrlRequestTransfer);
     }
 }

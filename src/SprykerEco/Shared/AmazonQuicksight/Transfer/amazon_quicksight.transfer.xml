@@ -51,4 +51,30 @@
         <property name="value" type="string"/>
     </transfer>
 
+    <transfer name="QuicksightGenerateEmbedUrlRequest" strict="true">
+        <property name="awsAccountId" type="string"/>
+        <property name="userArn" type="string"/>
+        <property name="experienceConfiguration" type="QuicksightExperienceConfiguration"/>
+    </transfer>
+
+    <transfer name="QuicksightExperienceConfiguration" strict="true">
+        <property name="quickSightConsole" type="QuicksightConsole"/>
+    </transfer>
+
+    <transfer name="QuicksightConsole" strict="true">
+        <property name="initialPath" type="string"/>
+    </transfer>
+
+    <transfer name="QuicksightGenerateEmbedUrlResponse" strict="true">
+        <property name="errors" type="Error[]" singular="error"/>
+        <property name="embedUrl" type="QuicksightEmbedUrl"/>
+    </transfer>
+
+    <transfer name="QuicksightEmbedUrl" strict="true">
+        <property name="url" type="string"/>
+    </transfer>
+
+    <transfer name="AnalyticsEmbedUrlResponse" strict="true">
+    </transfer>
+
 </transfers>

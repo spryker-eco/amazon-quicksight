@@ -9,12 +9,16 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business\ApiClient;
 
 use Aws\QuickSight\Exception\QuickSightException;
 use Generated\Shared\Transfer\ErrorTransfer;
+use Generated\Shared\Transfer\QuicksightConsoleTransfer;
+use Generated\Shared\Transfer\QuicksightExperienceConfigurationTransfer;
+use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
+use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserRegisterResponseTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
 use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatterInterface;
-use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapperInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
 
 class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
@@ -32,9 +36,21 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
     protected const RESPONSE_KEY_USER = 'User';
 
     /**
+     * @link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_GenerateEmbedUrlForRegisteredUser.html#API_GenerateEmbedUrlForRegisteredUser_ResponseSyntax
+     *
+     * @var string
+     */
+    protected const RESPONSE_KEY_EMBED_URL = 'EmbedUrl';
+
+    /**
      * @var string
      */
     protected const ERROR_MESSAGE_USER_REGISTRATION_FAILED = 'Failed to register Quicksight user.';
+
+    /**
+     * @var string
+     */
+    protected const ERROR_MESSAGE_EMBED_URL_GENERATION_FAILED = 'Failed to generate embed URL.';
 
     /**
      * @var \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig
@@ -42,9 +58,9 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
     protected AmazonQuicksightConfig $amazonQuicksightConfig;
 
     /**
-     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapperInterface
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface
      */
-    protected QuicksightUserMapperInterface $quicksightUserMapper;
+    protected AmazonQuicksightMapperInterface $amazonQuicksightMapper;
 
     /**
      * @var \SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatterInterface
@@ -58,18 +74,18 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
 
     /**
      * @param \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig $amazonQuicksightConfig
-     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapperInterface $quicksightUserMapper
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface $amazonQuicksightMapper
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatterInterface $amazonQuicksightRequestDataFormatter
      * @param \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface $amazonQuicksightToAwsQuicksightClient
      */
     public function __construct(
         AmazonQuicksightConfig $amazonQuicksightConfig,
-        QuicksightUserMapperInterface $quicksightUserMapper,
+        AmazonQuicksightMapperInterface $amazonQuicksightMapper,
         AmazonQuicksightRequestDataFormatterInterface $amazonQuicksightRequestDataFormatter,
         AmazonQuicksightToAwsQuicksightClientInterface $amazonQuicksightToAwsQuicksightClient
     ) {
         $this->amazonQuicksightConfig = $amazonQuicksightConfig;
-        $this->quicksightUserMapper = $quicksightUserMapper;
+        $this->amazonQuicksightMapper = $amazonQuicksightMapper;
         $this->amazonQuicksightRequestDataFormatter = $amazonQuicksightRequestDataFormatter;
         $this->amazonQuicksightToAwsQuicksightClient = $amazonQuicksightToAwsQuicksightClient;
     }
@@ -82,7 +98,7 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
     public function registerUser(UserTransfer $userTransfer): QuicksightUserRegisterResponseTransfer
     {
         $quicksightUserRegisterRequestTransfer = $this->createQuicksightUserRegisterRequestTransfer();
-        $quicksightUserRegisterRequestTransfer = $this->quicksightUserMapper->mapUserTransferToQuicksightUserRegisterRequestTransfer(
+        $quicksightUserRegisterRequestTransfer = $this->amazonQuicksightMapper->mapUserTransferToQuicksightUserRegisterRequestTransfer(
             $userTransfer,
             $quicksightUserRegisterRequestTransfer,
         );
@@ -106,12 +122,66 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
             );
         }
 
-        $quicksightUserTransfer = $this->quicksightUserMapper->mapQuicksightUserDataToQuicksightUserTransfer(
+        $quicksightUserTransfer = $this->amazonQuicksightMapper->mapQuicksightUserDataToQuicksightUserTransfer(
             $response->get(static::RESPONSE_KEY_USER),
             $userTransfer->getQuicksightUserOrFail(),
         );
 
         return $quicksightUserRegisterResponseTransfer->setQuicksightUser($quicksightUserTransfer);
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer
+     */
+    public function generateEmbedUrlForRegisteredUser(UserTransfer $userTransfer): QuicksightGenerateEmbedUrlResponseTransfer
+    {
+        $quicksightGenerateEmbedUrlRequestTransfer = $this->createQuicksightGenerateEmbedUrlRequestTransfer();
+        $quicksightGenerateEmbedUrlRequestTransfer = $this->amazonQuicksightMapper
+            ->mapUserTransferToQuicksightGenerateEmbedUrlRequestTransfer(
+                $userTransfer,
+                $quicksightGenerateEmbedUrlRequestTransfer,
+            );
+        $quicksightGenerateEmbedUrlResponseTransfer = new QuicksightGenerateEmbedUrlResponseTransfer();
+
+        $requestData = $this->amazonQuicksightRequestDataFormatter->formatRequestData(
+            $quicksightGenerateEmbedUrlRequestTransfer->modifiedToArray(true, true),
+        );
+
+        try {
+            $response = $this->amazonQuicksightToAwsQuicksightClient->generateEmbedUrlForRegisteredUser($requestData);
+        } catch (QuickSightException $quickSightException) {
+            return $quicksightGenerateEmbedUrlResponseTransfer->addError(
+                (new ErrorTransfer())->setMessage($quickSightException->getAwsErrorMessage()),
+            );
+        }
+
+        if (!$response->hasKey(static::RESPONSE_KEY_EMBED_URL)) {
+            return $quicksightGenerateEmbedUrlResponseTransfer->addError(
+                (new ErrorTransfer())->setMessage(static::ERROR_MESSAGE_EMBED_URL_GENERATION_FAILED),
+            );
+        }
+
+        return $this->amazonQuicksightMapper
+            ->mapGenerateEmbedUrlResponseDataToQuicksightGenerateEmbedUrlResponseTransfer(
+                $response->toArray(),
+                $quicksightGenerateEmbedUrlResponseTransfer,
+            );
+    }
+
+    /**
+     * @return \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer
+     */
+    protected function createQuicksightGenerateEmbedUrlRequestTransfer(): QuicksightGenerateEmbedUrlRequestTransfer
+    {
+        return (new QuicksightGenerateEmbedUrlRequestTransfer())
+            ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
+            ->setExperienceConfiguration((new QuicksightExperienceConfigurationTransfer())->setQuickSightConsole(
+                (new QuicksightConsoleTransfer())->setInitialPath(
+                    $this->amazonQuicksightConfig->getQuicksightConsoleInitialPath(),
+                ),
+            ));
     }
 
     /**
