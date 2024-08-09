@@ -47,6 +47,10 @@
         <property name="users" type="User[]" singular="user"/>
     </transfer>
 
+    <transfer name="Message">
+        <property name="value" type="string"/>
+    </transfer>
+
     <transfer name="QuicksightGenerateEmbedUrlRequest" strict="true">
         <property name="awsAccountId" type="string"/>
         <property name="userArn" type="string"/>

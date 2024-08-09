@@ -10,6 +10,7 @@ namespace SprykerEco\Zed\AmazonQuicksight;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientAdapter;
+use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeBridge;
 
 /**
  * @method \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig getConfig()
@@ -22,6 +23,11 @@ class AmazonQuicksightDependencyProvider extends AbstractBundleDependencyProvide
     public const AWS_QUICKSIGHT_CLIENT = 'AWS_QUICKSIGHT_CLIENT';
 
     /**
+     * @var string
+     */
+    public const FACADE_MESSENGER = 'FACADE_MESSENGER';
+
+    /**
      * @param \Spryker\Zed\Kernel\Container $container
      *
      * @return \Spryker\Zed\Kernel\Container
@@ -30,6 +36,7 @@ class AmazonQuicksightDependencyProvider extends AbstractBundleDependencyProvide
     {
         $container = parent::provideBusinessLayerDependencies($container);
         $container = $this->addAwsQuicksightClient($container);
+        $container = $this->addMessengerFacade($container);
 
         return $container;
     }
@@ -44,6 +51,22 @@ class AmazonQuicksightDependencyProvider extends AbstractBundleDependencyProvide
         $container->set(static::AWS_QUICKSIGHT_CLIENT, function () {
             return new AmazonQuicksightToAwsQuicksightClientAdapter(
                 $this->getConfig()->getQuicksightClientConfiguration(),
+            );
+        });
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addMessengerFacade(Container $container): Container
+    {
+        $container->set(static::FACADE_MESSENGER, function (Container $container) {
+            return new AmazonQuicksightToMessengerFacadeBridge(
+                $container->getLocator()->messenger()->facade(),
             );
         });
 

@@ -1,3 +1,4 @@
 "Author: A user who can create data sources, datasets, analyses, and dashboards. <br/>Reader: A user who has read-only access to dashboards.","Autor: Ein Benutzer, der Datenquellen, Datensätze, Analysen und Dashboards erstellen kann. <br/>Leser: Ein Benutzer, der nur Lesezugriff auf Dashboards hat."
 "Select user role","Benutzerrolle auswählen"
 Analytics,Analytics
+"The user role for Analytics could not be set. Please try again later.","Die Benutzerrolle für Analytics konnte nicht eingerichtet werden. Bitte versuchen Sie es später noch einmal."
