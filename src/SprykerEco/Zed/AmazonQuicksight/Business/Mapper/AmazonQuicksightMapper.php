@@ -7,7 +7,6 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business\Mapper;
 
-use Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightEmbedUrlTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
@@ -81,18 +80,5 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
         return $quicksightGenerateEmbedUrlResponseTransfer->setEmbedUrl(
             (new QuicksightEmbedUrlTransfer())->setUrl($generateEmbedUrlResponseData[static::RESPONSE_KEY_EMBED_URL]),
         );
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer
-     * @param \Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer $analyticsEmbedUrlResponseTransfer
-     *
-     * @return \Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer
-     */
-    public function mapQuicksightGenerateEmbedUrlResponseTransferToAnalyticsEmbedUrlResponseTransfer(
-        QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer,
-        AnalyticsEmbedUrlResponseTransfer $analyticsEmbedUrlResponseTransfer
-    ): AnalyticsEmbedUrlResponseTransfer {
-        return $analyticsEmbedUrlResponseTransfer->fromArray($quicksightGenerateEmbedUrlResponseTransfer->toArray(), true);
     }
 }

@@ -1,0 +1,10 @@
+{# @var quicksightGenerateEmbedUrlResponse \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer #}
+
+{% if quicksightGenerateEmbedUrlResponse.errors | length %}
+    {% for error in quicksightGenerateEmbedUrlResponse.errors %}
+        <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+    {% endfor %}
+{% endif %}
+{% if quicksightGenerateEmbedUrlResponse.embedUrl is not null and quicksightGenerateEmbedUrlResponse.embedUrl.url is not null %}
+    <iframe src="{{ quicksightGenerateEmbedUrlResponse.embedUrl.url }}" width="100%" height="800" frameborder="0"></iframe>
+{% endif %}

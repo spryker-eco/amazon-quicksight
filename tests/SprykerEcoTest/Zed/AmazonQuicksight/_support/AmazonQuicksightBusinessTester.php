@@ -12,12 +12,13 @@ use Aws\ResultInterface;
 use Codeception\Actor;
 use Codeception\Stub;
 use Generated\Shared\DataBuilder\QuicksightUserBuilder;
-use Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer;
+use Generated\Shared\Transfer\AnalyticsRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUser;
 use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUserQuery;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface;
 
 /**
  * Inherited Methods
@@ -73,16 +74,6 @@ class AmazonQuicksightBusinessTester extends Actor
     }
 
     /**
-     * @return \Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer
-     */
-    public function createValidAnalyticsEmbedUrlRequestTransfer(): AnalyticsEmbedUrlRequestTransfer
-    {
-        return (new AnalyticsEmbedUrlRequestTransfer())->setUser(
-            (new UserTransfer())->setQuicksightUser((new QuicksightUserTransfer())->setArn('arn')),
-        );
-    }
-
-    /**
      * @param \Aws\ResultInterface $result
      * @param string $methodName
      *
@@ -133,6 +124,30 @@ class AmazonQuicksightBusinessTester extends Actor
     public function getAwsQuicksightClientMock(): AmazonQuicksightToAwsQuicksightClientInterface
     {
         return Stub::makeEmpty(AmazonQuicksightToAwsQuicksightClientInterface::class);
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface|\PHPUnit\Framework\MockObject\Stub
+     */
+    public function getAmazonQuicksightRepositoryMock(): AmazonQuicksightRepositoryInterface
+    {
+        $amazonQuicksightRepositoryStub = Stub::makeEmpty(AmazonQuicksightRepositoryInterface::class);
+        $amazonQuicksightRepositoryStub->method('getQuicksightUsersByUserIds')
+            ->willReturn([new QuicksightUserTransfer()]);
+
+        return $amazonQuicksightRepositoryStub;
+    }
+
+    /**
+     * @return \Generated\Shared\Transfer\AnalyticsRequestTransfer
+     */
+    public function haveAnalyticsRequestWithUser(): AnalyticsRequestTransfer
+    {
+        $userTransfer = $this->haveUser();
+        $quicksightUserTransfer = $this->haveQuicksightUser($userTransfer);
+        $userTransfer->setQuicksightUser($quicksightUserTransfer);
+
+        return (new AnalyticsRequestTransfer())->setUser($userTransfer);
     }
 
     /**

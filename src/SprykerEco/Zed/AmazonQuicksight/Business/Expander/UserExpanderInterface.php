@@ -16,7 +16,7 @@ interface UserExpanderInterface
      *
      * @return \Generated\Shared\Transfer\UserCollectionTransfer
      */
-    public function expandUserCollectionWithQuicksightUser(
+    public function expandUserCollectionWithQuicksightUsers(
         UserCollectionTransfer $userCollectionTransfer
     ): UserCollectionTransfer;
 }
