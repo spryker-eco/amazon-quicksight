@@ -15,6 +15,7 @@ use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserRegisterResponseTransfer;
+use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
 use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatterInterface;
@@ -131,16 +132,17 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
      *
      * @return \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer
      */
-    public function generateEmbedUrlForRegisteredUser(UserTransfer $userTransfer): QuicksightGenerateEmbedUrlResponseTransfer
-    {
+    public function generateEmbedUrlForRegisteredUser(
+        QuicksightUserTransfer $quicksightUserTransfer
+    ): QuicksightGenerateEmbedUrlResponseTransfer {
         $quicksightGenerateEmbedUrlRequestTransfer = $this->createQuicksightGenerateEmbedUrlRequestTransfer();
         $quicksightGenerateEmbedUrlRequestTransfer = $this->amazonQuicksightMapper
-            ->mapUserTransferToQuicksightGenerateEmbedUrlRequestTransfer(
-                $userTransfer,
+            ->mapQuicksightUserTransferToQuicksightGenerateEmbedUrlRequestTransfer(
+                $quicksightUserTransfer,
                 $quicksightGenerateEmbedUrlRequestTransfer,
             );
         $quicksightGenerateEmbedUrlResponseTransfer = new QuicksightGenerateEmbedUrlResponseTransfer();

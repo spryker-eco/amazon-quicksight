@@ -38,13 +38,13 @@ interface AmazonQuicksightMapperInterface
     ): QuicksightUserTransfer;
 
     /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
      * @param \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer $quicksightGenerateEmbedUrlRequestTransfer
      *
      * @return \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer
      */
-    public function mapUserTransferToQuicksightGenerateEmbedUrlRequestTransfer(
-        UserTransfer $userTransfer,
+    public function mapQuicksightUserTransferToQuicksightGenerateEmbedUrlRequestTransfer(
+        QuicksightUserTransfer $quicksightUserTransfer,
         QuicksightGenerateEmbedUrlRequestTransfer $quicksightGenerateEmbedUrlRequestTransfer
     ): QuicksightGenerateEmbedUrlRequestTransfer;
 
