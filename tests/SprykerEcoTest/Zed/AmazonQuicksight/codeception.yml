@@ -32,3 +32,4 @@ suites:
                 - \SprykerTest\Zed\Testify\Helper\Business\DependencyProviderHelper
                 - \SprykerTest\Zed\Testify\Helper\Business\BusinessHelper
                 - \SprykerTest\Shared\User\Helper\UserDataHelper
+                - \SprykerTest\Service\Container\Helper\ContainerHelper

@@ -74,7 +74,16 @@
         <property name="url" type="string"/>
     </transfer>
 
-    <transfer name="AnalyticsEmbedUrlResponse" strict="true">
+    <transfer name="AnalyticsRequest" strict="true">
+        <property name="user" type="User"/>
+    </transfer>
+
+    <transfer name="AnalyticsCollection" strict="true">
+        <property name="analyticsList" type="Analytics[]" singular="analytics"/>
+    </transfer>
+
+    <transfer name="Analytics" strict="true">
+        <property name="content" type="string"/>
     </transfer>
 
 </transfers>

@@ -7,8 +7,8 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business;
 
-use Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer;
-use Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer;
+use Generated\Shared\Transfer\AnalyticsCollectionTransfer;
+use Generated\Shared\Transfer\AnalyticsRequestTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionTransfer;
 use Spryker\Zed\Kernel\Business\AbstractFacade;
@@ -32,7 +32,7 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
     public function expandUserCollectionWithQuicksightUsers(
         UserCollectionTransfer $userCollectionTransfer
     ): UserCollectionTransfer {
-        return $this->getFactory()->createUserExpander()->expandUserCollectionWithQuicksightUser($userCollectionTransfer);
+        return $this->getFactory()->createUserExpander()->expandUserCollectionWithQuicksightUsers($userCollectionTransfer);
     }
 
     /**
@@ -57,32 +57,17 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
+     * @param \Generated\Shared\Transfer\AnalyticsRequestTransfer $analyticsRequestTransfer
+     * @param \Generated\Shared\Transfer\AnalyticsCollectionTransfer $analyticsCollectionTransfer
      *
-     * @return bool
+     * @return \Generated\Shared\Transfer\AnalyticsCollectionTransfer
      */
-    public function isQuicksightAnalyticsEmbedUrlProviderApplicable(
-        AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
-    ): bool {
+    public function expandAnalyticsCollectionWithQuicksightAnalytics(
+        AnalyticsRequestTransfer $analyticsRequestTransfer,
+        AnalyticsCollectionTransfer $analyticsCollectionTransfer
+    ): AnalyticsCollectionTransfer {
         return $this->getFactory()
-            ->createQuicksightAnalyticsEmbedUrlProviderChecker()
-            ->isQuicksightAnalyticsEmbedUrlProviderApplicable($analyticsEmbedUrlRequestTransfer);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @api
-     *
-     * @param \Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer
-     */
-    public function getQuicksightAnalyticsEmbedUrl(
-        AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
-    ): AnalyticsEmbedUrlResponseTransfer {
-        return $this->getFactory()
-            ->createAnalyticsEmbedUrlProvider()
-            ->getAnalyticsEmbedUrl($analyticsEmbedUrlRequestTransfer);
+            ->createAnalyticsExpander()
+            ->expandAnalyticsCollectionWithQuicksightAnalytics($analyticsRequestTransfer, $analyticsCollectionTransfer);
     }
 }

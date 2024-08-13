@@ -11,20 +11,19 @@ use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClient;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
-use SprykerEco\Zed\AmazonQuicksight\Business\Checker\QuicksightAnalyticsEmbedUrlProviderChecker;
-use SprykerEco\Zed\AmazonQuicksight\Business\Checker\QuicksightAnalyticsEmbedUrlProviderCheckerInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreator;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreatorInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Expander\AnalyticsExpander;
+use SprykerEco\Zed\AmazonQuicksight\Business\Expander\AnalyticsExpanderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpander;
 use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpanderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatter;
 use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatterInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapper;
 use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface;
-use SprykerEco\Zed\AmazonQuicksight\Business\Provider\AnalyticsEmbedUrlProvider;
-use SprykerEco\Zed\AmazonQuicksight\Business\Provider\AnalyticsEmbedUrlProviderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface;
+use Twig\Environment;
 
 /**
  * @method \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig getConfig()
@@ -83,21 +82,14 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Checker\QuicksightAnalyticsEmbedUrlProviderCheckerInterface
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Expander\AnalyticsExpanderInterface
      */
-    public function createQuicksightAnalyticsEmbedUrlProviderChecker(): QuicksightAnalyticsEmbedUrlProviderCheckerInterface
+    public function createAnalyticsExpander(): AnalyticsExpanderInterface
     {
-        return new QuicksightAnalyticsEmbedUrlProviderChecker($this->getRepository());
-    }
-
-    /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Provider\AnalyticsEmbedUrlProviderInterface
-     */
-    public function createAnalyticsEmbedUrlProvider(): AnalyticsEmbedUrlProviderInterface
-    {
-        return new AnalyticsEmbedUrlProvider(
+        return new AnalyticsExpander(
+            $this->getRepository(),
             $this->createAmazonQuicksightApiClient(),
-            $this->createAmazonQuicksightMapper(),
+            $this->getTwigEnvironment(),
         );
     }
 
@@ -115,5 +107,13 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     public function getMessengerFacade(): AmazonQuicksightToMessengerFacadeInterface
     {
         return $this->getProvidedDependency(AmazonQuicksightDependencyProvider::FACADE_MESSENGER);
+    }
+
+    /**
+     * @return \Twig\Environment
+     */
+    public function getTwigEnvironment(): Environment
+    {
+        return $this->getProvidedDependency(AmazonQuicksightDependencyProvider::SERVICE_TWIG);
     }
 }

@@ -28,6 +28,13 @@ class AmazonQuicksightDependencyProvider extends AbstractBundleDependencyProvide
     public const FACADE_MESSENGER = 'FACADE_MESSENGER';
 
     /**
+     * @uses \Spryker\Zed\Twig\Communication\Plugin\Application\TwigApplicationPlugin::SERVICE_TWIG
+     *
+     * @var string
+     */
+    public const SERVICE_TWIG = 'twig';
+
+    /**
      * @param \Spryker\Zed\Kernel\Container $container
      *
      * @return \Spryker\Zed\Kernel\Container
@@ -37,6 +44,7 @@ class AmazonQuicksightDependencyProvider extends AbstractBundleDependencyProvide
         $container = parent::provideBusinessLayerDependencies($container);
         $container = $this->addAwsQuicksightClient($container);
         $container = $this->addMessengerFacade($container);
+        $container = $this->addTwigEnvironment($container);
 
         return $container;
     }
@@ -68,6 +76,20 @@ class AmazonQuicksightDependencyProvider extends AbstractBundleDependencyProvide
             return new AmazonQuicksightToMessengerFacadeBridge(
                 $container->getLocator()->messenger()->facade(),
             );
+        });
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addTwigEnvironment(Container $container): Container
+    {
+        $container->set(static::SERVICE_TWIG, function (Container $container) {
+            return $container->getApplicationService(static::SERVICE_TWIG);
         });
 
         return $container;

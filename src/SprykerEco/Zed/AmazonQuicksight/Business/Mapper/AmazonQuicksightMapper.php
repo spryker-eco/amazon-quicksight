@@ -7,7 +7,6 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business\Mapper;
 
-use Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightEmbedUrlTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
@@ -54,18 +53,16 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
      * @param \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer $quicksightGenerateEmbedUrlRequestTransfer
      *
      * @return \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer
      */
-    public function mapUserTransferToQuicksightGenerateEmbedUrlRequestTransfer(
-        UserTransfer $userTransfer,
+    public function mapQuicksightUserTransferToQuicksightGenerateEmbedUrlRequestTransfer(
+        QuicksightUserTransfer $quicksightUserTransfer,
         QuicksightGenerateEmbedUrlRequestTransfer $quicksightGenerateEmbedUrlRequestTransfer
     ): QuicksightGenerateEmbedUrlRequestTransfer {
-        return $quicksightGenerateEmbedUrlRequestTransfer->setUserArn(
-            $userTransfer->getQuicksightUserOrFail()->getArnOrFail(),
-        );
+        return $quicksightGenerateEmbedUrlRequestTransfer->setUserArn($quicksightUserTransfer->getArnOrFail());
     }
 
     /**
@@ -81,18 +78,5 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
         return $quicksightGenerateEmbedUrlResponseTransfer->setEmbedUrl(
             (new QuicksightEmbedUrlTransfer())->setUrl($generateEmbedUrlResponseData[static::RESPONSE_KEY_EMBED_URL]),
         );
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer
-     * @param \Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer $analyticsEmbedUrlResponseTransfer
-     *
-     * @return \Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer
-     */
-    public function mapQuicksightGenerateEmbedUrlResponseTransferToAnalyticsEmbedUrlResponseTransfer(
-        QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer,
-        AnalyticsEmbedUrlResponseTransfer $analyticsEmbedUrlResponseTransfer
-    ): AnalyticsEmbedUrlResponseTransfer {
-        return $analyticsEmbedUrlResponseTransfer->fromArray($quicksightGenerateEmbedUrlResponseTransfer->toArray(), true);
     }
 }
