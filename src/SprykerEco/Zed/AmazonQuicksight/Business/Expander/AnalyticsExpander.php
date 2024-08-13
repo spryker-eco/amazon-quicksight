@@ -10,6 +10,8 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business\Expander;
 use Generated\Shared\Transfer\AnalyticsCollectionTransfer;
 use Generated\Shared\Transfer\AnalyticsRequestTransfer;
 use Generated\Shared\Transfer\AnalyticsTransfer;
+use Generated\Shared\Transfer\QuicksightUserTransfer;
+use Generated\Shared\Transfer\UserTransfer;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface;
 use Twig\Environment;
@@ -62,10 +64,13 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
         AnalyticsCollectionTransfer $analyticsCollectionTransfer
     ): AnalyticsCollectionTransfer {
         $userTransfer = $analyticsRequestTransfer->getUserOrFail();
+        $quicksightUserTransfer = $this->findQuicksightUser($userTransfer);
 
-        if ($this->amazonQuicksightRepository->getQuicksightUsersByUserIds([$userTransfer->getIdUserOrFail()]) === []) {
+        if (!$quicksightUserTransfer) {
             return $analyticsCollectionTransfer;
         }
+
+        $userTransfer->setQuicksightUser($quicksightUserTransfer);
 
         $quicksightGenerateEmbedUrlResponseTransfer = $this->amazonQuicksightApiClient->generateEmbedUrlForRegisteredUser(
             $userTransfer,
@@ -81,5 +86,22 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
         $analyticsCollectionTransfer->addAnalytics((new AnalyticsTransfer())->setContent($content));
 
         return $analyticsCollectionTransfer;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightUserTransfer|null
+     */
+    protected function findQuicksightUser(UserTransfer $userTransfer): ?QuicksightUserTransfer
+    {
+        $quicksightUserTransfers = $this->amazonQuicksightRepository
+            ->getQuicksightUsersByUserIds([$userTransfer->getIdUserOrFail()]);
+
+        if (!isset($quicksightUserTransfers[0])) {
+            return null;
+        }
+
+        return $quicksightUserTransfers[0];
     }
 }

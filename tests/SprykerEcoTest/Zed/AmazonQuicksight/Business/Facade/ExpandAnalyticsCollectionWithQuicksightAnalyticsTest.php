@@ -204,13 +204,6 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
                 (new AnalyticsRequestTransfer())
                     ->setUser((new UserTransfer())->setQuicksightUser((new QuicksightUserTransfer())->setArn('arn'))),
             ],
-            'When Quicksight user is not set' => [
-                (new AnalyticsRequestTransfer())->setUser((new UserTransfer())->setIdUser(1)),
-            ],
-            'When Quicksight user ARN is not set' => [
-                (new AnalyticsRequestTransfer())
-                    ->setUser((new UserTransfer())->setQuicksightUser(new QuicksightUserTransfer())->setIdUser(1)),
-            ],
         ];
     }
 

@@ -53,8 +53,6 @@ interface AmazonQuicksightFacadeInterface
     /**
      * Specification:
      * - Requires `AnalyticsRequestTransfer.user` to be set.
-     * - Requires `AnalyticsRequestTransfer.user.quicksightUser` to be set.
-     * - Requires `AnalyticsRequestTransfer.user.quicksightUser.arn` to be set.
      * - Requires `AnalyticsRequestTransfer.user.idUser` to be set.
      * - If Quicksight user with the provided user ID does not exist in DB returns `AnalyticsCollectionTransfer` without any changes.
      * - Otherwise sends request to AWS API to generate an embed URL for a registered Quicksight user. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_GenerateEmbedUrlForRegisteredUser.html}.

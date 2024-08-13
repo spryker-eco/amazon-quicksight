@@ -133,7 +133,7 @@ class AmazonQuicksightBusinessTester extends Actor
     {
         $amazonQuicksightRepositoryStub = Stub::makeEmpty(AmazonQuicksightRepositoryInterface::class);
         $amazonQuicksightRepositoryStub->method('getQuicksightUsersByUserIds')
-            ->willReturn([new QuicksightUserTransfer()]);
+            ->willReturn([(new QuicksightUserTransfer())->setArn('arn')]);
 
         return $amazonQuicksightRepositoryStub;
     }
