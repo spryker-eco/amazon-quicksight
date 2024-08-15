@@ -7,6 +7,9 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Persistence;
 
+use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer;
+use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCriteriaTransfer;
+
 interface AmazonQuicksightRepositoryInterface
 {
     /**
@@ -15,4 +18,13 @@ interface AmazonQuicksightRepositoryInterface
      * @return list<\Generated\Shared\Transfer\QuicksightUserTransfer>
      */
     public function getQuicksightUsersByUserIds(array $userIds): array;
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobCriteriaTransfer $quicksightAssetBundleImportJobCriteriaTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer
+     */
+    public function getQuicksightAssetBundleImportJobCollection(
+        QuicksightAssetBundleImportJobCriteriaTransfer $quicksightAssetBundleImportJobCriteriaTransfer
+    ): QuicksightAssetBundleImportJobCollectionTransfer;
 }

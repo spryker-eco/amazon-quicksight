@@ -7,8 +7,10 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Persistence;
 
+use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJobQuery;
 use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUserQuery;
 use Spryker\Zed\Kernel\Persistence\AbstractPersistenceFactory;
+use SprykerEco\Zed\AmazonQuicksight\Persistence\Propel\Mapper\QuicksightAssetBundleImportJobMapper;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\Propel\Mapper\QuicksightUserMapper;
 
 /**
@@ -27,10 +29,26 @@ class AmazonQuicksightPersistenceFactory extends AbstractPersistenceFactory
     }
 
     /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Persistence\Propel\Mapper\QuicksightAssetBundleImportJobMapper
+     */
+    public function createQuicksightAssetBundleImportJobMapper(): QuicksightAssetBundleImportJobMapper
+    {
+        return new QuicksightAssetBundleImportJobMapper();
+    }
+
+    /**
      * @return \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUserQuery
      */
     public function getQuicksightUserQuery(): SpyQuicksightUserQuery
     {
         return SpyQuicksightUserQuery::create();
+    }
+
+    /**
+     * @return \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJobQuery
+     */
+    public function getQuicksightAssetBundleImportJobQuery(): SpyQuicksightAssetBundleImportJobQuery
+    {
+        return SpyQuicksightAssetBundleImportJobQuery::create();
     }
 }

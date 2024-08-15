@@ -7,6 +7,9 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Persistence;
 
+use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer;
+use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCriteriaTransfer;
+use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJobQuery;
 use Spryker\Zed\Kernel\Persistence\AbstractRepository;
 
 /**
@@ -33,5 +36,53 @@ class AmazonQuicksightRepository extends AbstractRepository implements AmazonQui
         return $this->getFactory()
             ->createQuicksightUserMapper()
             ->mapQuicksightUserEntitiesToQuicksightUserTransfers($quicksightUserEntities, []);
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobCriteriaTransfer $quicksightAssetBundleImportJobCriteriaTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer
+     */
+    public function getQuicksightAssetBundleImportJobCollection(
+        QuicksightAssetBundleImportJobCriteriaTransfer $quicksightAssetBundleImportJobCriteriaTransfer
+    ): QuicksightAssetBundleImportJobCollectionTransfer {
+        $quicksightAssetBundleImportJobQuery = $this->getFactory()->getQuicksightAssetBundleImportJobQuery();
+        $quicksightAssetBundleImportJobQuery = $this->applyQuicksightAssetBundleImportJobFilters(
+            $quicksightAssetBundleImportJobQuery,
+            $quicksightAssetBundleImportJobCriteriaTransfer,
+        );
+
+        return $this->getFactory()
+            ->createQuicksightAssetBundleImportJobMapper()
+            ->mapQuicksightAssetBundleImportJobEntitiesToQuicksightAssetBundleImportJobCollectionTransfer(
+                $quicksightAssetBundleImportJobQuery->find(),
+                new QuicksightAssetBundleImportJobCollectionTransfer(),
+            );
+    }
+
+    /**
+     * @param \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJobQuery $quicksightAssetBundleImportJobQuery
+     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobCriteriaTransfer $quicksightAssetBundleImportJobCriteriaTransfer
+     *
+     * @return \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJobQuery
+     */
+    protected function applyQuicksightAssetBundleImportJobFilters(
+        SpyQuicksightAssetBundleImportJobQuery $quicksightAssetBundleImportJobQuery,
+        QuicksightAssetBundleImportJobCriteriaTransfer $quicksightAssetBundleImportJobCriteriaTransfer
+    ): SpyQuicksightAssetBundleImportJobQuery {
+        $quicksightAssetBundleImportJobConditionsTransfer = $quicksightAssetBundleImportJobCriteriaTransfer
+            ->getQuicksightAssetBundleImportJobConditions();
+
+        if (!$quicksightAssetBundleImportJobConditionsTransfer) {
+            return $quicksightAssetBundleImportJobQuery;
+        }
+
+        if ($quicksightAssetBundleImportJobConditionsTransfer->getJobIds()) {
+            $quicksightAssetBundleImportJobQuery->filterByIdQuicksightAssetBundleImportJob_In(
+                $quicksightAssetBundleImportJobConditionsTransfer->getJobIds(),
+            );
+        }
+
+        return $quicksightAssetBundleImportJobQuery;
     }
 }

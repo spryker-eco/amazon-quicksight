@@ -9,6 +9,8 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business;
 
 use Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer;
+use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer;
+use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCriteriaTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionTransfer;
 use Spryker\Zed\Kernel\Business\AbstractFacade;
@@ -84,5 +86,21 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
         return $this->getFactory()
             ->createAnalyticsEmbedUrlProvider()
             ->getAnalyticsEmbedUrl($analyticsEmbedUrlRequestTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobCriteriaTransfer $quicksightAssetBundleImportJobCriteriaTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer
+     */
+    public function getQuicksightAssetBundleImportJobCollection(
+        QuicksightAssetBundleImportJobCriteriaTransfer $quicksightAssetBundleImportJobCriteriaTransfer
+    ): QuicksightAssetBundleImportJobCollectionTransfer {
+        return $this->getRepository()
+            ->getQuicksightAssetBundleImportJobCollection($quicksightAssetBundleImportJobCriteriaTransfer);
     }
 }

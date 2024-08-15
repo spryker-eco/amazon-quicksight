@@ -25,4 +25,19 @@
         <behavior name="timestampable"/>
     </table>
 
+    <table name="spy_quicksight_asset_bundle_import_job" idMethod="native">
+        <column name="id_quicksight_asset_bundle_import_job" required="true" type="INTEGER" autoIncrement="true" primaryKey="true"/>
+        <column name="job_id" required="true" type="VARCHAR" size="255"/>
+        <column name="status" required="true" type="VARCHAR" size="255"/>
+        <column name="errors" required="false" type="LONGVARCHAR"/>
+        <column name="uuid" required="false" type="VARCHAR" size="255"/>
+
+        <id-method-parameter value="spy_quicksight_asset_bundle_import_job_pk_seq"/>
+
+        <behavior name="uuid">
+            <parameter name="key_columns" value="id_quicksight_asset_bundle_import_job"/>
+        </behavior>
+        <behavior name="timestampable"/>
+    </table>
+
 </database>

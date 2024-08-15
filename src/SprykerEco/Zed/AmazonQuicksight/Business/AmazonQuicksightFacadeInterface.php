@@ -9,6 +9,8 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business;
 
 use Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer;
+use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer;
+use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCriteriaTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionTransfer;
 
@@ -84,4 +86,18 @@ interface AmazonQuicksightFacadeInterface
     public function getQuicksightAnalyticsEmbedUrl(
         AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
     ): AnalyticsEmbedUrlResponseTransfer;
+
+    /**
+     * Specification:
+     * - TODO
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobCriteriaTransfer $quicksightAssetBundleImportJobCriteriaTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer
+     */
+    public function getQuicksightAssetBundleImportJobCollection(
+        QuicksightAssetBundleImportJobCriteriaTransfer $quicksightAssetBundleImportJobCriteriaTransfer
+    ): QuicksightAssetBundleImportJobCollectionTransfer;
 }
