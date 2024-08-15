@@ -7,8 +7,8 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business;
 
-use Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer;
-use Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer;
+use Generated\Shared\Transfer\AnalyticsCollectionTransfer;
+use Generated\Shared\Transfer\AnalyticsRequestTransfer;
 use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer;
 use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCriteriaTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
@@ -54,38 +54,25 @@ interface AmazonQuicksightFacadeInterface
 
     /**
      * Specification:
-     * - Requires `AnalyticsEmbedUrlRequestTransfer.user` and `AnalyticsEmbedUrlRequestTransfer.user.idUser` to be set.
-     * - Returns `true` if Quicksight user with the provided user ID exists in DB.
-     * - Returns `false` otherwise.
+     * - Requires `AnalyticsRequestTransfer.user` to be set.
+     * - Requires `AnalyticsRequestTransfer.user.idUser` to be set.
+     * - If Quicksight user with the provided user ID does not exist in DB returns `AnalyticsCollectionTransfer` without any changes.
+     * - Otherwise sends request to AWS API to generate an embed URL for a registered Quicksight user. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_GenerateEmbedUrlForRegisteredUser.html}.
+     * - Renders a Quicksight analytics template with the generated embed URL.
+     * - Creates `AnalyticsTransfer` and populates `AnalyticsTransfer.content` with the rendered content.
+     * - Adds the newly introduced `AnalyticsTransfer` to `AnalyticsCollectionTransfer.analyticsList`.
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
+     * @param \Generated\Shared\Transfer\AnalyticsRequestTransfer $analyticsRequestTransfer
+     * @param \Generated\Shared\Transfer\AnalyticsCollectionTransfer $analyticsCollectionTransfer
      *
-     * @return bool
+     * @return \Generated\Shared\Transfer\AnalyticsCollectionTransfer
      */
-    public function isQuicksightAnalyticsEmbedUrlProviderApplicable(
-        AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
-    ): bool;
-
-    /**
-     * Specification:
-     * - Requires `AnalyticsEmbedUrlRequestTransfer.user` to be set.
-     * - Requires `AnalyticsEmbedUrlRequestTransfer.user.quicksightUser` to be set.
-     * - Requires `AnalyticsEmbedUrlRequestTransfer.user.quicksightUser.arn` to be set.
-     * - Sends request to AWS API to generate an embed URL for a registered Quicksight user. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_GenerateEmbedUrlForRegisteredUser.html}.
-     * - Adds errors to `AnalyticsEmbedUrlResponseTransfer.errors` if Quicksight embed URL generation failed.
-     * - Populates `AnalyticsEmbedUrlResponseTransfer.embedUrl.url` with the generated embed URL.
-     *
-     * @api
-     *
-     * @param \Generated\Shared\Transfer\AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer
-     */
-    public function getQuicksightAnalyticsEmbedUrl(
-        AnalyticsEmbedUrlRequestTransfer $analyticsEmbedUrlRequestTransfer
-    ): AnalyticsEmbedUrlResponseTransfer;
+    public function expandAnalyticsCollectionWithQuicksightAnalytics(
+        AnalyticsRequestTransfer $analyticsRequestTransfer,
+        AnalyticsCollectionTransfer $analyticsCollectionTransfer
+    ): AnalyticsCollectionTransfer;
 
     /**
      * Specification:

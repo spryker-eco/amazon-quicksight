@@ -7,7 +7,6 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business\Mapper;
 
-use Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer;
@@ -39,13 +38,13 @@ interface AmazonQuicksightMapperInterface
     ): QuicksightUserTransfer;
 
     /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
      * @param \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer $quicksightGenerateEmbedUrlRequestTransfer
      *
      * @return \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer
      */
-    public function mapUserTransferToQuicksightGenerateEmbedUrlRequestTransfer(
-        UserTransfer $userTransfer,
+    public function mapQuicksightUserTransferToQuicksightGenerateEmbedUrlRequestTransfer(
+        QuicksightUserTransfer $quicksightUserTransfer,
         QuicksightGenerateEmbedUrlRequestTransfer $quicksightGenerateEmbedUrlRequestTransfer
     ): QuicksightGenerateEmbedUrlRequestTransfer;
 
@@ -59,15 +58,4 @@ interface AmazonQuicksightMapperInterface
         array $generateEmbedUrlResponseData,
         QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer
     ): QuicksightGenerateEmbedUrlResponseTransfer;
-
-    /**
-     * @param \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer
-     * @param \Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer $analyticsEmbedUrlResponseTransfer
-     *
-     * @return \Generated\Shared\Transfer\AnalyticsEmbedUrlResponseTransfer
-     */
-    public function mapQuicksightGenerateEmbedUrlResponseTransferToAnalyticsEmbedUrlResponseTransfer(
-        QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer,
-        AnalyticsEmbedUrlResponseTransfer $analyticsEmbedUrlResponseTransfer
-    ): AnalyticsEmbedUrlResponseTransfer;
 }
