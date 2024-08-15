@@ -69,11 +69,11 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
         if (!$quicksightUserTransfer) {
             return $analyticsCollectionTransfer;
         }
-
+//        $this->amazonQuicksightApiClient->startAssetBundleExportJob($quicksightUserTransfer);
         $quicksightGenerateEmbedUrlResponseTransfer = $this->amazonQuicksightApiClient->generateEmbedUrlForRegisteredUser(
             $quicksightUserTransfer,
         );
-
+//dd($quicksightGenerateEmbedUrlResponseTransfer->getEmbedUrl()->getUrl());
         $content = $this->twigEnvironment->render(
             static::TEMPLATE_PATH_QUICKSIGHT_ANALYTICS,
             [

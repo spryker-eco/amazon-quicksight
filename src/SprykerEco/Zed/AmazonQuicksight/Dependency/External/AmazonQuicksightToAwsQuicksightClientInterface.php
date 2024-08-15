@@ -24,4 +24,53 @@ interface AmazonQuicksightToAwsQuicksightClientInterface
      * @return \Aws\ResultInterface<string, mixed>
      */
     public function generateEmbedUrlForRegisteredUser(array $generateEmbedUrlRequestData): ResultInterface;
+
+    /**
+     * @param array $data
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function listDashboards(array $data): ResultInterface;
+
+    /**
+     * @param array $data
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function listAnalyses(array $data): ResultInterface;
+
+    /**
+     * @param array $data
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function listDataSets(array $data): ResultInterface;
+
+    /**
+     * @param array $data
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function listDataSources(array $data): ResultInterface;
+
+    /**
+     * @param array $data
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function startAssetBundleExportJob(array $data): ResultInterface;
+
+    /**
+     * @param array $data
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function listAssetBundleExportJobs(array $data): ResultInterface;
+
+    /**
+     * @param array $data
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function describeAssetBundleExportJob(array $data): ResultInterface;
 }

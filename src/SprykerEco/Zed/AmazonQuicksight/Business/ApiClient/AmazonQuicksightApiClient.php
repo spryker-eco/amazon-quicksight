@@ -173,6 +173,51 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
     }
 
     /**
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
+     *
+     * @return void
+     */
+    public function startAssetBundleExportJob(QuicksightUserTransfer $quicksightUserTransfer)
+    {
+        $params = [
+            'AwsAccountId' => $this->amazonQuicksightConfig->getAwsAccountId(),
+            'MaxResults' => 100, // Maximum results per request
+        ];
+
+//        $dashboards = $this->amazonQuicksightToAwsQuicksightClient->listDashboards($params);
+//        $analyses = $this->amazonQuicksightToAwsQuicksightClient->listAnalyses($params);
+//        $dataSources = $this->amazonQuicksightToAwsQuicksightClient->listDataSources($params);
+//        $dataSets = $this->amazonQuicksightToAwsQuicksightClient->listDataSets($params);
+
+        $startAssetBundleExportJob = [
+            'AwsAccountId' => $this->amazonQuicksightConfig->getAwsAccountId(),
+            'AssetBundleExportJobId' => 'superUniqueID3',
+//            'IncludeAllDependencies' => true,
+            'ExportFormat' => 'QUICKSIGHT_JSON',
+            'ResourceArns' => [
+                'arn:aws:quicksight:eu-west-1:058264454086:analysis/02b7ef35-bac3-4cad-8929-192cf34b8353'
+            ],
+            'ValidationStrategy' => [
+                "StrictModeForAllResources" => true,
+            ],
+        ];
+
+//        $assetBundleExportJobResult = $this->amazonQuicksightToAwsQuicksightClient->startAssetBundleExportJob($startAssetBundleExportJob);
+//dd($assetBundleExportJobResult);
+//        $listAssetBundleExportJobs = $this->amazonQuicksightToAwsQuicksightClient->listAssetBundleExportJobs([
+//            'AwsAccountId' => $this->amazonQuicksightConfig->getAwsAccountId(),
+//        ]);
+
+        $describeAssetBundleExportJobResult = $this->amazonQuicksightToAwsQuicksightClient->describeAssetBundleExportJob([
+            'AwsAccountId' => $this->amazonQuicksightConfig->getAwsAccountId(),
+            'AssetBundleExportJobId' => 'superUniqueID1',
+        ]);
+
+dd($describeAssetBundleExportJobResult);
+//        dd($dashboards, $analyses, $dataSources, $dataSets);
+    }
+
+    /**
      * @return \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer
      */
     protected function createQuicksightGenerateEmbedUrlRequestTransfer(): QuicksightGenerateEmbedUrlRequestTransfer

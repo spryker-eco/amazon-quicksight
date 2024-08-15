@@ -29,4 +29,11 @@ interface AmazonQuicksightApiClientInterface
     public function generateEmbedUrlForRegisteredUser(
         QuicksightUserTransfer $quicksightUserTransfer
     ): QuicksightGenerateEmbedUrlResponseTransfer;
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
+     *
+     * @return void
+     */
+    public function startAssetBundleExportJob(QuicksightUserTransfer $quicksightUserTransfer);
 }
