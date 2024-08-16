@@ -33,4 +33,14 @@ class AmazonQuicksightToMessengerFacadeBridge implements AmazonQuicksightToMesse
     {
         $this->messengerFacade->addErrorMessage($message);
     }
+
+    /**
+     * @param \Generated\Shared\Transfer\MessageTransfer $message
+     *
+     * @return void
+     */
+    public function addInfoMessage(MessageTransfer $message): void
+    {
+        $this->messengerFacade->addInfoMessage($message);
+    }
 }
