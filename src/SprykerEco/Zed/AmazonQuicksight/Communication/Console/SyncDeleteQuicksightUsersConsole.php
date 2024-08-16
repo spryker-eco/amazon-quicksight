@@ -47,14 +47,14 @@ class SyncDeleteQuicksightUsersConsole extends Console
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $quicksightUserSynchronizeResponseTransfer = $this->getFacade()
+        $quicksightUserCollectionResponseTransfer = $this->getFacade()
             ->deleteRegisteredQuicksightUsersNotMatchedWithExistingUsers();
 
-        if ($quicksightUserSynchronizeResponseTransfer->getErrors()->count() === 0) {
+        if ($quicksightUserCollectionResponseTransfer->getErrors()->count() === 0) {
             return static::CODE_SUCCESS;
         }
 
-        foreach ($quicksightUserSynchronizeResponseTransfer->getErrors() as $errorTransfer) {
+        foreach ($quicksightUserCollectionResponseTransfer->getErrors() as $errorTransfer) {
             $this->output->writeln(
                 sprintf('<error>%s</error>', $errorTransfer->getMessage()),
             );

@@ -31,11 +31,6 @@
         <property name="errors" type="Error[]" singular="error"/>
     </transfer>
 
-    <transfer name="QuicksightUserSynchronizeResponse">
-        <property name="errors" type="Error[]" singular="error"/>
-        <property name="quicksightUsers" type="QuicksightUser[]" singular="quicksightUser"/>
-    </transfer>
-
     <transfer name="UserCollectionResponse" strict="true">
         <property name="users" type="User[]" singular="user"/>
         <property name="errors" type="Error[]" singular="error"/>
