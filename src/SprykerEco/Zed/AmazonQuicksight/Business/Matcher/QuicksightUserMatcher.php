@@ -51,7 +51,7 @@ class QuicksightUserMatcher implements QuicksightUserMatcherInterface
      */
     public function getQuicksightUsersMatchedWithExistingUsers(ArrayObject $quicksightUserTransfers): array
     {
-        $filteredQuicksightUserTransfers = $this->quicksightUserCollectionFilter->filterOutQuicksightUsersWithUnsupportedRoles(
+        $filteredQuicksightUserTransfers = $this->quicksightUserCollectionFilter->filterOutQuicksightUsersWithUnsupportedQuicksightUserRoles(
             $quicksightUserTransfers,
         );
         if ($filteredQuicksightUserTransfers === []) {
@@ -85,7 +85,7 @@ class QuicksightUserMatcher implements QuicksightUserMatcherInterface
      */
     public function getQuicksightUsersNotMatchedWithExistingUsers(ArrayObject $quicksightUserTransfers): array
     {
-        $filteredQuicksightUserTransfers = $this->quicksightUserCollectionFilter->filterOutQuicksightUsersWithUnsupportedRoles(
+        $filteredQuicksightUserTransfers = $this->quicksightUserCollectionFilter->filterOutQuicksightUsersWithUnsupportedQuicksightUserRoles(
             $quicksightUserTransfers,
         );
         if ($filteredQuicksightUserTransfers === []) {

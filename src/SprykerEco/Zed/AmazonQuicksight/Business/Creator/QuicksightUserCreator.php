@@ -78,7 +78,7 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
      *
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
-    public function createQuicksightUsersForUserCollectionResponse(
+    public function createQuicksightUsersByUserCollectionResponse(
         UserCollectionResponseTransfer $userCollectionResponseTransfer
     ): UserCollectionResponseTransfer {
         $filteredUserTransfers = $this->userCollectionFilter->filterOutUserTransfersNotApplicableForQuicksightUserRegistration(
@@ -100,7 +100,7 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
     /**
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
      */
-    public function createQuicksightUsersForRegisteredQuicksightUsersMatchedExistingUsers(): QuicksightUserCollectionResponseTransfer
+    public function createMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer
     {
         $quicksightUserCollectionResponseTransfer = new QuicksightUserCollectionResponseTransfer();
 

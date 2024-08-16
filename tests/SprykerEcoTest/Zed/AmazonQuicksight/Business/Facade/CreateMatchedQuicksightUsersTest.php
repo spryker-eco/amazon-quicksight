@@ -24,10 +24,10 @@ use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester;
  * @group AmazonQuicksight
  * @group Business
  * @group Facade
- * @group DeleteRegisteredQuicksightUsersNotMatchedWithExistingUsersTest
+ * @group CreateQuicksightUsersForRegisteredQuicksightUsersMatchedExistingUsersTest
  * Add your own group annotations below this line
  */
-class DeleteRegisteredQuicksightUsersNotMatchedWithExistingUsersTest extends Unit
+class CreateMatchedQuicksightUsersTest extends Unit
 {
     /**
      * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClient::RESPONSE_KEY_USER_LIST
@@ -49,16 +49,16 @@ class DeleteRegisteredQuicksightUsersNotMatchedWithExistingUsersTest extends Uni
     protected const QUICKSIGHT_USER_ROLE_ADMIN = 'ADMIN';
 
     /**
-     * @uses \Orm\Zed\User\Persistence\Map\SpyUserTableMap::COL_STATUS_DELETED
+     * @uses \Orm\Zed\User\Persistence\Map\SpyUserTableMap::COL_STATUS_BLOCKED
      *
      * @var string
      */
-    protected const USER_STATUS_DELETED = 'deleted';
+    protected const USER_STATUS_BLOCKED = 'blocked';
 
     /**
      * @var string
      */
-    protected const ERROR_MESSAGE_QUICKSIGHT_API_FAILURE = 'An internal failure occurred.';
+    protected const ERROR_MESSAGE_QUICKSIGHT_LIST_USERS_FAILURE = 'An internal failure occurred.';
 
     /**
      * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClient::ERROR_MESSAGE_USERS_LIST_RETRIEVE_FAILED
@@ -75,7 +75,7 @@ class DeleteRegisteredQuicksightUsersNotMatchedWithExistingUsersTest extends Uni
     /**
      * @return void
      */
-    public function testShouldDeleteRegisteredQuicksightUsersNotMatchedWithPersistedUsers(): void
+    public function testShouldPersistRegisteredQuicksightUserThatMatchesPersistedUserEmail(): void
     {
         // Arrange
         $userTransfer = $this->tester->haveUser();
@@ -88,83 +88,50 @@ class DeleteRegisteredQuicksightUsersNotMatchedWithExistingUsersTest extends Uni
             QuicksightUserTransfer::ROLE => static::QUICKSIGHT_USER_ROLE_READER,
         ]))->build();
 
-        $quicksightClientMock = $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(
-            $this->createListUsersSuccessfulResponse([
-                $matchingQuicksightUserTransfer,
-                $notMatchingQuicksightUserTransfer,
-            ]),
-            'listUsers',
+        $this->tester->setDependency(
+            AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
+            $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(
+                $this->createListUsersSuccessfulResponse([
+                    $matchingQuicksightUserTransfer,
+                    $notMatchingQuicksightUserTransfer,
+                ]),
+                'listUsers',
+            ),
         );
-        $quicksightClientMock->expects($this->once())
-            ->method('deleteUserByPrincipalId')
-            ->willReturn(new Result());
-        $this->tester->setDependency(AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT, $quicksightClientMock);
 
         // Act
-        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->deleteRegisteredQuicksightUsersNotMatchedWithExistingUsers();
+        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->createMatchedQuicksightUsers();
 
         // Assert
         $this->assertCount(0, $quicksightUserCollectionResponseTransfer->getErrors());
         $this->assertCount(1, $quicksightUserCollectionResponseTransfer->getQuicksightUsers());
 
         $this->assertSame(
-            $notMatchingQuicksightUserTransfer->getUserNameOrFail(),
+            $matchingQuicksightUserTransfer->getUserNameOrFail(),
             $quicksightUserCollectionResponseTransfer->getQuicksightUsers()->getIterator()->current()->getUserNameOrFail(),
         );
+        $this->assertNotNull($this->tester->findQuicksightUserByArn($matchingQuicksightUserTransfer->getArnOrFail()));
+        $this->assertNull($this->tester->findQuicksightUserByArn($notMatchingQuicksightUserTransfer->getArnOrFail()));
     }
 
     /**
      * @return void
      */
-    public function testShouldDeleteRegisteredQuicksightUserWhenMatchedUserHasDeletedStatus(): void
-    {
-        // Arrange
-        $userTransfer = $this->tester->haveUser([UserTransfer::STATUS => static::USER_STATUS_DELETED]);
-        $quicksightUserTransfer = (new QuicksightUserBuilder([
-            QuicksightUserTransfer::USER_NAME => $userTransfer->getUsernameOrFail(),
-            QuicksightUserTransfer::ROLE => static::QUICKSIGHT_USER_ROLE_READER,
-        ]))->build();
-
-        $quicksightClientMock = $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(
-            $this->createListUsersSuccessfulResponse([$quicksightUserTransfer]),
-            'listUsers',
-        );
-        $quicksightClientMock->expects($this->once())
-            ->method('deleteUserByPrincipalId')
-            ->willReturn(new Result());
-        $this->tester->setDependency(AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT, $quicksightClientMock);
-
-        // Act
-        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->deleteRegisteredQuicksightUsersNotMatchedWithExistingUsers();
-
-        // Assert
-        $this->assertCount(0, $quicksightUserCollectionResponseTransfer->getErrors());
-        $this->assertCount(1, $quicksightUserCollectionResponseTransfer->getQuicksightUsers());
-        $this->assertSame(
-            $quicksightUserTransfer->getUserNameOrFail(),
-            $quicksightUserCollectionResponseTransfer->getQuicksightUsers()->getIterator()->current()->getUserNameOrFail(),
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testShouldDoNothingWhenEmptyUserListIsReturned(): void
+    public function testShouldReturnEmptyCollectionWhenEmptyUserListIsReturned(): void
     {
         // Arrange
         $this->tester->haveUser();
 
-        $quicksightClientMock = $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(
-            $this->createListUsersSuccessfulResponse([]),
-            'listUsers',
+        $this->tester->setDependency(
+            AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
+            $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(
+                $this->createListUsersSuccessfulResponse([]),
+                'listUsers',
+            ),
         );
-        $quicksightClientMock->expects($this->never())
-            ->method('deleteUserByPrincipalId')
-            ->willReturn(new Result());
-        $this->tester->setDependency(AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT, $quicksightClientMock);
 
         // Act
-        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->deleteRegisteredQuicksightUsersNotMatchedWithExistingUsers();
+        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->createMatchedQuicksightUsers();
 
         // Assert
         $this->assertCount(0, $quicksightUserCollectionResponseTransfer->getErrors());
@@ -174,7 +141,7 @@ class DeleteRegisteredQuicksightUsersNotMatchedWithExistingUsersTest extends Uni
     /**
      * @return void
      */
-    public function testShouldDoNothingWhenMatchedUserHavePersistedQuicksightUser(): void
+    public function testShouldReturnEmptyCollectionWhenMatchedUserAlreadyHavePersistedQuicksightUser(): void
     {
         // Arrange
         $userTransfer = $this->tester->haveUser();
@@ -183,17 +150,16 @@ class DeleteRegisteredQuicksightUsersNotMatchedWithExistingUsersTest extends Uni
             QuicksightUserTransfer::ROLE => static::QUICKSIGHT_USER_ROLE_READER,
         ]);
 
-        $quicksightClientMock = $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(
-            $this->createListUsersSuccessfulResponse([$quicksightUserTransfer]),
-            'listUsers',
+        $this->tester->setDependency(
+            AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
+            $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(
+                $this->createListUsersSuccessfulResponse([$quicksightUserTransfer]),
+                'listUsers',
+            ),
         );
-        $quicksightClientMock->expects($this->never())
-            ->method('deleteUserByPrincipalId')
-            ->willReturn(new Result());
-        $this->tester->setDependency(AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT, $quicksightClientMock);
 
         // Act
-        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->deleteRegisteredQuicksightUsersNotMatchedWithExistingUsers();
+        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->createMatchedQuicksightUsers();
 
         // Assert
         $this->assertCount(0, $quicksightUserCollectionResponseTransfer->getErrors());
@@ -208,84 +174,80 @@ class DeleteRegisteredQuicksightUsersNotMatchedWithExistingUsersTest extends Uni
         // Arrange
         $userTransfer = $this->tester->haveUser();
         $quicksightUserTransfer = (new QuicksightUserBuilder([
-            QuicksightUserTransfer::USER_NAME => 'non-existing-user@spryker.com',
+            QuicksightUserTransfer::USER_NAME => $userTransfer->getUsernameOrFail(),
             QuicksightUserTransfer::ROLE => static::QUICKSIGHT_USER_ROLE_ADMIN,
         ]))->build();
 
-        $quicksightClientMock = $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(
-            $this->createListUsersSuccessfulResponse([$quicksightUserTransfer]),
-            'listUsers',
+        $this->tester->setDependency(
+            AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
+            $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(
+                $this->createListUsersSuccessfulResponse([$quicksightUserTransfer]),
+                'listUsers',
+            ),
         );
-        $quicksightClientMock->expects($this->never())
-            ->method('deleteUserByPrincipalId')
-            ->willReturn(new Result());
-        $this->tester->setDependency(AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT, $quicksightClientMock);
 
         // Act
-        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->deleteRegisteredQuicksightUsersNotMatchedWithExistingUsers();
+        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->createMatchedQuicksightUsers();
 
         // Assert
         $this->assertCount(0, $quicksightUserCollectionResponseTransfer->getErrors());
         $this->assertCount(0, $quicksightUserCollectionResponseTransfer->getQuicksightUsers());
+        $this->assertNull($this->tester->findQuicksightUserByArn($quicksightUserTransfer->getArnOrFail()));
     }
 
     /**
      * @return void
      */
-    public function testShouldReturnErrorWhenQuicksightClientMethodListUsersThrowsException(): void
+    public function testShouldReturnEmptyCollectionWhenMatchedUserHasInactiveStatus(): void
+    {
+        // Arrange
+        $userTransfer = $this->tester->haveUser([UserTransfer::STATUS => static::USER_STATUS_BLOCKED]);
+        $quicksightUserTransfer = (new QuicksightUserBuilder([
+            QuicksightUserTransfer::USER_NAME => $userTransfer->getUsernameOrFail(),
+            QuicksightUserTransfer::ROLE => static::QUICKSIGHT_USER_ROLE_ADMIN,
+        ]))->build();
+
+        $this->tester->setDependency(
+            AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
+            $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(
+                $this->createListUsersSuccessfulResponse([$quicksightUserTransfer]),
+                'listUsers',
+            ),
+        );
+
+        // Act
+        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->createMatchedQuicksightUsers();
+
+        // Assert
+        $this->assertCount(0, $quicksightUserCollectionResponseTransfer->getErrors());
+        $this->assertCount(0, $quicksightUserCollectionResponseTransfer->getQuicksightUsers());
+        $this->assertNull($this->tester->findQuicksightUserByArn($quicksightUserTransfer->getArnOrFail()));
+    }
+
+    /**
+     * @return void
+     */
+    public function testShouldReturnErrorWhenQuicksightClientThrowsException(): void
     {
         // Arrange
         $this->tester->haveUser();
         $this->tester->setDependency(
             AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
             $this->tester->getAwsQuicksightClientMockWithErrorResponse(
-                $this->tester->getQuicksightExceptionMock(static::ERROR_MESSAGE_QUICKSIGHT_API_FAILURE),
+                $this->tester->getQuicksightExceptionMock(static::ERROR_MESSAGE_QUICKSIGHT_LIST_USERS_FAILURE),
                 'listUsers',
             ),
         );
 
         // Act
-        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->deleteRegisteredQuicksightUsersNotMatchedWithExistingUsers();
+        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->createMatchedQuicksightUsers();
 
         // Assert
         $this->assertCount(1, $quicksightUserCollectionResponseTransfer->getErrors());
         $this->assertCount(0, $quicksightUserCollectionResponseTransfer->getQuicksightUsers());
 
         $this->assertSame(
-            static::ERROR_MESSAGE_QUICKSIGHT_API_FAILURE,
-            $quicksightUserCollectionResponseTransfer->getErrors()->getIterator()->current()->getMessage(),
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testShouldReturnErrorWhenQuicksightClientMethodDeleteUserByPrincipalIdThrowsException(): void
-    {
-        // Arrange
-        $userTransfer = $this->tester->haveUser();
-        $quicksightUserTransfer = (new QuicksightUserBuilder([
-            QuicksightUserTransfer::USER_NAME => 'non-existing-user@spryker.com',
-            QuicksightUserTransfer::ROLE => static::QUICKSIGHT_USER_ROLE_READER,
-        ]))->build();
-
-        $quicksightClientMock = $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(
-            $this->createListUsersSuccessfulResponse([$quicksightUserTransfer]),
-            'listUsers',
-        );
-        $quicksightClientMock->method('deleteUserByPrincipalId')
-            ->willThrowException($this->tester->getQuicksightExceptionMock(static::ERROR_MESSAGE_QUICKSIGHT_API_FAILURE));
-        $this->tester->setDependency(AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT, $quicksightClientMock);
-
-        // Act
-        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->deleteRegisteredQuicksightUsersNotMatchedWithExistingUsers();
-
-        // Assert
-        $this->assertCount(1, $quicksightUserCollectionResponseTransfer->getErrors());
-        $this->assertCount(0, $quicksightUserCollectionResponseTransfer->getQuicksightUsers());
-
-        $this->assertSame(
-            static::ERROR_MESSAGE_QUICKSIGHT_API_FAILURE,
+            static::ERROR_MESSAGE_QUICKSIGHT_LIST_USERS_FAILURE,
             $quicksightUserCollectionResponseTransfer->getErrors()->getIterator()->current()->getMessage(),
         );
     }
@@ -306,7 +268,7 @@ class DeleteRegisteredQuicksightUsersNotMatchedWithExistingUsersTest extends Uni
         );
 
         // Act
-        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->deleteRegisteredQuicksightUsersNotMatchedWithExistingUsers();
+        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->createMatchedQuicksightUsers();
 
         // Assert
         $this->assertCount(1, $quicksightUserCollectionResponseTransfer->getErrors());

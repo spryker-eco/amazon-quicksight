@@ -16,5 +16,5 @@ interface QuicksightUserCollectionFilterInterface
      *
      * @return list<\Generated\Shared\Transfer\QuicksightUserTransfer>
      */
-    public function filterOutQuicksightUsersWithUnsupportedRoles(ArrayObject $quicksightUserTransfers): array;
+    public function filterOutQuicksightUsersWithUnsupportedQuicksightUserRoles(ArrayObject $quicksightUserTransfers): array;
 }

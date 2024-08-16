@@ -26,7 +26,7 @@ use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester;
  * @group CreateQuicksightUsersForUserCollectionResponseTest
  * Add your own group annotations below this line
  */
-class CreateQuicksightUsersForUserCollectionResponseTest extends Unit
+class CreateQuicksightUsersByUserCollectionResponseTest extends Unit
 {
     /**
      * @uses \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::QUICKSIGHT_USER_ROLE_READER

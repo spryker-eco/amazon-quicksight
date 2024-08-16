@@ -20,13 +20,12 @@ class DeleteQuicksightUserPostUpdatePlugin extends AbstractPlugin implements Use
 {
     /**
      * {@inheritDoc}
-     * - Filters out users with statuses not applicable for deleting quicksight user.
-     * - Uses {@link \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::getUserStatusesApplicableForQuicksightUserDeletion()} to get a list of user statuses applicable for deleting quicksight user.
-     * - Filters out users without persisted quicksight user.
+     * - Filters out users with statuses not applicable for deleting a Quicksight user.
+     * - Uses {@link \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::getUserStatusesApplicableForQuicksightUserDeletion()} to get a list of user statuses applicable for deleting a Quicksight user.
+     * - Filters out users without persisted Quicksight user.
      * - Sends request to AWS API to delete Quicksight users. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_DeleteUser.html}.
-     * - If AWS API call returns error it is added to `QuicksightUserCollectionResponseTransfer.errors` with `idQuicksightUser` as entity identifier.
-     * - If AWS API call returns error, quicksight user will not be deleted from persistence.
-     * - Deletes persistence quicksight users that were successfully deleted from Quicksight.
+     * - If the AWS API call returns an error, the Quicksight user will not be deleted from persistence.
+     * - Deletes from persistence Quicksight users that were successfully deleted from Quicksight.
      * - Adds errors to `UserCollectionResponseTransfer.errors` if any occurs.
      *
      * @api

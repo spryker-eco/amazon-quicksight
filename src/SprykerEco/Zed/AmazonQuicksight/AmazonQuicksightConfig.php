@@ -156,7 +156,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
 
     /**
      * Specification:
-     * - Returns list of user statuses that allows user to be registered in Quicksight.
+     * - Returns a list of user statuses that allows users to be registered in Quicksight.
      *
      * @api
      *
@@ -171,7 +171,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
 
     /**
      * Specification:
-     * - Returns list of user statuses that allows user to be registered in Quicksight.
+     * - Returns a list of user statuses that allow user deletion from Quicksight.
      *
      * @api
      *

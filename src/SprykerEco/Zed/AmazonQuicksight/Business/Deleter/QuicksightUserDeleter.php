@@ -101,7 +101,7 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
     /**
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
      */
-    public function deleteRegisteredQuicksightUsersNotMatchedWithExistingUsers(): QuicksightUserCollectionResponseTransfer
+    public function deleteNotMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer
     {
         $quicksightUserCollectionResponseTransfer = new QuicksightUserCollectionResponseTransfer();
 

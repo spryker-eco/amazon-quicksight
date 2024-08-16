@@ -17,12 +17,12 @@ interface QuicksightUserCreatorInterface
      *
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
-    public function createQuicksightUsersForUserCollectionResponse(
+    public function createQuicksightUsersByUserCollectionResponse(
         UserCollectionResponseTransfer $userCollectionResponseTransfer
     ): UserCollectionResponseTransfer;
 
     /**
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
      */
-    public function createQuicksightUsersForRegisteredQuicksightUsersMatchedExistingUsers(): QuicksightUserCollectionResponseTransfer;
+    public function createMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer;
 }

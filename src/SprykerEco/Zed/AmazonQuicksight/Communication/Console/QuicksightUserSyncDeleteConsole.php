@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @method \SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightFacadeInterface getFacade()
  * @method \SprykerEco\Zed\AmazonQuicksight\Communication\AmazonQuicksightCommunicationFactory getFactory()
  */
-class SyncDeleteQuicksightUsersConsole extends Console
+class QuicksightUserSyncDeleteConsole extends Console
 {
     /**
      * @var string
@@ -26,7 +26,7 @@ class SyncDeleteQuicksightUsersConsole extends Console
     /**
      * @var string
      */
-    protected const COMMAND_DESCRIPTION = 'Deletes registered quicksight users that can\'t be matched with backoffice users from persistence.';
+    protected const COMMAND_DESCRIPTION = 'Deletes registered Quicksight users on the Quicksight side that can\'t be matched with existing Backoffice users.';
 
     /**
      * @return void
@@ -48,7 +48,7 @@ class SyncDeleteQuicksightUsersConsole extends Console
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $quicksightUserCollectionResponseTransfer = $this->getFacade()
-            ->deleteRegisteredQuicksightUsersNotMatchedWithExistingUsers();
+            ->deleteNotMatchedQuicksightUsers();
 
         if ($quicksightUserCollectionResponseTransfer->getErrors()->count() === 0) {
             return static::CODE_SUCCESS;

@@ -30,7 +30,7 @@ class QuicksightUserCollectionFilter implements QuicksightUserCollectionFilterIn
      *
      * @return list<\Generated\Shared\Transfer\QuicksightUserTransfer>
      */
-    public function filterOutQuicksightUsersWithUnsupportedRoles(ArrayObject $quicksightUserTransfers): array
+    public function filterOutQuicksightUsersWithUnsupportedQuicksightUserRoles(ArrayObject $quicksightUserTransfers): array
     {
         $quicksightUserRoles = array_flip($this->amazonQuicksightConfig->getQuicksightUserRoles());
 

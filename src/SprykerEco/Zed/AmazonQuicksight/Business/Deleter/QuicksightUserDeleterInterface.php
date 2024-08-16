@@ -24,5 +24,5 @@ interface QuicksightUserDeleterInterface
     /**
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
      */
-    public function deleteRegisteredQuicksightUsersNotMatchedWithExistingUsers(): QuicksightUserCollectionResponseTransfer;
+    public function deleteNotMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer;
 }

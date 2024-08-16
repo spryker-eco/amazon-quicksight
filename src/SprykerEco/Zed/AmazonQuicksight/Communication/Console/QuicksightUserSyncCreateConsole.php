@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @method \SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightFacadeInterface getFacade()
  * @method \SprykerEco\Zed\AmazonQuicksight\Communication\AmazonQuicksightCommunicationFactory getFactory()
  */
-class SyncCreateQuicksightUsersConsole extends Console
+class QuicksightUserSyncCreateConsole extends Console
 {
     /**
      * @var string
@@ -26,7 +26,7 @@ class SyncCreateQuicksightUsersConsole extends Console
     /**
      * @var string
      */
-    protected const COMMAND_DESCRIPTION = 'Creates quicksight users for registered quicksight users that can be matched with existing backoffice users from persistence.';
+    protected const COMMAND_DESCRIPTION = 'Creates Quicksight users in persistence for users registered on the Quicksight side that can be matched with existing Backoffice users.';
 
     /**
      * @return void
@@ -48,7 +48,7 @@ class SyncCreateQuicksightUsersConsole extends Console
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $quicksightUserCollectionResponseTransfer = $this->getFacade()
-            ->createQuicksightUsersForRegisteredQuicksightUsersMatchedExistingUsers();
+            ->createMatchedQuicksightUsers();
 
         if ($quicksightUserCollectionResponseTransfer->getErrors()->count() === 0) {
             return static::CODE_SUCCESS;

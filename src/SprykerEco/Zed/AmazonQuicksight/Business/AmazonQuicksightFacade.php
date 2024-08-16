@@ -9,7 +9,6 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business;
 
 use Generated\Shared\Transfer\AnalyticsCollectionTransfer;
 use Generated\Shared\Transfer\AnalyticsRequestTransfer;
-use Generated\Shared\Transfer\QuicksightListUsersResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionTransfer;
@@ -51,7 +50,7 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
     ): UserCollectionResponseTransfer {
         return $this->getFactory()
             ->createQuicksightUserCreator()
-            ->createQuicksightUsersForUserCollectionResponse($userCollectionResponseTransfer);
+            ->createQuicksightUsersByUserCollectionResponse($userCollectionResponseTransfer);
     }
 
     /**
@@ -95,25 +94,13 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
      *
      * @api
      *
-     * @return \Generated\Shared\Transfer\QuicksightListUsersResponseTransfer
-     */
-    public function getQuicksightUsersList(): QuicksightListUsersResponseTransfer
-    {
-        return $this->getFactory()->createAmazonQuicksightApiClient()->listUsers();
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @api
-     *
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
      */
-    public function createQuicksightUsersForRegisteredQuicksightUsersMatchedExistingUsers(): QuicksightUserCollectionResponseTransfer
+    public function createMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer
     {
         return $this->getFactory()
             ->createQuicksightUserCreator()
-            ->createQuicksightUsersForRegisteredQuicksightUsersMatchedExistingUsers();
+            ->createMatchedQuicksightUsers();
     }
 
     /**
@@ -123,10 +110,10 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
      *
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
      */
-    public function deleteRegisteredQuicksightUsersNotMatchedWithExistingUsers(): QuicksightUserCollectionResponseTransfer
+    public function deleteNotMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer
     {
         return $this->getFactory()
             ->createQuicksightUserDeleter()
-            ->deleteRegisteredQuicksightUsersNotMatchedWithExistingUsers();
+            ->deleteNotMatchedQuicksightUsers();
     }
 }
