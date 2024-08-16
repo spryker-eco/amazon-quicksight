@@ -1,3 +1,5 @@
 "Author: A user who can create data sources, datasets, analyses, and dashboards. <br/>Reader: A user who has read-only access to dashboards.","Author: A user who can create data sources, datasets, analyses, and dashboards. <br/>Reader: A user who has read-only access to dashboards."
 "Select user role","Select user role"
 Analytics,Analytics
+"The user role for Analytics could not be set. Please try again later.","The user role for Analytics could not be set. Please try again later."
+"The user role for Analytics could not be reset. Please contact your Spryker Success Manager.","The user role for Analytics could not be reset. Please contact your Spryker Success Manager."

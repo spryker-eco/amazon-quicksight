@@ -7,6 +7,7 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business\Creator;
 
+use Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 
 interface QuicksightUserCreatorInterface
@@ -19,4 +20,9 @@ interface QuicksightUserCreatorInterface
     public function createQuicksightUsersForUserCollectionResponse(
         UserCollectionResponseTransfer $userCollectionResponseTransfer
     ): UserCollectionResponseTransfer;
+
+    /**
+     * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
+     */
+    public function createQuicksightUsersForRegisteredQuicksightUsersMatchedExistingUsers(): QuicksightUserCollectionResponseTransfer;
 }

@@ -4,6 +4,7 @@
     <transfer name="QuicksightUser" strict="true">
         <property name="idQuicksightUser" type="int"/>
         <property name="fkUser" type="int"/>
+        <property name="userName" type="string"/>
         <property name="role" type="string"/>
         <property name="arn" type="string"/>
         <property name="principalId" type="string"/>
@@ -18,10 +19,7 @@
 
     <transfer name="QuicksightUserConditions" strict="true">
         <property name="quicksightUserIds" type="int[]" singular="idQuicksightUser"/>
-    </transfer>
-
-    <transfer name="QuicksightUserCollectionDeleteCriteria" strict="true">
-        <property name="quicksightUserIds" type="int[]" singular="idQuicksightUser"/>
+        <property name="userIds" type="int[]" singular="idUser"/>
     </transfer>
 
     <transfer name="QuicksightUserCollection" strict="true">
@@ -33,15 +31,21 @@
         <property name="errors" type="Error[]" singular="error"/>
     </transfer>
 
+    <transfer name="QuicksightUserSynchronizeResponse">
+        <property name="errors" type="Error[]" singular="error"/>
+        <property name="quicksightUsers" type="QuicksightUser[]" singular="quicksightUser"/>
+    </transfer>
+
     <transfer name="UserCollectionResponse" strict="true">
         <property name="users" type="User[]" singular="user"/>
+        <property name="errors" type="Error[]" singular="error"/>
     </transfer>
 
     <transfer name="User">
         <property name="idUser" type="int"/>
         <property name="quicksightUser" type="QuicksightUser" strict="true"/>
-        <property name="idUser" type="int"/>
         <property name="username" type="string"/>
+        <property name="status" type="string"/>
     </transfer>
 
     <transfer name="QuicksightUserRegisterResponse" strict="true">
@@ -67,6 +71,17 @@
         <property name="awsAccountId" type="string"/>
         <property name="principalId" type="string" />
         <property name="namespace" type="string"/>
+        <property name="userName" type="string"/>
+    </transfer>
+
+    <transfer name="QuicksightListUsersRequest" strict="true">
+        <property name="awsAccountId" type="string"/>
+        <property name="namespace" type="string"/>
+    </transfer>
+
+    <transfer name="QuicksightListUsersResponse" strict="true">
+        <property name="errors" type="Error[]" singular="error"/>
+        <property name="quicksightUsers" type="QuicksightUser[]" singular="quicksightUser"/>
     </transfer>
 
     <transfer name="Error">
@@ -76,6 +91,53 @@
 
     <transfer name="UserCollection" strict="true">
         <property name="users" type="User[]" singular="user"/>
+    </transfer>
+
+    <transfer name="Message">
+        <property name="value" type="string"/>
+    </transfer>
+
+    <transfer name="QuicksightGenerateEmbedUrlRequest" strict="true">
+        <property name="awsAccountId" type="string"/>
+        <property name="userArn" type="string"/>
+        <property name="experienceConfiguration" type="QuicksightExperienceConfiguration"/>
+    </transfer>
+
+    <transfer name="QuicksightExperienceConfiguration" strict="true">
+        <property name="quickSightConsole" type="QuicksightConsole"/>
+    </transfer>
+
+    <transfer name="QuicksightConsole" strict="true">
+        <property name="initialPath" type="string"/>
+    </transfer>
+
+    <transfer name="QuicksightGenerateEmbedUrlResponse" strict="true">
+        <property name="errors" type="Error[]" singular="error"/>
+        <property name="embedUrl" type="QuicksightEmbedUrl"/>
+    </transfer>
+
+    <transfer name="QuicksightEmbedUrl" strict="true">
+        <property name="url" type="string"/>
+    </transfer>
+
+    <transfer name="AnalyticsRequest" strict="true">
+        <property name="user" type="User"/>
+    </transfer>
+
+    <transfer name="AnalyticsCollection" strict="true">
+        <property name="analyticsList" type="Analytics[]" singular="analytics"/>
+    </transfer>
+
+    <transfer name="Analytics" strict="true">
+        <property name="content" type="string"/>
+    </transfer>
+
+    <transfer name="UserConditions">
+        <property name="statuses" type="string[]" singular="status"/>
+    </transfer>
+
+    <transfer name="UserCriteria">
+        <property name="userConditions" type="UserConditions" strict="true"/>
     </transfer>
 
 </transfers>

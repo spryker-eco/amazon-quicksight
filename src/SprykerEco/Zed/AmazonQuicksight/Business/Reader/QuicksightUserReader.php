@@ -14,9 +14,9 @@ use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterf
 
 class QuicksightUserReader implements QuicksightUserReaderInterface
 {
- /**
-  * @var \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface
-  */
+    /**
+     * @var \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface
+     */
     protected AmazonQuicksightRepositoryInterface $amazonQuicksightRepository;
 
     /**
@@ -28,17 +28,20 @@ class QuicksightUserReader implements QuicksightUserReaderInterface
     }
 
     /**
-     * @param list<int> $quicksightUserIds
+     * @param array<int|string, \Generated\Shared\Transfer\UserTransfer> $userTransfers
      *
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionTransfer
      */
-    public function getQuicksightUserCollectionByQuicksightUserIds(array $quicksightUserIds): QuicksightUserCollectionTransfer
+    public function getQuicksightUserCollectionByUserTransfers(array $userTransfers): QuicksightUserCollectionTransfer
     {
-        $quicksightUserConditionsTransfer = (new QuicksightUserConditionsTransfer())
-            ->setQuicksightUserIds($quicksightUserIds);
-        $quicksightUSerCriteriaTransfer = (new QuicksightUserCriteriaTransfer())
+        $quicksightUserConditionsTransfer = new QuicksightUserConditionsTransfer();
+        foreach ($userTransfers as $userTransfer) {
+            $quicksightUserConditionsTransfer->addIdUser($userTransfer->getIdUserOrFail());
+        }
+
+        $quicksightUserCriteriaTransfer = (new QuicksightUserCriteriaTransfer())
             ->setQuicksightUserConditions($quicksightUserConditionsTransfer);
 
-        return $this->amazonQuicksightRepository->getQuicksightUserCollection($quicksightUSerCriteriaTransfer);
+        return $this->amazonQuicksightRepository->getQuicksightUserCollection($quicksightUserCriteriaTransfer);
     }
 }

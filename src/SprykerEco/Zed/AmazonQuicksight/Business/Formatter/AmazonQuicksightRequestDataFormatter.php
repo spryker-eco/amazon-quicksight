@@ -18,6 +18,10 @@ class AmazonQuicksightRequestDataFormatter implements AmazonQuicksightRequestDat
     {
         $formattedData = [];
         foreach ($requestData as $key => $value) {
+            if ($value === null) {
+                continue;
+            }
+
             if (is_array($value)) {
                 $value = $this->formatRequestData($value);
             }

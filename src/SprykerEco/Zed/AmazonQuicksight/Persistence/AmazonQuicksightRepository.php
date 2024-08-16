@@ -63,6 +63,12 @@ class AmazonQuicksightRepository extends AbstractRepository implements AmazonQui
             );
     }
 
+    /**
+     * @param \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUserQuery $quicksightUserQuery
+     * @param \Generated\Shared\Transfer\QuicksightUserCriteriaTransfer $quicksightUserCriteriaTransfer
+     *
+     * @return \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUserQuery
+     */
     protected function applyQuicksightUserFilters(
         SpyQuicksightUserQuery $quicksightUserQuery,
         QuicksightUserCriteriaTransfer $quicksightUserCriteriaTransfer
@@ -74,6 +80,10 @@ class AmazonQuicksightRepository extends AbstractRepository implements AmazonQui
 
         if ($quicksightUserConditions->getQuicksightUserIds() !== []) {
             $quicksightUserQuery->filterByIdQuicksightUser_In($quicksightUserConditions->getQuicksightUserIds());
+        }
+
+        if ($quicksightUserConditions->getUserIds() !== []) {
+            $quicksightUserQuery->filterByFkUser_In($quicksightUserConditions->getUserIds());
         }
 
         return $quicksightUserQuery;

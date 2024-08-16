@@ -15,15 +15,28 @@ use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreator;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreatorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Deleter\QuicksightUserDeleter;
 use SprykerEco\Zed\AmazonQuicksight\Business\Deleter\QuicksightUserDeleterInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Expander\AnalyticsExpander;
+use SprykerEco\Zed\AmazonQuicksight\Business\Expander\AnalyticsExpanderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpander;
 use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpanderInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Filter\QuicksightUserCollectionFilter;
+use SprykerEco\Zed\AmazonQuicksight\Business\Filter\QuicksightUserCollectionFilterInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilter;
+use SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilterInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatter;
 use SprykerEco\Zed\AmazonQuicksight\Business\Formatter\AmazonQuicksightRequestDataFormatterInterface;
-use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapper;
-use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapperInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapper;
+use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Matcher\QuicksightUserMatcher;
+use SprykerEco\Zed\AmazonQuicksight\Business\Matcher\QuicksightUserMatcherInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Reader\QuicksightUserReader;
 use SprykerEco\Zed\AmazonQuicksight\Business\Reader\QuicksightUserReaderInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Reader\UserReader;
+use SprykerEco\Zed\AmazonQuicksight\Business\Reader\UserReaderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface;
+use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToUserFacadeInterface;
+use Twig\Environment;
 
 /**
  * @method \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig getConfig()
@@ -46,8 +59,37 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     public function createQuicksightUserCreator(): QuicksightUserCreatorInterface
     {
         return new QuicksightUserCreator(
-            $this->createAmazonQuicksightApiClient(),
+            $this->createUserCollectionFilter(),
+            $this->createQuicksightUserMatcher(),
             $this->getEntityManager(),
+            $this->createAmazonQuicksightApiClient(),
+            $this->getMessengerFacade(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Deleter\QuicksightUserDeleterInterface
+     */
+    public function createQuicksightUserDeleter(): QuicksightUserDeleterInterface
+    {
+        return new QuicksightUserDeleter(
+            $this->createUserCollectionFilter(),
+            $this->createQuicksightUserMatcher(),
+            $this->getEntityManager(),
+            $this->createAmazonQuicksightApiClient(),
+            $this->getMessengerFacade(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Matcher\QuicksightUserMatcherInterface
+     */
+    public function createQuicksightUserMatcher(): QuicksightUserMatcherInterface
+    {
+        return new QuicksightUserMatcher(
+            $this->createUserReader(),
+            $this->createUserCollectionFilter(),
+            $this->createQuicksightUserCollectionFilter(),
         );
     }
 
@@ -60,14 +102,32 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Deleter\QuicksightUserDeleterInterface
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Reader\UserReaderInterface
      */
-    public function createQuicksightUserDeleter(): QuicksightUserDeleterInterface
+    public function createUserReader(): UserReaderInterface
     {
-        return new QuicksightUserDeleter(
+        return new UserReader(
+            $this->getConfig(),
+            $this->getUserFacade(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Filter\QuicksightUserCollectionFilterInterface
+     */
+    public function createQuicksightUserCollectionFilter(): QuicksightUserCollectionFilterInterface
+    {
+        return new QuicksightUserCollectionFilter($this->getConfig());
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilterInterface
+     */
+    public function createUserCollectionFilter(): UserCollectionFilterInterface
+    {
+        return new UserCollectionFilter(
+            $this->getConfig(),
             $this->createQuicksightUserReader(),
-            $this->getEntityManager(),
-            $this->createAmazonQuicksightApiClient(),
         );
     }
 
@@ -78,18 +138,18 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     {
         return new AmazonQuicksightApiClient(
             $this->getConfig(),
-            $this->createQuicksightUserMapper(),
+            $this->createAmazonQuicksightMapper(),
             $this->createAmazonQuicksightRequestDataFormatter(),
             $this->getAwsQuicksightClient(),
         );
     }
 
     /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\QuicksightUserMapperInterface
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface
      */
-    public function createQuicksightUserMapper(): QuicksightUserMapperInterface
+    public function createAmazonQuicksightMapper(): AmazonQuicksightMapperInterface
     {
-        return new QuicksightUserMapper();
+        return new AmazonQuicksightMapper();
     }
 
     /**
@@ -101,10 +161,46 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Expander\AnalyticsExpanderInterface
+     */
+    public function createAnalyticsExpander(): AnalyticsExpanderInterface
+    {
+        return new AnalyticsExpander(
+            $this->getRepository(),
+            $this->createAmazonQuicksightApiClient(),
+            $this->getTwigEnvironment(),
+        );
+    }
+
+    /**
      * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface
      */
     public function getAwsQuicksightClient(): AmazonQuicksightToAwsQuicksightClientInterface
     {
         return $this->getProvidedDependency(AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT);
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToUserFacadeInterface
+     */
+    public function getUserFacade(): AmazonQuicksightToUserFacadeInterface
+    {
+        return $this->getProvidedDependency(AmazonQuicksightDependencyProvider::FACADE_USER);
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface
+     */
+    public function getMessengerFacade(): AmazonQuicksightToMessengerFacadeInterface
+    {
+        return $this->getProvidedDependency(AmazonQuicksightDependencyProvider::FACADE_MESSENGER);
+    }
+
+    /**
+     * @return \Twig\Environment
+     */
+    public function getTwigEnvironment(): Environment
+    {
+        return $this->getProvidedDependency(AmazonQuicksightDependencyProvider::SERVICE_TWIG);
     }
 }

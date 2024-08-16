@@ -12,9 +12,9 @@ use Generated\Shared\Transfer\QuicksightUserCollectionTransfer;
 interface QuicksightUserReaderInterface
 {
     /**
-     * @param list<int> $quicksightUserIds
+     * @param array<int|string, \Generated\Shared\Transfer\UserTransfer> $userTransfers
      *
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionTransfer
      */
-    public function getQuicksightUserCollectionByQuicksightUserIds(array $quicksightUserIds): QuicksightUserCollectionTransfer;
+    public function getQuicksightUserCollectionByUserTransfers(array $userTransfers): QuicksightUserCollectionTransfer;
 }

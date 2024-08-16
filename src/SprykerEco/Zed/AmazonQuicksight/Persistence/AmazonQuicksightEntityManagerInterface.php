@@ -24,4 +24,11 @@ interface AmazonQuicksightEntityManagerInterface
      * @return void
      */
     public function deleteQuicksightUsers(array $quicksightUserIds): void;
+
+    /**
+     * @param list<int> $userIds
+     *
+     * @return void
+     */
+    public function deleteQuicksightUsersByUserIds(array $userIds): void;
 }

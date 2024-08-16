@@ -10,6 +10,8 @@ namespace SprykerEco\Zed\AmazonQuicksight;
 use Spryker\Zed\Kernel\AbstractBundleDependencyProvider;
 use Spryker\Zed\Kernel\Container;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientAdapter;
+use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeBridge;
+use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToUserFacadeBridge;
 
 /**
  * @method \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig getConfig()
@@ -22,6 +24,23 @@ class AmazonQuicksightDependencyProvider extends AbstractBundleDependencyProvide
     public const AWS_QUICKSIGHT_CLIENT = 'AWS_QUICKSIGHT_CLIENT';
 
     /**
+     * @var string
+     */
+    public const FACADE_USER = 'FACADE_USER';
+
+    /**
+     * @var string
+     */
+    public const FACADE_MESSENGER = 'FACADE_MESSENGER';
+
+    /**
+     * @uses \Spryker\Zed\Twig\Communication\Plugin\Application\TwigApplicationPlugin::SERVICE_TWIG
+     *
+     * @var string
+     */
+    public const SERVICE_TWIG = 'twig';
+
+    /**
      * @param \Spryker\Zed\Kernel\Container $container
      *
      * @return \Spryker\Zed\Kernel\Container
@@ -30,6 +49,9 @@ class AmazonQuicksightDependencyProvider extends AbstractBundleDependencyProvide
     {
         $container = parent::provideBusinessLayerDependencies($container);
         $container = $this->addAwsQuicksightClient($container);
+        $container = $this->addUserFacade($container);
+        $container = $this->addMessengerFacade($container);
+        $container = $this->addTwigEnvironment($container);
 
         return $container;
     }
@@ -45,6 +67,52 @@ class AmazonQuicksightDependencyProvider extends AbstractBundleDependencyProvide
             return new AmazonQuicksightToAwsQuicksightClientAdapter(
                 $this->getConfig()->getQuicksightClientConfiguration(),
             );
+        });
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addUserFacade(Container $container): Container
+    {
+        $container->set(static::FACADE_USER, function (Container $container) {
+            return new AmazonQuicksightToUserFacadeBridge(
+                $container->getLocator()->user()->facade(),
+            );
+        });
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addMessengerFacade(Container $container): Container
+    {
+        $container->set(static::FACADE_MESSENGER, function (Container $container) {
+            return new AmazonQuicksightToMessengerFacadeBridge(
+                $container->getLocator()->messenger()->facade(),
+            );
+        });
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addTwigEnvironment(Container $container): Container
+    {
+        $container->set(static::SERVICE_TWIG, function (Container $container) {
+            return $container->getApplicationService(static::SERVICE_TWIG);
         });
 
         return $container;

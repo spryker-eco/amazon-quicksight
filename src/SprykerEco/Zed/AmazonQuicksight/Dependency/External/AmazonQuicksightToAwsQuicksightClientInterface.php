@@ -31,4 +31,18 @@ interface AmazonQuicksightToAwsQuicksightClientInterface
      * @return \Aws\ResultInterface
      */
     public function deleteUserByPrincipalId(array $deleteUserRequestData): ResultInterface;
+
+    /**
+     * @param array<string, mixed> $deleteUserRequestData
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function deleteUser(array $deleteUserRequestData): ResultInterface;
+
+    /**
+     * @param array<string, mixed> $listUsersRequestData
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function listUsers(array $listUsersRequestData): ResultInterface;
 }

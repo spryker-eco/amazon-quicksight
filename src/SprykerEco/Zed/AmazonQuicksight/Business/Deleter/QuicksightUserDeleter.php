@@ -8,12 +8,15 @@
 namespace SprykerEco\Zed\AmazonQuicksight\Business\Deleter;
 
 use ArrayObject;
-use Generated\Shared\Transfer\QuicksightUserCollectionDeleteCriteriaTransfer;
+use Generated\Shared\Transfer\MessageTransfer;
 use Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer;
-use Generated\Shared\Transfer\QuicksightUserCollectionTransfer;
+use Generated\Shared\Transfer\QuicksightUserTransfer;
+use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Spryker\Zed\Kernel\Persistence\EntityManager\TransactionTrait;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
-use SprykerEco\Zed\AmazonQuicksight\Business\Reader\QuicksightUserReaderInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilterInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Matcher\QuicksightUserMatcherInterface;
+use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface;
 
 class QuicksightUserDeleter implements QuicksightUserDeleterInterface
@@ -21,9 +24,19 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
     use TransactionTrait;
 
     /**
-     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Reader\QuicksightUserReaderInterface
+     * @var string
      */
-    protected QuicksightUserReaderInterface $quicksightUserReader;
+    protected const ERROR_MESSAGE_QUICKSIGHT_USER_DELETION_FAILED = 'The user role for Analytics could not be reset. Please contact your Spryker Success Manager.';
+
+    /**
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilterInterface
+     */
+    protected UserCollectionFilterInterface $userCollectionFilter;
+
+    /**
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Matcher\QuicksightUserMatcherInterface
+     */
+    protected QuicksightUserMatcherInterface $quicksightUserMatcher;
 
     /**
      * @var \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface
@@ -36,78 +49,145 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
     protected AmazonQuicksightApiClientInterface $amazonQuicksightApiClient;
 
     /**
-     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Reader\QuicksightUserReaderInterface $quicksightUserReader
+     * @var \SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface
+     */
+    protected AmazonQuicksightToMessengerFacadeInterface $messengerFacade;
+
+    /**
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilterInterface $userCollectionFilter
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Matcher\QuicksightUserMatcherInterface $quicksightUserMatcher
      * @param \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface $amazonQuicksightApiClient
+     * @param \SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface $messengerFacade
      */
     public function __construct(
-        QuicksightUserReaderInterface $quicksightUserReader,
+        UserCollectionFilterInterface $userCollectionFilter,
+        QuicksightUserMatcherInterface $quicksightUserMatcher,
         AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager,
-        AmazonQuicksightApiClientInterface $amazonQuicksightApiClient
+        AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
+        AmazonQuicksightToMessengerFacadeInterface $messengerFacade
     ) {
-        $this->quicksightUserReader = $quicksightUserReader;
+        $this->userCollectionFilter = $userCollectionFilter;
+        $this->quicksightUserMatcher = $quicksightUserMatcher;
         $this->amazonQuicksightEntityManager = $amazonQuicksightEntityManager;
         $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
+        $this->messengerFacade = $messengerFacade;
     }
 
     /**
-     * @param \Generated\Shared\Transfer\QuicksightUserCollectionDeleteCriteriaTransfer $quicksightUserCollectionDeleteCriteriaTransfer
+     * @param \Generated\Shared\Transfer\UserCollectionResponseTransfer $userCollectionResponseTransfer
      *
-     * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
+     * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
-    public function deleteQuicksightUserCollection(
-        QuicksightUserCollectionDeleteCriteriaTransfer $quicksightUserCollectionDeleteCriteriaTransfer
-    ): QuicksightUserCollectionResponseTransfer {
-        $quicksightUserCollectionResponseTransfer = new QuicksightUserCollectionResponseTransfer();
-
-        if ($quicksightUserCollectionDeleteCriteriaTransfer->getQuicksightUserIds() === []) {
-            return $quicksightUserCollectionResponseTransfer;
-        }
-
-        $quicksightUserCollectionTransfer = $this->quicksightUserReader->getQuicksightUserCollectionByQuicksightUserIds(
-            $quicksightUserCollectionDeleteCriteriaTransfer->getQuicksightUserIds(),
+    public function deleteQuicksightUsersByUserCollectionResponse(
+        UserCollectionResponseTransfer $userCollectionResponseTransfer
+    ): UserCollectionResponseTransfer {
+        $filteredUserTransfers = $this->userCollectionFilter->filterOutUserTransfersNotApplicableForQuicksightUserDeletion(
+            $userCollectionResponseTransfer->getUsers()->getArrayCopy(),
         );
-        if ($quicksightUserCollectionTransfer->getQuicksightUsers()->count() === 0) {
-            return $quicksightUserCollectionResponseTransfer;
+
+        if ($filteredUserTransfers === []) {
+            return $userCollectionResponseTransfer;
         }
 
-        return $this->getTransactionHandler()->handleTransaction(function () use ($quicksightUserCollectionTransfer, $quicksightUserCollectionResponseTransfer) {
-            return $this->executeDeleteQuicksightUserCollectionTransaction(
-                $quicksightUserCollectionTransfer,
-                $quicksightUserCollectionResponseTransfer,
+        return $this->getTransactionHandler()->handleTransaction(function () use ($userCollectionResponseTransfer, $filteredUserTransfers) {
+            return $this->executeDeleteQuicksightUsersByUserCollectionResponseTransaction(
+                $userCollectionResponseTransfer,
+                $filteredUserTransfers,
             );
         });
     }
 
     /**
-     * @param \Generated\Shared\Transfer\QuicksightUserCollectionTransfer $quicksightUserCollectionTransfer
-     * @param \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer $quicksightUserCollectionResponseTransfer
-     *
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
      */
-    protected function executeDeleteQuicksightUserCollectionTransaction(
-        QuicksightUserCollectionTransfer $quicksightUserCollectionTransfer,
-        QuicksightUserCollectionResponseTransfer $quicksightUserCollectionResponseTransfer
-    ): QuicksightUserCollectionResponseTransfer {
-        $quicksightUserIdsToDelete = [];
-        foreach ($quicksightUserCollectionTransfer->getQuicksightUsers() as $quicksightUserTransfer) {
-            $quicksightUserCollectionResponseTransfer->addQuicksightUser($quicksightUserTransfer);
+    public function deleteRegisteredQuicksightUsersNotMatchedWithExistingUsers(): QuicksightUserCollectionResponseTransfer
+    {
+        $quicksightUserCollectionResponseTransfer = new QuicksightUserCollectionResponseTransfer();
 
-            $quicksightDeleteUserResponseTransfer = $this->amazonQuicksightApiClient->deleteUser($quicksightUserTransfer);
-            if ($quicksightDeleteUserResponseTransfer->getErrors()) {
-                $quicksightUserCollectionResponseTransfer = $this->addErrorsToQuicksightUserCollectionResponse(
-                    $quicksightUserCollectionResponseTransfer,
+        $quicksightListUsersResponseTransfer = $this->amazonQuicksightApiClient->listUsers();
+        if ($quicksightListUsersResponseTransfer->getErrors()->count() !== 0) {
+            return $quicksightUserCollectionResponseTransfer->setErrors(
+                $quicksightListUsersResponseTransfer->getErrors(),
+            );
+        }
+
+        $quicksightUserTransfers = $quicksightListUsersResponseTransfer->getQuicksightUsers();
+        if ($quicksightUserTransfers->count() === 0) {
+            return $quicksightUserCollectionResponseTransfer;
+        }
+
+        $notMatchedQuicksightUserTransfers = $this->quicksightUserMatcher->getQuicksightUsersNotMatchedWithExistingUsers(
+            $quicksightUserTransfers,
+        );
+
+        foreach ($notMatchedQuicksightUserTransfers as $quicksightUserTransfer) {
+            $quicksightUserCollectionResponseTransfer = $this->deleteQuicksightUser(
+                $quicksightUserTransfer,
+                $quicksightUserCollectionResponseTransfer,
+            );
+        }
+
+        return $quicksightUserCollectionResponseTransfer;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\UserCollectionResponseTransfer $userCollectionResponseTransfer
+     * @param array<int|string, \Generated\Shared\Transfer\UserTransfer> $userTransfers
+     *
+     * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
+     */
+    protected function executeDeleteQuicksightUsersByUserCollectionResponseTransaction(
+        UserCollectionResponseTransfer $userCollectionResponseTransfer,
+        array $userTransfers
+    ): UserCollectionResponseTransfer {
+        $userIdsToDelete = [];
+        foreach ($userTransfers as $entityIdentifier => $userTransfer) {
+            $quicksightDeleteUserResponseTransfer = $this->amazonQuicksightApiClient->deleteUserByUsername($userTransfer);
+            if ($quicksightDeleteUserResponseTransfer->getErrors()->count() !== 0) {
+                $userCollectionResponseTransfer = $this->addErrorsToUserCollectionResponse(
+                    $userCollectionResponseTransfer,
                     $quicksightDeleteUserResponseTransfer->getErrors(),
-                    $quicksightUserTransfer->getIdQuicksightUser(),
+                    (string)$entityIdentifier,
+                );
+
+                $this->messengerFacade->addInfoMessage(
+                    (new MessageTransfer())->setValue(static::ERROR_MESSAGE_QUICKSIGHT_USER_DELETION_FAILED),
                 );
 
                 continue;
             }
 
-            $quicksightUserIdsToDelete[] = $quicksightUserTransfer->getIdQuicksightUser();
+            $userIdsToDelete[] = $userTransfer->getIdUserOrFail();
         }
 
-        $this->amazonQuicksightEntityManager->deleteQuicksightUsers($quicksightUserIdsToDelete);
+        $this->amazonQuicksightEntityManager->deleteQuicksightUsersByUserIds($userIdsToDelete);
+
+        return $userCollectionResponseTransfer;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
+     * @param \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer $quicksightUserCollectionResponseTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
+     */
+    protected function deleteQuicksightUser(
+        QuicksightUserTransfer $quicksightUserTransfer,
+        QuicksightUserCollectionResponseTransfer $quicksightUserCollectionResponseTransfer
+    ): QuicksightUserCollectionResponseTransfer {
+        $quicksightDeleteUserResponseTransfer = $this->amazonQuicksightApiClient->deleteUserByPrincipalId(
+            $quicksightUserTransfer,
+        );
+
+        if ($quicksightDeleteUserResponseTransfer->getErrors()->count() !== 0) {
+            return $this->addErrorsToQuicksightUserCollectionResponse(
+                $quicksightUserCollectionResponseTransfer,
+                $quicksightDeleteUserResponseTransfer->getErrors(),
+            );
+        }
+
+        $quicksightUserCollectionResponseTransfer->addQuicksightUser($quicksightUserTransfer);
 
         return $quicksightUserCollectionResponseTransfer;
     }
@@ -115,20 +195,37 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
     /**
      * @param \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer $quicksightUserCollectionResponseTransfer
      * @param \ArrayObject<array-key, \Generated\Shared\Transfer\ErrorTransfer> $errorTransfers
-     * @param string $entityIdentifier
      *
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
      */
     protected function addErrorsToQuicksightUserCollectionResponse(
         QuicksightUserCollectionResponseTransfer $quicksightUserCollectionResponseTransfer,
-        ArrayObject $errorTransfers,
-        string $entityIdentifier
+        ArrayObject $errorTransfers
     ): QuicksightUserCollectionResponseTransfer {
         foreach ($errorTransfers as $errorTransfer) {
-            $errorTransfer->setEntityIdentifier($entityIdentifier);
             $quicksightUserCollectionResponseTransfer->addError($errorTransfer);
         }
 
         return $quicksightUserCollectionResponseTransfer;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\UserCollectionResponseTransfer $userCollectionResponseTransfer
+     * @param \ArrayObject<array-key, \Generated\Shared\Transfer\ErrorTransfer> $errorTransfers
+     * @param string $entityIdentifier
+     *
+     * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
+     */
+    protected function addErrorsToUserCollectionResponse(
+        UserCollectionResponseTransfer $userCollectionResponseTransfer,
+        ArrayObject $errorTransfers,
+        string $entityIdentifier
+    ): UserCollectionResponseTransfer {
+        foreach ($errorTransfers as $errorTransfer) {
+            $errorTransfer->setEntityIdentifier($entityIdentifier);
+            $userCollectionResponseTransfer->addError($errorTransfer);
+        }
+
+        return $userCollectionResponseTransfer;
     }
 }

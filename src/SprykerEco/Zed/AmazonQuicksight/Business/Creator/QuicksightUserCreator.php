@@ -8,9 +8,14 @@
 namespace SprykerEco\Zed\AmazonQuicksight\Business\Creator;
 
 use ArrayObject;
+use Generated\Shared\Transfer\MessageTransfer;
+use Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Spryker\Zed\Kernel\Persistence\EntityManager\TransactionTrait;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilterInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Matcher\QuicksightUserMatcherInterface;
+use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface;
 
 class QuicksightUserCreator implements QuicksightUserCreatorInterface
@@ -18,9 +23,19 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
     use TransactionTrait;
 
     /**
-     * @var \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface
+     * @var string
      */
-    protected AmazonQuicksightApiClientInterface $amazonQuicksightApiClient;
+    protected const ERROR_MESSAGE_QUICKSIGHT_USER_REGISTRATION_FAILED = 'The user role for Analytics could not be set. Please try again later.';
+
+    /**
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilterInterface
+     */
+    protected UserCollectionFilterInterface $userCollectionFilter;
+
+    /**
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Matcher\QuicksightUserMatcherInterface
+     */
+    protected QuicksightUserMatcherInterface $quicksightUserMatcher;
 
     /**
      * @var \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface
@@ -28,15 +43,34 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
     protected AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager;
 
     /**
-     * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface $amazonQuicksightApiClient
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface
+     */
+    protected AmazonQuicksightApiClientInterface $amazonQuicksightApiClient;
+
+    /**
+     * @var \SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface
+     */
+    protected AmazonQuicksightToMessengerFacadeInterface $messengerFacade;
+
+    /**
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilterInterface $userCollectionFilter
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Matcher\QuicksightUserMatcherInterface $quicksightUserMatcher
      * @param \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface $amazonQuicksightApiClient
+     * @param \SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface $messengerFacade
      */
     public function __construct(
+        UserCollectionFilterInterface $userCollectionFilter,
+        QuicksightUserMatcherInterface $quicksightUserMatcher,
+        AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager,
         AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
-        AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager
+        AmazonQuicksightToMessengerFacadeInterface $messengerFacade
     ) {
-        $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
+        $this->userCollectionFilter = $userCollectionFilter;
+        $this->quicksightUserMatcher = $quicksightUserMatcher;
         $this->amazonQuicksightEntityManager = $amazonQuicksightEntityManager;
+        $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
+        $this->messengerFacade = $messengerFacade;
     }
 
     /**
@@ -47,20 +81,53 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
     public function createQuicksightUsersForUserCollectionResponse(
         UserCollectionResponseTransfer $userCollectionResponseTransfer
     ): UserCollectionResponseTransfer {
-        $userTransfersWithQuicksightUserRole = $this->extractUserTransfersWithQuicksightUserRole(
-            $userCollectionResponseTransfer->getUsers(),
+        $filteredUserTransfers = $this->userCollectionFilter->filterOutUserTransfersNotApplicableForQuicksightUserRegistration(
+            $userCollectionResponseTransfer->getUsers()->getArrayCopy(),
         );
 
-        if ($userTransfersWithQuicksightUserRole === []) {
+        if ($filteredUserTransfers === []) {
             return $userCollectionResponseTransfer;
         }
 
-        return $this->getTransactionHandler()->handleTransaction(function () use ($userCollectionResponseTransfer, $userTransfersWithQuicksightUserRole) {
-            return $this->executeCreateQuicksightUsersForUsersTransaction(
+        return $this->getTransactionHandler()->handleTransaction(function () use ($userCollectionResponseTransfer, $filteredUserTransfers) {
+            return $this->executeCreateQuicksightUsersForUserCollectionResponseTransaction(
                 $userCollectionResponseTransfer,
-                $userTransfersWithQuicksightUserRole,
+                $filteredUserTransfers,
             );
         });
+    }
+
+    /**
+     * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
+     */
+    public function createQuicksightUsersForRegisteredQuicksightUsersMatchedExistingUsers(): QuicksightUserCollectionResponseTransfer
+    {
+        $quicksightUserCollectionResponseTransfer = new QuicksightUserCollectionResponseTransfer();
+
+        $quicksightListUsersResponseTransfer = $this->amazonQuicksightApiClient->listUsers();
+        if ($quicksightListUsersResponseTransfer->getErrors()->count() !== 0) {
+            return $quicksightUserCollectionResponseTransfer->setErrors(
+                $quicksightListUsersResponseTransfer->getErrors(),
+            );
+        }
+
+        $quicksightUserTransfers = $quicksightListUsersResponseTransfer->getQuicksightUsers();
+        if ($quicksightUserTransfers->count() === 0) {
+            return $quicksightUserCollectionResponseTransfer;
+        }
+
+        $matchedQuicksightUserTransfers = $this->quicksightUserMatcher->getQuicksightUsersMatchedWithExistingUsers(
+            $quicksightUserTransfers,
+        );
+        if ($matchedQuicksightUserTransfers === []) {
+            return $quicksightUserCollectionResponseTransfer;
+        }
+
+        $persistedQuicksightUserTransfers = $this->getTransactionHandler()->handleTransaction(function () use ($matchedQuicksightUserTransfers) {
+            return $this->executeCreateQuicksightUsersForRegisteredQuicksightUsersMatchedExistingUsersTransaction($matchedQuicksightUserTransfers);
+        });
+
+        return $quicksightUserCollectionResponseTransfer->setQuicksightUsers(new ArrayObject($persistedQuicksightUserTransfers));
     }
 
     /**
@@ -69,7 +136,7 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
      *
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
-    protected function executeCreateQuicksightUsersForUsersTransaction(
+    protected function executeCreateQuicksightUsersForUserCollectionResponseTransaction(
         UserCollectionResponseTransfer $userCollectionResponseTransfer,
         array $userTransfers
     ): UserCollectionResponseTransfer {
@@ -79,7 +146,11 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
                 $userCollectionResponseTransfer = $this->addErrorsToUserCollectionResponse(
                     $userCollectionResponseTransfer,
                     $quicksightUserRegisterResponseTransfer->getErrors(),
-                    $entityIdentifier,
+                    (string)$entityIdentifier,
+                );
+
+                $this->messengerFacade->addErrorMessage(
+                    (new MessageTransfer())->setValue(static::ERROR_MESSAGE_QUICKSIGHT_USER_REGISTRATION_FAILED),
                 );
 
                 continue;
@@ -96,20 +167,18 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
     }
 
     /**
-     * @param \ArrayObject<array-key, \Generated\Shared\Transfer\UserTransfer> $userTransfers
+     * @param array<int|string, \Generated\Shared\Transfer\QuicksightUserTransfer> $quicksightUserTransfers
      *
-     * @return array<int|string, \Generated\Shared\Transfer\UserTransfer>
+     * @return array<int|string, \Generated\Shared\Transfer\QuicksightUserTransfer>
      */
-    protected function extractUserTransfersWithQuicksightUserRole(ArrayObject $userTransfers): array
-    {
-        $extractedUserTransfers = [];
-        foreach ($userTransfers as $entityIdentifier => $userTransfer) {
-            if ($userTransfer->getQuicksightUser() && $userTransfer->getQuicksightUserOrFail()->getRole()) {
-                $extractedUserTransfers[$entityIdentifier] = $userTransfer;
-            }
+    protected function executeCreateQuicksightUsersForRegisteredQuicksightUsersMatchedExistingUsersTransaction(
+        array $quicksightUserTransfers
+    ): array {
+        foreach ($quicksightUserTransfers as $quicksightUserTransfer) {
+            $this->amazonQuicksightEntityManager->createQuicksightUser($quicksightUserTransfer);
         }
 
-        return $extractedUserTransfers;
+        return $quicksightUserTransfers;
     }
 
     /**

@@ -9,24 +9,17 @@ namespace SprykerEco\Zed\AmazonQuicksight\Communication\Plugin\User;
 
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Spryker\Zed\Kernel\Communication\AbstractPlugin;
-use Spryker\Zed\UserExtension\Dependency\Plugin\UserPostCreatePluginInterface;
+use Spryker\Zed\UserExtension\Dependency\Plugin\UserPostUpdatePluginInterface;
 
 /**
  * @method \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig getConfig()
  * @method \SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightFacadeInterface getFacade()
  * @method \SprykerEco\Zed\AmazonQuicksight\Communication\AmazonQuicksightCommunicationFactory getFactory()
  */
-class QuicksightUserPostCreatePlugin extends AbstractPlugin implements UserPostCreatePluginInterface
+class CreateQuicksightUserPostUpdatePlugin extends AbstractPlugin implements UserPostUpdatePluginInterface
 {
     /**
      * {@inheritDoc}
-     * - Expects `UserCollectionResponseTransfer.users.quicksightUser.role` to be set.
-     * - Does nothing if `UserTransfer.quicksightUser.role` is not set.
-     * - Filters out users with already persisted quicksight user.
-     * - Sends request to AWS API to register Quicksight users. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_RegisterUser.html}.
-     * - Adds errors to `UserCollectionResponseTransfer.errors` if Quicksight user registration failed.
-     * - Persists successfully registered Quicksight users in the database.
-     * - Returns `UserCollectionResponseTransfer` with updated `UserTransfers`.
      *
      * @api
      *
@@ -34,7 +27,7 @@ class QuicksightUserPostCreatePlugin extends AbstractPlugin implements UserPostC
      *
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
-    public function postCreate(UserCollectionResponseTransfer $userCollectionResponseTransfer): UserCollectionResponseTransfer
+    public function postUpdate(UserCollectionResponseTransfer $userCollectionResponseTransfer): UserCollectionResponseTransfer
     {
         return $this->getFacade()->createQuicksightUsersByUserCollectionResponse($userCollectionResponseTransfer);
     }
