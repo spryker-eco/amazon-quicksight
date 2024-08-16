@@ -171,7 +171,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
 
     /**
      * Specification:
-     * - Returns a list of user statuses that allow user deletion from Quicksight.
+     * - Returns a list of user statuses that allows user deletion from Quicksight.
      *
      * @api
      *
