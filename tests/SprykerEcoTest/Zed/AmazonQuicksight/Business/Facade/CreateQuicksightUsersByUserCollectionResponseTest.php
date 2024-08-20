@@ -15,7 +15,18 @@ use Generated\Shared\Transfer\UserTransfer;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
 use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester;
 
-class CreateQuicksightUsersForUserCollectionResponseTest extends Unit
+/**
+ * Auto-generated group annotations
+ *
+ * @group SprykerEcoTest
+ * @group Zed
+ * @group AmazonQuicksight
+ * @group Business
+ * @group Facade
+ * @group CreateQuicksightUsersForUserCollectionResponseTest
+ * Add your own group annotations below this line
+ */
+class CreateQuicksightUsersByUserCollectionResponseTest extends Unit
 {
     /**
      * @uses \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::QUICKSIGHT_USER_ROLE_READER
@@ -23,6 +34,13 @@ class CreateQuicksightUsersForUserCollectionResponseTest extends Unit
      * @var string
      */
     protected const QUICKSIGHT_USER_ROLE_READER = 'READER';
+
+    /**
+     * @uses \Orm\Zed\User\Persistence\Map\SpyUserTableMap::COL_STATUS_BLOCKED
+     *
+     * @var string
+     */
+    protected const USER_STATUS_BLOCKED = 'blocked';
 
     /**
      * @var string
@@ -61,7 +79,7 @@ class CreateQuicksightUsersForUserCollectionResponseTest extends Unit
 
         // Act
         $userCollectionResponseTransfer = $this->tester->getFacade()
-            ->createQuicksightUsersForUserCollectionResponse($userCollectionResponseTransfer);
+            ->createQuicksightUsersByUserCollectionResponse($userCollectionResponseTransfer);
 
         // Assert
         $this->assertCount(0, $userCollectionResponseTransfer->getErrors());
@@ -81,7 +99,7 @@ class CreateQuicksightUsersForUserCollectionResponseTest extends Unit
     /**
      * @return void
      */
-    public function testShouldReturnErrorWhenUserQuicksightClientThrowsException(): void
+    public function testShouldReturnErrorWhenQuicksightClientThrowsException(): void
     {
         // Arrange
         $userTransfer = $this->tester->haveUserWithNotPersistedQuicksightUserRole(static::QUICKSIGHT_USER_ROLE_READER);
@@ -98,7 +116,7 @@ class CreateQuicksightUsersForUserCollectionResponseTest extends Unit
 
         // Act
         $userCollectionResponseTransfer = $this->tester->getFacade()
-            ->createQuicksightUsersForUserCollectionResponse($userCollectionResponseTransfer);
+            ->createQuicksightUsersByUserCollectionResponse($userCollectionResponseTransfer);
 
         // Assert
         $this->assertCount(1, $userCollectionResponseTransfer->getErrors());
@@ -134,7 +152,7 @@ class CreateQuicksightUsersForUserCollectionResponseTest extends Unit
 
         // Act
         $userCollectionResponseTransfer = $this->tester->getFacade()
-            ->createQuicksightUsersForUserCollectionResponse($userCollectionResponseTransfer);
+            ->createQuicksightUsersByUserCollectionResponse($userCollectionResponseTransfer);
 
         // Assert
         $this->assertCount(1, $userCollectionResponseTransfer->getErrors());
@@ -173,7 +191,66 @@ class CreateQuicksightUsersForUserCollectionResponseTest extends Unit
 
         // Act
         $userCollectionResponseTransfer = $this->tester->getFacade()
-            ->createQuicksightUsersForUserCollectionResponse($userCollectionResponseTransfer);
+            ->createQuicksightUsersByUserCollectionResponse($userCollectionResponseTransfer);
+
+        // Assert
+        $this->assertCount(0, $userCollectionResponseTransfer->getErrors());
+        $this->assertCount(1, $userCollectionResponseTransfer->getUsers());
+        $this->assertNull($userCollectionResponseTransfer->getUsers()->getIterator()->current()->getQuicksightUser());
+    }
+
+    /**
+     * @return void
+     */
+    public function testShouldDoNothingWhenQuicksightUserAlreadyExistsForProvidedForUser(): void
+    {
+        // Arrange
+        $userTransfer = $this->tester->haveUser();
+        $this->tester->haveQuicksightUser($userTransfer);
+
+        $awsQuicksightClientMock = $this->tester->getAwsQuicksightClientMock();
+        $awsQuicksightClientMock->expects($this->never())->method('registerUser');
+        $this->tester->setDependency(
+            AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
+            $awsQuicksightClientMock,
+        );
+
+        // Act
+        $userCollectionResponseTransfer = (new UserCollectionResponseTransfer())->addUser($userTransfer);
+
+        // Act
+        $userCollectionResponseTransfer = $this->tester->getFacade()
+            ->createQuicksightUsersByUserCollectionResponse($userCollectionResponseTransfer);
+
+        // Assert
+        $this->assertCount(0, $userCollectionResponseTransfer->getErrors());
+        $this->assertCount(1, $userCollectionResponseTransfer->getUsers());
+        $this->assertNull($userCollectionResponseTransfer->getUsers()->getIterator()->current()->getQuicksightUser());
+    }
+
+    /**
+     * @return void
+     */
+    public function testShouldDoNothingWhenQuicksightUserStatusIsNotApplicableForRegisteringQuicksightUser(): void
+    {
+        // Arrange
+        $userTransfer = $this->tester->haveUser([
+            UserTransfer::STATUS => static::USER_STATUS_BLOCKED,
+        ]);
+
+        $awsQuicksightClientMock = $this->tester->getAwsQuicksightClientMock();
+        $awsQuicksightClientMock->expects($this->never())->method('registerUser');
+        $this->tester->setDependency(
+            AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
+            $awsQuicksightClientMock,
+        );
+
+        // Act
+        $userCollectionResponseTransfer = (new UserCollectionResponseTransfer())->addUser($userTransfer);
+
+        // Act
+        $userCollectionResponseTransfer = $this->tester->getFacade()
+            ->createQuicksightUsersByUserCollectionResponse($userCollectionResponseTransfer);
 
         // Assert
         $this->assertCount(0, $userCollectionResponseTransfer->getErrors());

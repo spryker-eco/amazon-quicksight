@@ -4,12 +4,31 @@
     <transfer name="QuicksightUser" strict="true">
         <property name="idQuicksightUser" type="int"/>
         <property name="fkUser" type="int"/>
+        <property name="userName" type="string"/>
         <property name="role" type="string"/>
         <property name="arn" type="string"/>
         <property name="principalId" type="string"/>
         <property name="uuid" type="string"/>
         <property name="createdAt" type="string"/>
         <property name="updatedAt" type="string"/>
+    </transfer>
+
+    <transfer name="QuicksightUserCriteria" strict="true">
+        <property name="quicksightUserConditions" type="QuicksightUserConditions"/>
+    </transfer>
+
+    <transfer name="QuicksightUserConditions" strict="true">
+        <property name="quicksightUserIds" type="int[]" singular="idQuicksightUser"/>
+        <property name="userIds" type="int[]" singular="idUser"/>
+    </transfer>
+
+    <transfer name="QuicksightUserCollection" strict="true">
+        <property name="quicksightUsers" type="QuicksightUser[]" singular="quicksightUser"/>
+    </transfer>
+
+    <transfer name="QuicksightUserCollectionResponse" strict="true">
+        <property name="quicksightUsers" type="QuicksightUser[]" singular="quicksightUser"/>
+        <property name="errors" type="Error[]" singular="error"/>
     </transfer>
 
     <transfer name="UserCollectionResponse" strict="true">
@@ -20,11 +39,16 @@
     <transfer name="User">
         <property name="idUser" type="int"/>
         <property name="quicksightUser" type="QuicksightUser" strict="true"/>
-        <property name="idUser" type="int"/>
         <property name="username" type="string"/>
+        <property name="status" type="string"/>
     </transfer>
 
     <transfer name="QuicksightUserRegisterResponse" strict="true">
+        <property name="errors" type="Error[]" singular="error"/>
+        <property name="quicksightUser" type="QuicksightUser"/>
+    </transfer>
+
+    <transfer name="QuicksightDeleteUserResponse" strict="true">
         <property name="errors" type="Error[]" singular="error"/>
         <property name="quicksightUser" type="QuicksightUser"/>
     </transfer>
@@ -36,6 +60,23 @@
         <property name="namespace" type="string"/>
         <property name="userRole" type="string" />
         <property name="userName" type="string"/>
+    </transfer>
+
+    <transfer name="QuicksightDeleteUserRequest" strict="true">
+        <property name="awsAccountId" type="string"/>
+        <property name="principalId" type="string" />
+        <property name="namespace" type="string"/>
+        <property name="userName" type="string"/>
+    </transfer>
+
+    <transfer name="QuicksightListUsersRequest" strict="true">
+        <property name="awsAccountId" type="string"/>
+        <property name="namespace" type="string"/>
+    </transfer>
+
+    <transfer name="QuicksightListUsersResponse" strict="true">
+        <property name="errors" type="Error[]" singular="error"/>
+        <property name="quicksightUsers" type="QuicksightUser[]" singular="quicksightUser"/>
     </transfer>
 
     <transfer name="Error">
@@ -84,6 +125,14 @@
 
     <transfer name="Analytics" strict="true">
         <property name="content" type="string"/>
+    </transfer>
+
+    <transfer name="UserConditions">
+        <property name="statuses" type="string[]" singular="status"/>
+    </transfer>
+
+    <transfer name="UserCriteria">
+        <property name="userConditions" type="UserConditions" strict="true"/>
     </transfer>
 
     <transfer name="QuicksightAssetBundleImportJob" strict="true">

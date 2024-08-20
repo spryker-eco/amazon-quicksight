@@ -43,12 +43,13 @@ class AmazonQuicksightBusinessTester extends Actor
 
     /**
      * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
+     * @param list<mixed> $seedData
      *
      * @return \Generated\Shared\Transfer\QuicksightUserTransfer
      */
-    public function haveQuicksightUser(UserTransfer $userTransfer): QuicksightUserTransfer
+    public function haveQuicksightUser(UserTransfer $userTransfer, array $seedData = []): QuicksightUserTransfer
     {
-        $quicksightUserTransfer = (new QuicksightUserBuilder())->build();
+        $quicksightUserTransfer = (new QuicksightUserBuilder($seedData))->build();
         $quicksightUserTransfer->setFkUser($userTransfer->getIdUserOrFail());
         $quicksightUserEntity = (new SpyQuicksightUser())
             ->fromArray($quicksightUserTransfer->toArray());
@@ -69,6 +70,9 @@ class AmazonQuicksightBusinessTester extends Actor
         return $this->haveUser([
             UserTransfer::QUICKSIGHT_USER => (new QuicksightUserBuilder([
                 QuicksightUserTransfer::ROLE => $quicksightUserRole,
+                QuicksightUserTransfer::ARN => null,
+                QuicksightUserTransfer::PRINCIPAL_ID => null,
+                QuicksightUserTransfer::UUID => null,
             ]))->build(),
         ]);
     }
@@ -77,7 +81,7 @@ class AmazonQuicksightBusinessTester extends Actor
      * @param \Aws\ResultInterface $result
      * @param string $methodName
      *
-     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface|\PHPUnit\Framework\MockObject\Stub
+     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getAwsQuicksightClientMockWithSuccessfulResponse(
         ResultInterface $result,
@@ -93,7 +97,7 @@ class AmazonQuicksightBusinessTester extends Actor
      * @param \Aws\QuickSight\Exception\QuickSightException $quickSightException
      * @param string $methodName
      *
-     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface|\PHPUnit\Framework\MockObject\Stub
+     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getAwsQuicksightClientMockWithErrorResponse(
         QuickSightException $quickSightException,
@@ -108,7 +112,7 @@ class AmazonQuicksightBusinessTester extends Actor
     /**
      * @param string $message
      *
-     * @return \Aws\QuickSight\Exception\QuickSightException|\PHPUnit\Framework\MockObject\Stub
+     * @return \Aws\QuickSight\Exception\QuickSightException|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getQuicksightExceptionMock(string $message): QuickSightException
     {
@@ -119,7 +123,7 @@ class AmazonQuicksightBusinessTester extends Actor
     }
 
     /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface|\PHPUnit\Framework\MockObject\Stub
+     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getAwsQuicksightClientMock(): AmazonQuicksightToAwsQuicksightClientInterface
     {
@@ -127,7 +131,7 @@ class AmazonQuicksightBusinessTester extends Actor
     }
 
     /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface|\PHPUnit\Framework\MockObject\Stub
+     * @return \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getAmazonQuicksightRepositoryMock(): AmazonQuicksightRepositoryInterface
     {
@@ -159,6 +163,18 @@ class AmazonQuicksightBusinessTester extends Actor
     {
         return $this->getQuicksightUserQuery()
             ->filterByFkUser($idUser)
+            ->findOne();
+    }
+
+    /**
+     * @param string $arn
+     *
+     * @return \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUser|null
+     */
+    public function findQuicksightUserByArn(string $arn): ?SpyQuicksightUser
+    {
+        return $this->getQuicksightUserQuery()
+            ->filterByArn($arn)
             ->findOne();
     }
 

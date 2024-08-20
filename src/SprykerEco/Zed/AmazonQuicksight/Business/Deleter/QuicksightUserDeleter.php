@@ -5,11 +5,12 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerEco\Zed\AmazonQuicksight\Business\Creator;
+namespace SprykerEco\Zed\AmazonQuicksight\Business\Deleter;
 
 use ArrayObject;
 use Generated\Shared\Transfer\MessageTransfer;
 use Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer;
+use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Spryker\Zed\Kernel\Persistence\EntityManager\TransactionTrait;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
@@ -18,14 +19,14 @@ use SprykerEco\Zed\AmazonQuicksight\Business\Matcher\QuicksightUserMatcherInterf
 use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface;
 
-class QuicksightUserCreator implements QuicksightUserCreatorInterface
+class QuicksightUserDeleter implements QuicksightUserDeleterInterface
 {
     use TransactionTrait;
 
     /**
      * @var string
      */
-    protected const ERROR_MESSAGE_QUICKSIGHT_USER_REGISTRATION_FAILED = 'The user role for Analytics could not be set. Please try again later.';
+    protected const ERROR_MESSAGE_QUICKSIGHT_USER_DELETION_FAILED = 'The user role for Analytics could not be reset. Please contact your Spryker Success Manager.';
 
     /**
      * @var \SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilterInterface
@@ -78,10 +79,10 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
      *
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
-    public function createQuicksightUsersByUserCollectionResponse(
+    public function deleteQuicksightUsersByUserCollectionResponse(
         UserCollectionResponseTransfer $userCollectionResponseTransfer
     ): UserCollectionResponseTransfer {
-        $filteredUserTransfers = $this->userCollectionFilter->filterOutUserTransfersNotApplicableForQuicksightUserRegistration(
+        $filteredUserTransfers = $this->userCollectionFilter->filterOutUserTransfersNotApplicableForQuicksightUserDeletion(
             $userCollectionResponseTransfer->getUsers()->getArrayCopy(),
         );
 
@@ -90,7 +91,7 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
         }
 
         return $this->getTransactionHandler()->handleTransaction(function () use ($userCollectionResponseTransfer, $filteredUserTransfers) {
-            return $this->executeCreateQuicksightUsersForUserCollectionResponseTransaction(
+            return $this->executeDeleteQuicksightUsersByUserCollectionResponseTransaction(
                 $userCollectionResponseTransfer,
                 $filteredUserTransfers,
             );
@@ -100,7 +101,7 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
     /**
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
      */
-    public function createMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer
+    public function deleteNotMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer
     {
         $quicksightUserCollectionResponseTransfer = new QuicksightUserCollectionResponseTransfer();
 
@@ -116,18 +117,18 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
             return $quicksightUserCollectionResponseTransfer;
         }
 
-        $matchedQuicksightUserTransfers = $this->quicksightUserMatcher->getQuicksightUsersMatchedWithExistingUsers(
+        $notMatchedQuicksightUserTransfers = $this->quicksightUserMatcher->getQuicksightUsersNotMatchedWithExistingUsers(
             $quicksightUserTransfers,
         );
-        if ($matchedQuicksightUserTransfers === []) {
-            return $quicksightUserCollectionResponseTransfer;
+
+        foreach ($notMatchedQuicksightUserTransfers as $quicksightUserTransfer) {
+            $quicksightUserCollectionResponseTransfer = $this->deleteQuicksightUser(
+                $quicksightUserTransfer,
+                $quicksightUserCollectionResponseTransfer,
+            );
         }
 
-        $persistedQuicksightUserTransfers = $this->getTransactionHandler()->handleTransaction(function () use ($matchedQuicksightUserTransfers) {
-            return $this->executeCreateQuicksightUsersForRegisteredQuicksightUsersMatchedExistingUsersTransaction($matchedQuicksightUserTransfers);
-        });
-
-        return $quicksightUserCollectionResponseTransfer->setQuicksightUsers(new ArrayObject($persistedQuicksightUserTransfers));
+        return $quicksightUserCollectionResponseTransfer;
     }
 
     /**
@@ -136,49 +137,76 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
      *
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
-    protected function executeCreateQuicksightUsersForUserCollectionResponseTransaction(
+    protected function executeDeleteQuicksightUsersByUserCollectionResponseTransaction(
         UserCollectionResponseTransfer $userCollectionResponseTransfer,
         array $userTransfers
     ): UserCollectionResponseTransfer {
+        $userIdsToDelete = [];
         foreach ($userTransfers as $entityIdentifier => $userTransfer) {
-            $quicksightUserRegisterResponseTransfer = $this->amazonQuicksightApiClient->registerUser($userTransfer);
-            if ($quicksightUserRegisterResponseTransfer->getErrors()->count() !== 0) {
+            $quicksightDeleteUserResponseTransfer = $this->amazonQuicksightApiClient->deleteUserByUsername($userTransfer);
+            if ($quicksightDeleteUserResponseTransfer->getErrors()->count() !== 0) {
                 $userCollectionResponseTransfer = $this->addErrorsToUserCollectionResponse(
                     $userCollectionResponseTransfer,
-                    $quicksightUserRegisterResponseTransfer->getErrors(),
+                    $quicksightDeleteUserResponseTransfer->getErrors(),
                     (string)$entityIdentifier,
                 );
 
-                $this->messengerFacade->addErrorMessage(
-                    (new MessageTransfer())->setValue(static::ERROR_MESSAGE_QUICKSIGHT_USER_REGISTRATION_FAILED),
+                $this->messengerFacade->addInfoMessage(
+                    (new MessageTransfer())->setValue(static::ERROR_MESSAGE_QUICKSIGHT_USER_DELETION_FAILED),
                 );
 
                 continue;
             }
 
-            $quicksightUserTransfer = $quicksightUserRegisterResponseTransfer->getQuicksightUserOrFail();
-            $quicksightUserTransfer->setFkUser($userTransfer->getIdUserOrFail());
-
-            $quicksightUserTransfer = $this->amazonQuicksightEntityManager->createQuicksightUser($quicksightUserTransfer);
-            $userTransfer->setQuicksightUser($quicksightUserTransfer);
+            $userIdsToDelete[] = $userTransfer->getIdUserOrFail();
         }
+
+        $this->amazonQuicksightEntityManager->deleteQuicksightUsersByUserIds($userIdsToDelete);
 
         return $userCollectionResponseTransfer;
     }
 
     /**
-     * @param array<int|string, \Generated\Shared\Transfer\QuicksightUserTransfer> $quicksightUserTransfers
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
+     * @param \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer $quicksightUserCollectionResponseTransfer
      *
-     * @return array<int|string, \Generated\Shared\Transfer\QuicksightUserTransfer>
+     * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
      */
-    protected function executeCreateQuicksightUsersForRegisteredQuicksightUsersMatchedExistingUsersTransaction(
-        array $quicksightUserTransfers
-    ): array {
-        foreach ($quicksightUserTransfers as $quicksightUserTransfer) {
-            $this->amazonQuicksightEntityManager->createQuicksightUser($quicksightUserTransfer);
+    protected function deleteQuicksightUser(
+        QuicksightUserTransfer $quicksightUserTransfer,
+        QuicksightUserCollectionResponseTransfer $quicksightUserCollectionResponseTransfer
+    ): QuicksightUserCollectionResponseTransfer {
+        $quicksightDeleteUserResponseTransfer = $this->amazonQuicksightApiClient->deleteUserByPrincipalId(
+            $quicksightUserTransfer,
+        );
+
+        if ($quicksightDeleteUserResponseTransfer->getErrors()->count() !== 0) {
+            return $this->addErrorsToQuicksightUserCollectionResponse(
+                $quicksightUserCollectionResponseTransfer,
+                $quicksightDeleteUserResponseTransfer->getErrors(),
+            );
         }
 
-        return $quicksightUserTransfers;
+        $quicksightUserCollectionResponseTransfer->addQuicksightUser($quicksightUserTransfer);
+
+        return $quicksightUserCollectionResponseTransfer;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer $quicksightUserCollectionResponseTransfer
+     * @param \ArrayObject<array-key, \Generated\Shared\Transfer\ErrorTransfer> $errorTransfers
+     *
+     * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
+     */
+    protected function addErrorsToQuicksightUserCollectionResponse(
+        QuicksightUserCollectionResponseTransfer $quicksightUserCollectionResponseTransfer,
+        ArrayObject $errorTransfers
+    ): QuicksightUserCollectionResponseTransfer {
+        foreach ($errorTransfers as $errorTransfer) {
+            $quicksightUserCollectionResponseTransfer->addError($errorTransfer);
+        }
+
+        return $quicksightUserCollectionResponseTransfer;
     }
 
     /**
@@ -195,7 +223,6 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
     ): UserCollectionResponseTransfer {
         foreach ($errorTransfers as $errorTransfer) {
             $errorTransfer->setEntityIdentifier($entityIdentifier);
-
             $userCollectionResponseTransfer->addError($errorTransfer);
         }
 
