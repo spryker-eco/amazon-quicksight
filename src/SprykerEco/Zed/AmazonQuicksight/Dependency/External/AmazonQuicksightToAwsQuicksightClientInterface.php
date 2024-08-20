@@ -73,4 +73,18 @@ interface AmazonQuicksightToAwsQuicksightClientInterface
      * @return \Aws\ResultInterface
      */
     public function describeAssetBundleExportJob(array $data): ResultInterface;
+
+    /**
+     * @param array $data
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function startAssetBundleImportJob(array $data): ResultInterface;
+
+    /**
+     * @param array $data
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function describeAssetBundleImportJob(array $data): ResultInterface;
 }

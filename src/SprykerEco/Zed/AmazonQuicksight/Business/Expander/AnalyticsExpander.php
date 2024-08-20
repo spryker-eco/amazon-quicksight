@@ -69,7 +69,7 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
         if (!$quicksightUserTransfer) {
             return $analyticsCollectionTransfer;
         }
-//        $this->amazonQuicksightApiClient->startAssetBundleExportJob($quicksightUserTransfer);
+        $this->amazonQuicksightApiClient->startAssetBundleExportJob($quicksightUserTransfer);
         $quicksightGenerateEmbedUrlResponseTransfer = $this->amazonQuicksightApiClient->generateEmbedUrlForRegisteredUser(
             $quicksightUserTransfer,
         );

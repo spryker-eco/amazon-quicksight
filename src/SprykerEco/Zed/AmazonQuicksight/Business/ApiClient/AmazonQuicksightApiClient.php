@@ -179,42 +179,72 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
      */
     public function startAssetBundleExportJob(QuicksightUserTransfer $quicksightUserTransfer)
     {
-        $params = [
-            'AwsAccountId' => $this->amazonQuicksightConfig->getAwsAccountId(),
-            'MaxResults' => 100, // Maximum results per request
-        ];
 
+        $startAssetBundleExportJob = [
+            'AwsAccountId' => $this->amazonQuicksightConfig->getAwsAccountId(),
+            'AssetBundleExportJobId' => 'superUniqueID4',
+//            'IncludeAllDependencies' => true,
+            'ExportFormat' => 'QUICKSIGHT_JSON',
+            'ResourceArns' => [
+                'arn:aws:quicksight:eu-west-1:058264454086:dashboard/c6017bc0-7c84-4bfb-bb8b-d2359e3f9b21',
+//                'arn:aws:quicksight:eu-west-1:058264454086:dashboard/14b60bdc-8502-4827-b1dc-eeb597eee0ad',
+//                'arn:aws:quicksight:eu-west-1:058264454086:dashboard/34464686-ad58-449c-a40b-51f887555d47',
+            ],
+//            'ValidationStrategy' => [
+//                "StrictModeForAllResources" => true,
+//            ],
+        ];
+//        $assetBundleExportJobResult = $this->amazonQuicksightToAwsQuicksightClient->startAssetBundleExportJob($startAssetBundleExportJob);
+//dd($assetBundleExportJobResult);
+
+
+
+//        $listAssetBundleExportJobs = $this->amazonQuicksightToAwsQuicksightClient->listAssetBundleExportJobs([
+//            'AwsAccountId' => $this->amazonQuicksightConfig->getAwsAccountId(),
+//        ]);
+//dd($listAssetBundleExportJobs);
+//
+//        $describeAssetBundleExportJobResult = $this->amazonQuicksightToAwsQuicksightClient->describeAssetBundleExportJob([
+//            'AwsAccountId' => $this->amazonQuicksightConfig->getAwsAccountId(),
+//            'AssetBundleExportJobId' => 'superUniqueID4',
+//        ]);
+//dd($describeAssetBundleExportJobResult);
+
+//        $params = [
+//            'AwsAccountId' => $this->amazonQuicksightConfig->getAwsAccountId(),
+//            'MaxResults' => 100, // Maximum results per request
+//        ];
 //        $dashboards = $this->amazonQuicksightToAwsQuicksightClient->listDashboards($params);
 //        $analyses = $this->amazonQuicksightToAwsQuicksightClient->listAnalyses($params);
 //        $dataSources = $this->amazonQuicksightToAwsQuicksightClient->listDataSources($params);
 //        $dataSets = $this->amazonQuicksightToAwsQuicksightClient->listDataSets($params);
-
-        $startAssetBundleExportJob = [
-            'AwsAccountId' => $this->amazonQuicksightConfig->getAwsAccountId(),
-            'AssetBundleExportJobId' => 'superUniqueID3',
-//            'IncludeAllDependencies' => true,
-            'ExportFormat' => 'QUICKSIGHT_JSON',
-            'ResourceArns' => [
-                'arn:aws:quicksight:eu-west-1:058264454086:analysis/02b7ef35-bac3-4cad-8929-192cf34b8353'
-            ],
-            'ValidationStrategy' => [
-                "StrictModeForAllResources" => true,
-            ],
-        ];
-
-//        $assetBundleExportJobResult = $this->amazonQuicksightToAwsQuicksightClient->startAssetBundleExportJob($startAssetBundleExportJob);
-//dd($assetBundleExportJobResult);
-//        $listAssetBundleExportJobs = $this->amazonQuicksightToAwsQuicksightClient->listAssetBundleExportJobs([
-//            'AwsAccountId' => $this->amazonQuicksightConfig->getAwsAccountId(),
-//        ]);
-
-        $describeAssetBundleExportJobResult = $this->amazonQuicksightToAwsQuicksightClient->describeAssetBundleExportJob([
-            'AwsAccountId' => $this->amazonQuicksightConfig->getAwsAccountId(),
-            'AssetBundleExportJobId' => 'superUniqueID1',
-        ]);
-
-dd($describeAssetBundleExportJobResult);
+//
 //        dd($dashboards, $analyses, $dataSources, $dataSets);
+
+
+
+        // Import
+//        $body = $this->getModuleRoot() . 'data' . DIRECTORY_SEPARATOR . 'import' . DIRECTORY_SEPARATOR . 'dashboard.zip';
+//        $fileContent = file_get_contents($body);
+//        $params = [
+//            'AwsAccountId' => $this->amazonQuicksightConfig->getAwsAccountId(),
+//            'AssetBundleImportJobId' => 'DefaultAssetBundleImportJobId',
+//            'AssetBundleImportSource' => [
+//                'Body' => $fileContent,
+//            ],
+//            'FailureAction' => 'ROLLBACK',
+//        ];
+//        $importResult = $this->amazonQuicksightToAwsQuicksightClient->startAssetBundleImportJob($params);
+//        dd($importResult);
+
+
+        // Describe Import
+//        $params = [
+//            'AwsAccountId' => $this->amazonQuicksightConfig->getAwsAccountId(),
+//            'AssetBundleImportJobId' => 'DefaultAssetBundleImportJobId',
+//        ];
+//        $describeImportResult = $this->amazonQuicksightToAwsQuicksightClient->describeAssetBundleImportJob($params);
+//        dd($describeImportResult);
     }
 
     /**
@@ -240,5 +270,23 @@ dd($describeAssetBundleExportJobResult);
             ->setIdentityType(static::QUICKSIGHT_USER_IDENTITY_TYPE)
             ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
             ->setNamespace($this->amazonQuicksightConfig->getQuicksightRegisterUserNamespace());
+    }
+
+    /**
+     * @return string
+     */
+    protected function getModuleRoot(): string
+    {
+        $moduleRoot = realpath(
+            __DIR__
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR . '..',
+        );
+
+        return $moduleRoot . DIRECTORY_SEPARATOR;
     }
 }
