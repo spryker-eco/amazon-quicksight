@@ -1,0 +1,8 @@
+{
+    "private": true,
+    "name": "spryker-zed-quicksight-analytics",
+    "version": "1.0.0",
+    "dependencies": {
+        "amazon-quicksight-embedding-sdk": "2.7.0"
+    }
+}
