@@ -1,10 +1,29 @@
 {# @var quicksightGenerateEmbedUrlResponse \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer #}
+{# @var quicksightAssetBundleImportJob \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer #}
 
-{% if quicksightGenerateEmbedUrlResponse.errors | length %}
-    {% for error in quicksightGenerateEmbedUrlResponse.errors %}
+{% if quicksightAssetBundleImportJob and quicksightAssetBundleImportJob.errors | length %}
+    {% for error in quicksightAssetBundleImportJob.errors %}
         <div class="alert alert-danger" role="alert">{{ error.message }}</div>
     {% endfor %}
 {% endif %}
-{% if quicksightGenerateEmbedUrlResponse.embedUrl is not null and quicksightGenerateEmbedUrlResponse.embedUrl.url is not null %}
-    <iframe src="{{ quicksightGenerateEmbedUrlResponse.embedUrl.url }}" width="100%" height="800" frameborder="0"></iframe>
+
+{% if isAssetBundleSuccessfullyInitialized and not isAssetBundleInitializationInProgress %}
+    {% if isQuicksightUserRoleAvailable %}
+        {% if quicksightGenerateEmbedUrlResponse.errors | length %}
+            {% for error in quicksightGenerateEmbedUrlResponse.errors %}
+                <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+            {% endfor %}
+        {% endif %}
+        {% if quicksightGenerateEmbedUrlResponse.embedUrl is not null and quicksightGenerateEmbedUrlResponse.embedUrl.url is not null %}
+            <iframe src="{{ quicksightGenerateEmbedUrlResponse.embedUrl.url }}" width="100%" height="800" frameborder="0"></iframe>
+        {% endif %}
+    {% else %}
+        {{ 'No Analytics permission has been granted to the current user.' | trans }}
+    {% endif %}
+{% elseif isAssetBundleInitializationInProgress %}
+    <div class="alert alert-info" role="alert">{{ 'Spryker Analytics is being activated. Please wait 1-2 minutes and reload the page.' | trans }}</div>
+{% else %}
+    <h3>{{ 'Spryker Analytics is not enabled yet' | trans }}</h3>
+    {{ 'You can enable Spryker Analytics to view and modify default dashboards with the ability to share them with other users. ' | trans }}
+    {{ viewActionButton(url('/amazon-quicksight/analytics/enable'), 'Enable Analytics' | trans) }}
 {% endif %}

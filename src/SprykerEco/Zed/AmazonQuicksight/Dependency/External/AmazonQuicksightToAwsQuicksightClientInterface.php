@@ -45,4 +45,25 @@ interface AmazonQuicksightToAwsQuicksightClientInterface
      * @return \Aws\ResultInterface
      */
     public function listUsers(array $listUsersRequestData): ResultInterface;
+
+    /**
+     * @param array<string, mixed> $updateUserRequestData
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function updateUser(array $updateUserRequestData): ResultInterface;
+
+    /**
+     * @param array<string, mixed> $startAssetBundleImportJobRequestData
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function startAssetBundleImportJob(array $startAssetBundleImportJobRequestData): ResultInterface;
+
+    /**
+     * @param array<string, mixed> $describeAssetBundleImportJobRequestData
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function describeAssetBundleImportJob(array $describeAssetBundleImportJobRequestData): ResultInterface;
 }

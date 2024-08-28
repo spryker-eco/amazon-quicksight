@@ -9,9 +9,13 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business;
 
 use Generated\Shared\Transfer\AnalyticsCollectionTransfer;
 use Generated\Shared\Transfer\AnalyticsRequestTransfer;
+use Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer;
+use Generated\Shared\Transfer\EnableQuicksightAnalyticsResponseTransfer;
 use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer;
 use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCriteriaTransfer;
 use Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer;
+use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
+use Generated\Shared\Transfer\ResetQuicksightAnalyticsResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionTransfer;
 use Spryker\Zed\Kernel\Business\AbstractFacade;
@@ -133,5 +137,39 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
     ): QuicksightAssetBundleImportJobCollectionTransfer {
         return $this->getRepository()
             ->getQuicksightAssetBundleImportJobCollection($quicksightAssetBundleImportJobCriteriaTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\EnableQuicksightAnalyticsResponseTransfer
+     */
+    public function enableAnalytics(
+        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
+    ): EnableQuicksightAnalyticsResponseTransfer {
+        return $this->getFactory()
+            ->createAssetBundleEnabler()
+            ->enableAnalytics($enableQuicksightAnalyticsRequestTransfer);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\ResetQuicksightAnalyticsResponseTransfer
+     */
+    public function resetAnalytics(
+        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
+    ): ResetQuicksightAnalyticsResponseTransfer {
+        return $this->getFactory()
+            ->createAssetBundleEnabler()
+            ->resetAnalytics($resetQuicksightAnalyticsRequestTransfer);
     }
 }

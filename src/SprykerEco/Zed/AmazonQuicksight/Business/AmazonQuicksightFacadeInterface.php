@@ -9,9 +9,13 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business;
 
 use Generated\Shared\Transfer\AnalyticsCollectionTransfer;
 use Generated\Shared\Transfer\AnalyticsRequestTransfer;
+use Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer;
+use Generated\Shared\Transfer\EnableQuicksightAnalyticsResponseTransfer;
 use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer;
 use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCriteriaTransfer;
 use Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer;
+use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
+use Generated\Shared\Transfer\ResetQuicksightAnalyticsResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserCollectionTransfer;
 
@@ -144,4 +148,32 @@ interface AmazonQuicksightFacadeInterface
     public function getQuicksightAssetBundleImportJobCollection(
         QuicksightAssetBundleImportJobCriteriaTransfer $quicksightAssetBundleImportJobCriteriaTransfer
     ): QuicksightAssetBundleImportJobCollectionTransfer;
+
+    /**
+     * Specification:
+     * - TODO
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\EnableQuicksightAnalyticsResponseTransfer
+     */
+    public function enableAnalytics(
+        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
+    ): EnableQuicksightAnalyticsResponseTransfer;
+
+    /**
+     * Specification:
+     * - TODO
+     *
+     * @api
+     *
+     * @param \Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\ResetQuicksightAnalyticsResponseTransfer
+     */
+    public function resetAnalytics(
+        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
+    ): ResetQuicksightAnalyticsResponseTransfer;
 }

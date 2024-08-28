@@ -7,12 +7,18 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business\Expander;
 
+use Generated\Shared\Transfer\AnalyticsActionTransfer;
 use Generated\Shared\Transfer\AnalyticsCollectionTransfer;
 use Generated\Shared\Transfer\AnalyticsRequestTransfer;
 use Generated\Shared\Transfer\AnalyticsTransfer;
+use Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer;
+use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserTransfer;
+use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Syncer\QuicksightAssetBundleImportJobSyncerInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsRequestValidatorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface;
 use Twig\Environment;
 
@@ -24,14 +30,34 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
     protected const TEMPLATE_PATH_QUICKSIGHT_ANALYTICS = '@AmazonQuicksight/_partials/quicksight-analytics.twig';
 
     /**
+     * @var string
+     */
+    protected const TEMPLATE_PATH_QUICKSIGHT_ANALYTICS_ACTIONS = '@AmazonQuicksight/_partials/quicksight-analytics-actions.twig';
+
+    /**
      * @var \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface
      */
     protected AmazonQuicksightRepositoryInterface $amazonQuicksightRepository;
 
     /**
+     * @var \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig
+     */
+    protected AmazonQuicksightConfig $amazonQuicksightConfig;
+
+    /**
      * @var \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface
      */
     protected AmazonQuicksightApiClientInterface $amazonQuicksightApiClient;
+
+    /**
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsRequestValidatorInterface
+     */
+    protected QuicksightAnalyticsRequestValidatorInterface $quicksightAnalyticsRequestValidator;
+
+    /**
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Syncer\QuicksightAssetBundleImportJobSyncerInterface
+     */
+    protected QuicksightAssetBundleImportJobSyncerInterface $quicksightAssetBundleImportJobSyncer;
 
     /**
      * @var \Twig\Environment
@@ -40,16 +66,25 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
 
     /**
      * @param \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface $amazonQuicksightRepository
+     * @param \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig $amazonQuicksightConfig
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface $amazonQuicksightApiClient
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsRequestValidatorInterface $quicksightAnalyticsRequestValidator
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Syncer\QuicksightAssetBundleImportJobSyncerInterface $quicksightAssetBundleImportJobSyncer
      * @param \Twig\Environment $twigEnvironment
      */
     public function __construct(
         AmazonQuicksightRepositoryInterface $amazonQuicksightRepository,
+        AmazonQuicksightConfig $amazonQuicksightConfig,
         AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
+        QuicksightAnalyticsRequestValidatorInterface $quicksightAnalyticsRequestValidator,
+        QuicksightAssetBundleImportJobSyncerInterface $quicksightAssetBundleImportJobSyncer,
         Environment $twigEnvironment
     ) {
         $this->amazonQuicksightRepository = $amazonQuicksightRepository;
+        $this->amazonQuicksightConfig = $amazonQuicksightConfig;
         $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
+        $this->quicksightAnalyticsRequestValidator = $quicksightAnalyticsRequestValidator;
+        $this->quicksightAssetBundleImportJobSyncer = $quicksightAssetBundleImportJobSyncer;
         $this->twigEnvironment = $twigEnvironment;
     }
 
@@ -66,22 +101,79 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
         $userTransfer = $analyticsRequestTransfer->getUserOrFail();
         $quicksightUserTransfer = $this->findQuicksightUser($userTransfer);
 
-        if (!$quicksightUserTransfer) {
-            return $analyticsCollectionTransfer;
-        }
+        $quicksightAssetBundleImportJobTransfer = $this->quicksightAssetBundleImportJobSyncer
+            ->findSyncedDefaultQuicksightAssetBundleImportJob();
 
-        $quicksightGenerateEmbedUrlResponseTransfer = $this->amazonQuicksightApiClient->generateEmbedUrlForRegisteredUser(
+        $analyticsCollectionTransfer = $this->expandAnalytics(
+            $analyticsCollectionTransfer,
+            $quicksightAssetBundleImportJobTransfer,
             $quicksightUserTransfer,
         );
+
+        return $this->expandAnalyticsActions(
+            $analyticsCollectionTransfer,
+            $quicksightAssetBundleImportJobTransfer,
+            $quicksightUserTransfer,
+        );
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\AnalyticsCollectionTransfer $analyticsCollectionTransfer
+     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer|null $quicksightAssetBundleImportJobTransfer
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer|null $quicksightUserTransfer
+     *
+     * @return \Generated\Shared\Transfer\AnalyticsCollectionTransfer
+     */
+    protected function expandAnalytics(
+        AnalyticsCollectionTransfer $analyticsCollectionTransfer,
+        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
+        ?QuicksightUserTransfer $quicksightUserTransfer
+    ): AnalyticsCollectionTransfer {
+        $isAssetBundleSuccessfullyInitialized = $this->quicksightAnalyticsRequestValidator
+            ->isAssetBundleSuccessfullyInitialized($quicksightAssetBundleImportJobTransfer);
+        $isAssetBundleInitializationInProgress = $this->quicksightAnalyticsRequestValidator
+            ->isAssetBundleInitializationInProgress($quicksightAssetBundleImportJobTransfer);
+        $isQuicksightUserRoleAvailable = $this->quicksightAnalyticsRequestValidator
+            ->isQuicksightUserRoleAvailable($quicksightUserTransfer);
 
         $content = $this->twigEnvironment->render(
             static::TEMPLATE_PATH_QUICKSIGHT_ANALYTICS,
             [
-                'quicksightGenerateEmbedUrlResponse' => $quicksightGenerateEmbedUrlResponseTransfer,
+                'quicksightGenerateEmbedUrlResponse' => $this->getQuicksightGenerateEmbedUrlResponseTransfer(
+                    $isAssetBundleSuccessfullyInitialized,
+                    $isQuicksightUserRoleAvailable,
+                    $quicksightUserTransfer,
+                ),
+                'quicksightAssetBundleImportJob' => $quicksightAssetBundleImportJobTransfer,
+                'isAssetBundleSuccessfullyInitialized' => $isAssetBundleSuccessfullyInitialized,
+                'isAssetBundleInitializationInProgress' => $isAssetBundleInitializationInProgress,
+                'isQuicksightUserRoleAvailable' => $isQuicksightUserRoleAvailable,
             ],
         );
 
         $analyticsCollectionTransfer->addAnalytics((new AnalyticsTransfer())->setContent($content));
+
+        return $analyticsCollectionTransfer;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\AnalyticsCollectionTransfer $analyticsCollectionTransfer
+     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer|null $quicksightAssetBundleImportJobTransfer
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer|null $quicksightUserTransfer
+     *
+     * @return \Generated\Shared\Transfer\AnalyticsCollectionTransfer
+     */
+    protected function expandAnalyticsActions(
+        AnalyticsCollectionTransfer $analyticsCollectionTransfer,
+        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
+        ?QuicksightUserTransfer $quicksightUserTransfer
+    ): AnalyticsCollectionTransfer {
+        if (!$this->quicksightAnalyticsRequestValidator->isResetAnalyticsEnabled($quicksightAssetBundleImportJobTransfer, $quicksightUserTransfer)) {
+            return $analyticsCollectionTransfer;
+        }
+
+        $content = $this->twigEnvironment->render(static::TEMPLATE_PATH_QUICKSIGHT_ANALYTICS_ACTIONS);
+        $analyticsCollectionTransfer->addAnalyticsAction((new AnalyticsActionTransfer())->setContent($content));
 
         return $analyticsCollectionTransfer;
     }
@@ -101,5 +193,24 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
         }
 
         return $quicksightUserTransfers[0];
+    }
+
+    /**
+     * @param bool $isAssetBundleSuccessfullyInitialized
+     * @param bool $isQuicksightUserRoleAvailable
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer|null $quicksightUserTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer
+     */
+    protected function getQuicksightGenerateEmbedUrlResponseTransfer(
+        bool $isAssetBundleSuccessfullyInitialized,
+        bool $isQuicksightUserRoleAvailable,
+        ?QuicksightUserTransfer $quicksightUserTransfer
+    ): QuicksightGenerateEmbedUrlResponseTransfer {
+        if (!$isAssetBundleSuccessfullyInitialized || !$isQuicksightUserRoleAvailable || !$quicksightUserTransfer) {
+            return new QuicksightGenerateEmbedUrlResponseTransfer();
+        }
+
+        return $this->amazonQuicksightApiClient->generateEmbedUrlForRegisteredUser($quicksightUserTransfer);
     }
 }

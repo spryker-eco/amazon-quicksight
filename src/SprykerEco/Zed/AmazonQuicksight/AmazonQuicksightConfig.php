@@ -10,6 +10,7 @@ namespace SprykerEco\Zed\AmazonQuicksight;
 use Aws\Credentials\Credentials;
 use Spryker\Zed\Kernel\AbstractBundleConfig;
 use SprykerEco\Shared\AmazonQuicksight\AmazonQuicksightConstants;
+use SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFilePathNotDefinedException;
 
 class AmazonQuicksightConfig extends AbstractBundleConfig
 {
@@ -53,6 +54,38 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
      * @var string
      */
     protected const QUICKSIGHT_CONSOLE_INITIAL_PATH = '/start';
+
+    /**
+     * @var string
+     */
+    protected const DEFAULT_ASSET_BUNDLE_IMPORT_JOB_ID = 'defaultAssetBundleImportJobId';
+
+    /**
+     * @var string
+     */
+    protected const ASSET_BUNDLE_IMPORT_JOB_STATUS_SUCCESSFUL = 'SUCCESSFUL';
+
+    /**
+     * @var string
+     */
+    protected const ASSET_BUNDLE_IMPORT_JOB_STATUS_FAILED = 'FAILED';
+
+    /**
+     * @var string
+     */
+    protected const ASSET_BUNDLE_IMPORT_JOB_STATUS_FAILED_ROLLBACK_COMPLETED = 'FAILED_ROLLBACK_COMPLETED';
+
+    /**
+     * @var string
+     */
+    protected const ASSET_BUNDLE_IMPORT_JOB_STATUS_FAILED_ROLLBACK_ERROR = 'FAILED_ROLLBACK_ERROR';
+
+    /**
+     * @link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_DescribeAssetBundleImportJob.html#API_DescribeAssetBundleImportJob_ResponseSyntax
+     *
+     * @var string
+     */
+    protected const DEFAULT_NEW_ASSET_BUNDLE_IMPORT_JOB_STATUS = 'QUEUED_FOR_IMMEDIATE_EXECUTION';
 
     /**
      * Specification:
@@ -183,5 +216,64 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
             static::USER_STATUS_BLOCKED,
             static::USER_STATUS_DELETED,
         ];
+    }
+
+    /**
+     * Specification:
+     * - Returns the default asset bundle import job ID.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultAssetBundleImportJobId(): string
+    {
+        return static::DEFAULT_ASSET_BUNDLE_IMPORT_JOB_ID;
+    }
+
+    /**
+     * Specification:
+     * - Returns the list of statuses that indicate the completion of the asset bundle import job.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getAssetBundleImportJobCompletionStatuses(): array
+    {
+        return [
+            static::ASSET_BUNDLE_IMPORT_JOB_STATUS_SUCCESSFUL,
+            static::ASSET_BUNDLE_IMPORT_JOB_STATUS_FAILED,
+            static::ASSET_BUNDLE_IMPORT_JOB_STATUS_FAILED_ROLLBACK_COMPLETED,
+            static::ASSET_BUNDLE_IMPORT_JOB_STATUS_FAILED_ROLLBACK_ERROR,
+        ];
+    }
+
+    /**
+     * Specification:
+     * - Returns the path to the asset bundle import file.
+     *
+     * @api
+     *
+     * @throws \SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFilePathNotDefinedException
+     *
+     * @return string
+     */
+    public function getAssetBundleImportFilePath(): string
+    {
+        throw new AssetBundleImportFilePathNotDefinedException('Asset bundle import file path is not defined.');
+    }
+
+    /**
+     * Specification:
+     * - Returns the default status for new asset bundle import jobs.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultNewAssetBundleImportJobStatus(): string
+    {
+        return static::DEFAULT_NEW_ASSET_BUNDLE_IMPORT_JOB_STATUS;
     }
 }

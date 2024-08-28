@@ -7,12 +7,20 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business\Mapper;
 
+use Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer;
+use Generated\Shared\Transfer\ErrorTransfer;
+use Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer;
+use Generated\Shared\Transfer\QuicksightAssetBundleImportSourceTransfer;
 use Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer;
+use Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTransfer;
 use Generated\Shared\Transfer\QuicksightEmbedUrlTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
+use Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer;
+use Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
+use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 
 class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
@@ -23,6 +31,20 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
      * @var string
      */
     protected const RESPONSE_KEY_EMBED_URL = 'EmbedUrl';
+
+    /**
+     * @link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_DescribeAssetBundleImportJob.html#API_DescribeAssetBundleImportJob_ResponseSyntax
+     *
+     * @var string
+     */
+    protected const RESPONSE_KEY_ERRORS = 'Errors';
+
+    /**
+     * @link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_DescribeAssetBundleImportJob.html#API_DescribeAssetBundleImportJob_ResponseSyntax
+     *
+     * @var string
+     */
+    protected const RESPONSE_KEY_ERRORS_MESSAGE = 'Message';
 
     /**
      * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
@@ -105,5 +127,108 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
         QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
     ): QuicksightDeleteUserRequestTransfer {
         return $quicksightDeleteUserRequestTransfer->setUserName($userTransfer->getUsernameOrFail());
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
+     * @param \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer
+     */
+    public function mapEnableQuicksightAnalyticsRequestTransferToQuicksightStartAssetBundleImportJobRequestTransfer(
+        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
+        QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer
+    ): QuicksightStartAssetBundleImportJobRequestTransfer {
+        $quicksightStartAssetBundleImportJobRequestTransfer->fromArray(
+            $enableQuicksightAnalyticsRequestTransfer->toArray(),
+            true,
+        );
+        $quicksightStartAssetBundleImportJobRequestTransfer->setAssetBundleImportSource(
+            (new QuicksightAssetBundleImportSourceTransfer())
+                ->setBody($enableQuicksightAnalyticsRequestTransfer->getAssetBundleImportSourceBody()),
+        );
+
+        return $quicksightStartAssetBundleImportJobRequestTransfer;
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
+     * @param \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer
+     */
+    public function mapResetQuicksightAnalyticsRequestTransferToQuicksightStartAssetBundleImportJobRequestTransfer(
+        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer,
+        QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer
+    ): QuicksightStartAssetBundleImportJobRequestTransfer {
+        $quicksightStartAssetBundleImportJobRequestTransfer->fromArray(
+            $resetQuicksightAnalyticsRequestTransfer->toArray(),
+            true,
+        );
+        $quicksightStartAssetBundleImportJobRequestTransfer->setAssetBundleImportSource(
+            (new QuicksightAssetBundleImportSourceTransfer())
+                ->setBody($resetQuicksightAnalyticsRequestTransfer->getAssetBundleImportSourceBody()),
+        );
+
+        return $quicksightStartAssetBundleImportJobRequestTransfer;
+    }
+
+    /**
+     * @param array<string, mixed> $describeAssetBundleImportJobData
+     * @param \Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTransfer $quicksightDescribeAssetBundleImportJobResponseTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTransfer
+     */
+    public function mapDescribeAssetBundleImportJobDataToQuicksightDescribeAssetBundleImportJobResponseTransfer(
+        array $describeAssetBundleImportJobData,
+        QuicksightDescribeAssetBundleImportJobResponseTransfer $quicksightDescribeAssetBundleImportJobResponseTransfer
+    ): QuicksightDescribeAssetBundleImportJobResponseTransfer {
+        if (isset($describeAssetBundleImportJobData[static::RESPONSE_KEY_ERRORS])) {
+            foreach ($describeAssetBundleImportJobData[static::RESPONSE_KEY_ERRORS] as $error) {
+                if (!isset($error[static::RESPONSE_KEY_ERRORS_MESSAGE])) {
+                    continue;
+                }
+                $quicksightDescribeAssetBundleImportJobResponseTransfer->addError(
+                    (new ErrorTransfer())->setMessage($error[static::RESPONSE_KEY_ERRORS_MESSAGE]),
+                );
+            }
+
+            unset($describeAssetBundleImportJobData[static::RESPONSE_KEY_ERRORS]);
+        }
+
+        return $quicksightDescribeAssetBundleImportJobResponseTransfer->fromArray($describeAssetBundleImportJobData, true);
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTransfer $quicksightDescribeAssetBundleImportJobResponseTransfer
+     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
+     */
+    public function mapQuicksightDescribeAssetBundleImportJobResponseTransferToQuicksightAssetBundleImportJobTransfer(
+        QuicksightDescribeAssetBundleImportJobResponseTransfer $quicksightDescribeAssetBundleImportJobResponseTransfer,
+        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+    ): QuicksightAssetBundleImportJobTransfer {
+        $quicksightAssetBundleImportJobTransfer->setStatus(
+            $quicksightDescribeAssetBundleImportJobResponseTransfer->getJobStatusOrFail(),
+        );
+
+        return $quicksightAssetBundleImportJobTransfer->fromArray($quicksightDescribeAssetBundleImportJobResponseTransfer->toArray(), true);
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
+     * @param \Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer $quicksightUpdateUserRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer
+     */
+    public function mapUserTransferToQuicksightUpdateUserRequestTransfer(
+        UserTransfer $userTransfer,
+        QuicksightUpdateUserRequestTransfer $quicksightUpdateUserRequestTransfer
+    ): QuicksightUpdateUserRequestTransfer {
+        return $quicksightUpdateUserRequestTransfer
+            ->setEmail($userTransfer->getUsernameOrFail())
+            ->setUserName($userTransfer->getUsernameOrFail())
+            ->setRole(strtoupper($userTransfer->getQuicksightUserOrFail()->getRoleOrFail()));
     }
 }

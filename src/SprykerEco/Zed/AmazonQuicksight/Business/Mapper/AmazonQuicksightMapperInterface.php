@@ -7,11 +7,17 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business\Mapper;
 
+use Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer;
+use Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer;
 use Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer;
+use Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
+use Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer;
+use Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
+use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 
 interface AmazonQuicksightMapperInterface
@@ -81,4 +87,59 @@ interface AmazonQuicksightMapperInterface
         UserTransfer $userTransfer,
         QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
     ): QuicksightDeleteUserRequestTransfer;
+
+    /**
+     * @param \Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
+     * @param \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer
+     */
+    public function mapEnableQuicksightAnalyticsRequestTransferToQuicksightStartAssetBundleImportJobRequestTransfer(
+        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
+        QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer
+    ): QuicksightStartAssetBundleImportJobRequestTransfer;
+
+    /**
+     * @param \Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
+     * @param \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer
+     */
+    public function mapResetQuicksightAnalyticsRequestTransferToQuicksightStartAssetBundleImportJobRequestTransfer(
+        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer,
+        QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer
+    ): QuicksightStartAssetBundleImportJobRequestTransfer;
+
+    /**
+     * @param array<string, mixed> $describeAssetBundleImportJobData
+     * @param \Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTransfer $quicksightDescribeAssetBundleImportJobResponseTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTransfer
+     */
+    public function mapDescribeAssetBundleImportJobDataToQuicksightDescribeAssetBundleImportJobResponseTransfer(
+        array $describeAssetBundleImportJobData,
+        QuicksightDescribeAssetBundleImportJobResponseTransfer $quicksightDescribeAssetBundleImportJobResponseTransfer
+    ): QuicksightDescribeAssetBundleImportJobResponseTransfer;
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTransfer $quicksightDescribeAssetBundleImportJobResponseTransfer
+     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
+     */
+    public function mapQuicksightDescribeAssetBundleImportJobResponseTransferToQuicksightAssetBundleImportJobTransfer(
+        QuicksightDescribeAssetBundleImportJobResponseTransfer $quicksightDescribeAssetBundleImportJobResponseTransfer,
+        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+    ): QuicksightAssetBundleImportJobTransfer;
+
+    /**
+     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
+     * @param \Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer $quicksightUpdateUserRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer
+     */
+    public function mapUserTransferToQuicksightUpdateUserRequestTransfer(
+        UserTransfer $userTransfer,
+        QuicksightUpdateUserRequestTransfer $quicksightUpdateUserRequestTransfer
+    ): QuicksightUpdateUserRequestTransfer;
 }

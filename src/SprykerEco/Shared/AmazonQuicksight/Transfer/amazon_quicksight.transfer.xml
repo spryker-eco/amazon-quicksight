@@ -121,13 +121,18 @@
 
     <transfer name="AnalyticsCollection" strict="true">
         <property name="analyticsList" type="Analytics[]" singular="analytics"/>
+        <property name="analyticsActions" type="AnalyticsAction[]" singular="analyticsAction"/>
     </transfer>
 
     <transfer name="Analytics" strict="true">
         <property name="content" type="string"/>
     </transfer>
 
-    <transfer name="UserConditions">
+    <transfer name="AnalyticsAction" strict="true">
+        <property name="content" type="string"/>
+    </transfer>
+
+    <transfer name="UserConditions" strict="true">
         <property name="statuses" type="string[]" singular="status"/>
     </transfer>
 
@@ -137,6 +142,9 @@
 
     <transfer name="QuicksightAssetBundleImportJob" strict="true">
         <property name="status" type="string"/>
+        <property name="jobId" type="string"/>
+        <property name="isInitialized" type="bool"/>
+        <property name="errors" type="Error[]" singular="error"/>
     </transfer>
 
     <transfer name="QuicksightAssetBundleImportJobCollection" strict="true">
@@ -149,6 +157,68 @@
 
     <transfer name="QuicksightAssetBundleImportJobConditions" strict="true">
         <property name="jobIds" type="string[]" singular="idJob"/>
+    </transfer>
+
+    <transfer name="QuicksightStartAssetBundleImportJobRequest" strict="true">
+        <property name="awsAccountId" type="string"/>
+        <property name="assetBundleImportJobId" type="string"/>
+        <property name="failureAction" type="string"/>
+        <property name="assetBundleImportSource" type="QuicksightAssetBundleImportSource"/>
+    </transfer>
+
+    <transfer name="QuicksightAssetBundleImportSource" strict="true">
+        <property name="body" type="string"/>
+    </transfer>
+
+    <transfer name="QuicksightStartAssetBundleImportJobResponse" strict="true">
+        <property name="errors" type="Error[]" singular="error"/>
+    </transfer>
+
+    <transfer name="QuicksightDescribeAssetBundleImportJobRequest" strict="true">
+        <property name="awsAccountId" type="string"/>
+        <property name="assetBundleImportJobId" type="string"/>
+    </transfer>
+
+    <transfer name="QuicksightDescribeAssetBundleImportJobResponse" strict="true">
+        <property name="jobStatus" type="string"/>
+        <property name="errors" type="Error[]" singular="error"/>
+    </transfer>
+
+    <transfer name="EnableQuicksightAnalyticsRequest" strict="true">
+        <property name="assetBundleImportJobId" type="string"/>
+        <property name="assetBundleImportSourceBody" type="string"/>
+        <property name="user" type="User"/>
+        <property name="quicksightAssetBundleImportJob" type="QuicksightAssetBundleImportJob"/>
+    </transfer>
+
+    <transfer name="EnableQuicksightAnalyticsResponse" strict="true">
+        <property name="quicksightAssetBundleImportJob" type="QuicksightAssetBundleImportJob"/>
+        <property name="errors" type="Error[]" singular="error"/>
+    </transfer>
+
+    <transfer name="ResetQuicksightAnalyticsRequest" strict="true">
+        <property name="assetBundleImportJobId" type="string"/>
+        <property name="assetBundleImportSourceBody" type="string"/>
+        <property name="user" type="User"/>
+        <property name="quicksightAssetBundleImportJob" type="QuicksightAssetBundleImportJob"/>
+    </transfer>
+
+    <transfer name="ResetQuicksightAnalyticsResponse" strict="true">
+        <property name="quicksightAssetBundleImportJob" type="QuicksightAssetBundleImportJob"/>
+        <property name="errors" type="Error[]" singular="error"/>
+    </transfer>
+
+    <transfer name="QuicksightUpdateUserResponse" strict="true">
+        <property name="quicksightUser" type="QuicksightUser"/>
+        <property name="errors" type="Error[]" singular="error"/>
+    </transfer>
+
+    <transfer name="QuicksightUpdateUserRequest" strict="true">
+        <property name="awsAccountId" type="string"/>
+        <property name="email" type="string" />
+        <property name="namespace" type="string"/>
+        <property name="role" type="string" />
+        <property name="userName" type="string"/>
     </transfer>
 
 </transfers>

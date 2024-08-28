@@ -1,0 +1,28 @@
+{% extends '@Gui/Layout/layout.twig' %}
+
+{% set widget_title = 'Enable Analytics' | trans %}
+
+{% block head_title widget_title %}
+{% block section_title widget_title %}
+
+{% block action %}
+    {{ backActionButton(app.request.headers.get('referer'), 'Back' | trans) }}
+{% endblock %}
+
+{% block content %}
+
+    {% embed '@Gui/Partials/widget.twig' %}
+
+        {% block widget_content %}
+            <p>{{ 'Please be aware that you will be the owner of all default dashboards.' | trans }}</p>
+            <div>
+                {{ form_start(enableAnalyticsForm) }}
+                    <a href="{{ app.request.headers.get('referer') }}" class="btn btn-view btn-outline">{{ 'Cancel' | trans }}</a>
+                    <button type="submit" class="btn safe-submit"> {{ 'Enable Analytics' | trans }} </button>
+                {{ form_end(enableAnalyticsForm) }}
+            </div>
+        {% endblock %}
+
+    {% endembed %}
+
+{% endblock %}

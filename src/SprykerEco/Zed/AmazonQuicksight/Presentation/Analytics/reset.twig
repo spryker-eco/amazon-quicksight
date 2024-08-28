@@ -1,0 +1,28 @@
+{% extends '@Gui/Layout/layout.twig' %}
+
+{% set widget_title = 'Reset Analytics' | trans %}
+
+{% block head_title widget_title %}
+{% block section_title widget_title %}
+
+{% block action %}
+    {{ backActionButton(app.request.headers.get('referer'), 'Back' | trans) }}
+{% endblock %}
+
+{% block content %}
+
+    {% embed '@Gui/Partials/widget.twig' %}
+
+        {% block widget_content %}
+            <p>{{ 'Please be aware that all Analytics dashboards and configurations, including your changes, will be reset and replaced with the default data.' | trans }}</p>
+            <div>
+                {{ form_start(resetAnalyticsForm) }}
+                    {{ viewActionButton(app.request.headers.get('referer'), 'Cancel' | trans) }}
+                    <button type="submit" class="btn btn-danger safe-submit"> {{ 'Reset Analytics' | trans }} </button>
+                {{ form_end(resetAnalyticsForm) }}
+            </div>
+        {% endblock %}
+
+    {% endembed %}
+
+{% endblock %}
