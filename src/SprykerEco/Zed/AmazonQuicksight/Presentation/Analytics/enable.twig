@@ -14,7 +14,7 @@
     {% embed '@Gui/Partials/widget.twig' %}
 
         {% block widget_content %}
-            <p>{{ 'Please be aware that you will be the owner of all default dashboards.' | trans }}</p>
+            <p>{{ 'Please be aware that you will be the owner of all default assets (dashboards, analyses, datasets and data sources).' | trans }}</p>
             <div>
                 {{ form_start(enableAnalyticsForm) }}
                     <a href="{{ app.request.headers.get('referer') }}" class="btn btn-view btn-outline">{{ 'Cancel' | trans }}</a>

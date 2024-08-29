@@ -13,6 +13,7 @@ use Generated\Shared\Transfer\AnalyticsCollectionTransfer;
 use Generated\Shared\Transfer\AnalyticsRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserTransfer;
+use org\bovigo\vfs\vfsStream;
 use Spryker\Shared\Kernel\Transfer\Exception\NullValueException;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
 use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester;
@@ -67,6 +68,14 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
         parent::setUp();
 
         $this->tester->getContainer()->set(static::SERVICE_TWIG, $this->getTwigMock());
+    }
+
+    public function testExpandsCollectionWhenAssetBundleImportJobByJobDoesNotExistAndQuicksightUserDoesNotExist(): void
+    {
+        // Arrange
+        $analyticsRequestTransfer = $this->tester->haveAnalyticsRequestWithUser();
+
+        // Act
     }
 
     /**
