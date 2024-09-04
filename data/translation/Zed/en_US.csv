@@ -4,3 +4,5 @@ Analytics,Analytics
 "The user role for Analytics could not be set. Please try again later.","The user role for Analytics could not be set. Please try again later."
 "The user role for Analytics could not be reset. Please contact your Spryker Success Manager.","The user role for Analytics could not be reset. Please contact your Spryker Success Manager."
 "Please be aware that you will be the owner of all default assets (dashboards, analyses, datasets and data sources).","Please be aware that you will be the owner of all default assets (dashboards, analyses, datasets and data sources)."
+"An error occurred during the Analytics activation. Please try again by clicking the ""Enable Analytics"" button.","An error occurred during the Analytics activation. Please try again by clicking the ""Enable Analytics"" button."
+"An error occurred during the Analytics reset. Please try again by clicking the ""Reset Analytics"" button.","An error occurred during the Analytics reset. Please try again by clicking the ""Reset Analytics"" button."

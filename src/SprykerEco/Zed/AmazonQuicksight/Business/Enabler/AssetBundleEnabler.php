@@ -7,6 +7,7 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business\Enabler;
 
+use ArrayObject;
 use Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\EnableQuicksightAnalyticsResponseTransfer;
 use Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer;
@@ -198,6 +199,7 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
         QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
     ): QuicksightAssetBundleImportJobTransfer {
         $quicksightAssetBundleImportJobTransfer->setStatus($this->amazonQuicksightConfig->getDefaultNewAssetBundleImportJobStatus());
+        $quicksightAssetBundleImportJobTransfer->setErrors(new ArrayObject());
         $quicksightAssetBundleImportJobTransfer = $this->amazonQuicksightEntityManager
             ->updateQuicksightAssetBundleImportJob($quicksightAssetBundleImportJobTransfer);
 

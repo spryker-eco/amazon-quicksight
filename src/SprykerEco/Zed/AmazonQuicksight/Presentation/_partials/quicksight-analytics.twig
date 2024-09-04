@@ -2,6 +2,12 @@
 {# @var quicksightAssetBundleImportJob \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer #}
 
 {% if quicksightAssetBundleImportJob and quicksightAssetBundleImportJob.errors | length %}
+    <div class="alert alert-danger" role="alert">
+        {{ quicksightAssetBundleImportJob.isInitialized
+            ? 'An error occurred during the Analytics reset. Please try again by clicking the ""Reset Analytics"" button.' | trans
+            : 'An error occurred during the Analytics activation. Please try again by clicking the ""Enable Analytics"" button.' | trans
+        }}
+    </div>
     {% for error in quicksightAssetBundleImportJob.errors %}
         <div class="alert alert-danger" role="alert">{{ error.message }}</div>
     {% endfor %}
