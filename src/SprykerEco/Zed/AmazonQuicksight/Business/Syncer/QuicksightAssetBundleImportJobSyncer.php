@@ -94,6 +94,12 @@ class QuicksightAssetBundleImportJobSyncer implements QuicksightAssetBundleImpor
         $quicksightDescribeAssetBundleImportJobResponseTransfer = $this->amazonQuicksightApiClient
             ->describeAssetBundleImportJob($defaultAssetBundleImportJobId);
 
+        if ($quicksightDescribeAssetBundleImportJobResponseTransfer->getJobStatus() === null) {
+            $quicksightDescribeAssetBundleImportJobResponseTransfer->setJobStatus(
+                $quicksightAssetBundleImportJobTransfer->getStatusOrFail(),
+            );
+        }
+
         $quicksightAssetBundleImportJobTransfer = $this->amazonQuicksightMapper
             ->mapQuicksightDescribeAssetBundleImportJobResponseTransferToQuicksightAssetBundleImportJobTransfer(
                 $quicksightDescribeAssetBundleImportJobResponseTransfer,

@@ -7,14 +7,19 @@
 
 namespace SprykerEcoTest\Zed\AmazonQuicksight;
 
+use ArrayObject;
 use Aws\QuickSight\Exception\QuickSightException;
 use Aws\ResultInterface;
 use Codeception\Actor;
 use Codeception\Stub;
+use Generated\Shared\DataBuilder\QuicksightAssetBundleImportJobBuilder;
 use Generated\Shared\DataBuilder\QuicksightUserBuilder;
 use Generated\Shared\Transfer\AnalyticsRequestTransfer;
+use Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserTransfer;
+use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJob;
+use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJobQuery;
 use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUser;
 use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUserQuery;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
@@ -148,7 +153,20 @@ class AmazonQuicksightBusinessTester extends Actor
     public function haveAnalyticsRequestWithUser(): AnalyticsRequestTransfer
     {
         $userTransfer = $this->haveUser();
-        $quicksightUserTransfer = $this->haveQuicksightUser($userTransfer);
+
+        return (new AnalyticsRequestTransfer())->setUser($userTransfer);
+    }
+
+    /**
+     * @param string|null $quicksightUserRole
+     *
+     * @return \Generated\Shared\Transfer\AnalyticsRequestTransfer
+     */
+    public function haveAnalyticsRequestWithQuicksightUser(?string $quicksightUserRole = null): AnalyticsRequestTransfer
+    {
+        $userTransfer = $this->haveUser();
+        $quicksightUserSeedData = $quicksightUserRole ? ['role' => $quicksightUserRole] : [];
+        $quicksightUserTransfer = $this->haveQuicksightUser($userTransfer, $quicksightUserSeedData);
         $userTransfer->setQuicksightUser($quicksightUserTransfer);
 
         return (new AnalyticsRequestTransfer())->setUser($userTransfer);
@@ -179,10 +197,64 @@ class AmazonQuicksightBusinessTester extends Actor
     }
 
     /**
+     * @return void
+     */
+    public function ensureQuicksightUserTableIsEmpty(): void
+    {
+        $this->ensureDatabaseTableIsEmpty($this->getQuicksightUserQuery());
+    }
+
+    /**
+     * @return void
+     */
+    public function ensureQuicksightAssetBundleImportJobTableIsEmpty(): void
+    {
+        $this->ensureDatabaseTableIsEmpty($this->getQuicksightUserQuery());
+    }
+
+    /**
+     * @param array<string, mixed> $seedData
+     * @param list<\Generated\Shared\Transfer\ErrorTransfer> $errorTransfers
+     *
+     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
+     */
+    public function haveQuicksightAssetBundleImportJob(array $seedData, array $errorTransfers = []): QuicksightAssetBundleImportJobTransfer
+    {
+        $quicksightAssetBundleImportJobTransfer = (new QuicksightAssetBundleImportJobBuilder($seedData))->build();
+        $quicksightAssetBundleImportJobTransfer->setErrors(new ArrayObject($errorTransfers));
+        $quicksightAssetBundleImportJobData = $quicksightAssetBundleImportJobTransfer->toArray();
+        $quicksightAssetBundleImportJobData[QuicksightAssetBundleImportJobTransfer::ERRORS] = json_encode(
+            $quicksightAssetBundleImportJobData[QuicksightAssetBundleImportJobTransfer::ERRORS],
+        );
+        $quicksightAssetBundleImportJobEntity = (new SpyQuicksightAssetBundleImportJob())->fromArray($quicksightAssetBundleImportJobData);
+        $quicksightAssetBundleImportJobEntity->save();
+
+        return $quicksightAssetBundleImportJobTransfer;
+    }
+
+    /**
+     * @param string $jobId
+     *
+     * @return \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJob|null
+     */
+    public function findQuicksightAssetBundleImportJobQueryByJobId(string $jobId): ?SpyQuicksightAssetBundleImportJob
+    {
+        return $this->getQuicksightAssetBundleImportJobQuery()->filterByJobId($jobId)->findOne();
+    }
+
+    /**
      * @return \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUserQuery
      */
     protected function getQuicksightUserQuery(): SpyQuicksightUserQuery
     {
         return SpyQuicksightUserQuery::create();
+    }
+
+    /**
+     * @return \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJobQuery
+     */
+    protected function getQuicksightAssetBundleImportJobQuery(): SpyQuicksightAssetBundleImportJobQuery
+    {
+        return SpyQuicksightAssetBundleImportJobQuery::create();
     }
 }

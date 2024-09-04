@@ -105,9 +105,9 @@ class AnalyticsController extends AbstractController
         $userTransfer = $userFacade->getCurrentUser();
         $userCollectionTransfer = $userFacade->getUserCollection(
             (new UserCriteriaTransfer())->setUserConditions(
-                (new UserConditionsTransfer())->addIdUser($userTransfer->getIdUserOrFail()
-            )
-        ));
+                (new UserConditionsTransfer())->addIdUser($userTransfer->getIdUserOrFail()),
+            ),
+        );
 
         return $userCollectionTransfer->getUsers()->offsetExists(0)
             ? $userCollectionTransfer->getUsers()->offsetGet(0) :
