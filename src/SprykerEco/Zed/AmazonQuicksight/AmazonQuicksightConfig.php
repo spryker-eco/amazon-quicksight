@@ -16,7 +16,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     /**
      * @var string
      */
-    protected const QUICKSIGHT_REGISTER_USER_NAMESPACE = 'spryker-test';
+    protected const QUICKSIGHT_REGISTER_USER_NAMESPACE = 'default';
 
     /**
      * @var string
@@ -86,15 +86,15 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
 
     /**
      * Specification:
-     * - Returns the name of the Quicksight namespace.
+     * - Returns the namespace for the Quicksight user registration.
      *
      * @api
      *
      * @return string
      */
-    public function getQuicksightNamespace(): string
+    public function getQuicksightRegisterUserNamespace(): string
     {
-        return $this->get(AmazonQuicksightConstants::AWS_QUICKSIGHT_NAMESPACE);
+        return static::QUICKSIGHT_REGISTER_USER_NAMESPACE;
     }
 
     /**

@@ -61,14 +61,4 @@ interface AmazonQuicksightConstants
      * @var string
      */
     public const AWS_CREDENTIALS_TOKEN = 'AMAZON_QUICKSIGHT:AWS_CREDENTIALS_TOKEN';
-
-    /**
-     * Specification:
-     * - The name of Quicksight namespace.
-     *
-     * @api
-     *
-     * @var string
-     */
-    public const AWS_QUICKSIGHT_NAMESPACE = 'AMAZON_QUICKSIGHT:AWS_QUICKSIGHT_NAMESPACE';
 }
