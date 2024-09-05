@@ -61,6 +61,7 @@ class AmazonQuicksightBusinessTester extends Actor
         $quicksightUserEntity->save();
 
         $quicksightUserTransfer->setFkUser($quicksightUserEntity->getFkUser());
+        $quicksightUserTransfer->setIdQuicksightUser($quicksightUserEntity->getIdQuicksightUser());
 
         return $quicksightUserTransfer;
     }

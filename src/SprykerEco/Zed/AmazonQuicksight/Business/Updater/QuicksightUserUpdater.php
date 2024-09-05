@@ -47,7 +47,7 @@ class QuicksightUserUpdater implements QuicksightUserUpdaterInterface
         $quicksightUpdateUserResponseTransfer = $this->amazonQuicksightApiClient->updateUser($userTransfer);
 
         if ($quicksightUpdateUserResponseTransfer->getErrors()->count() !== 0) {
-            return $quicksightUpdateUserResponseTransfer;
+            return $quicksightUpdateUserResponseTransfer->setQuicksightUser($quicksightUserTransfer);
         }
 
         $quicksightUserTransfer = $this->amazonQuicksightEntityManager->updateQuicksightUser($quicksightUserTransfer);

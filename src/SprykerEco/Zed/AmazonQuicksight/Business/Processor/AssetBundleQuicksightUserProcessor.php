@@ -73,7 +73,9 @@ class AssetBundleQuicksightUserProcessor implements AssetBundleQuicksightUserPro
             $quicksightUpdateUserResponseTransfer = $this->quicksightUserUpdater->updateQuicksightUser($userTransfer);
             $userTransfer->setQuicksightUser($quicksightUpdateUserResponseTransfer->getQuicksightUserOrFail());
 
-            return (new UserCollectionResponseTransfer())->addUser($userTransfer);
+            return (new UserCollectionResponseTransfer())
+                ->addUser($userTransfer)
+                ->setErrors($quicksightUpdateUserResponseTransfer->getErrors());
         }
 
         return new UserCollectionResponseTransfer();

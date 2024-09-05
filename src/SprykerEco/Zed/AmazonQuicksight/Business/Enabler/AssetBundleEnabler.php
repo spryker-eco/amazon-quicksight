@@ -15,6 +15,7 @@ use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsResponseTransfer;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Processor\AssetBundleQuicksightUserProcessorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsRequestValidatorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface;
@@ -53,12 +54,18 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
     protected AssetBundleQuicksightUserProcessorInterface $assetBundleQuicksightUserProcessor;
 
     /**
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface
+     */
+    protected AssetBundleImportFileContentLoaderInterface $assetBundleImportFileContentLoader;
+
+    /**
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface $amazonQuicksightApiClient
      * @param \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig $amazonQuicksightConfig
      * @param \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager
      * @param \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface $amazonQuicksightRepository
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsRequestValidatorInterface $quicksightAnalyticsRequestValidator
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Processor\AssetBundleQuicksightUserProcessorInterface $assetBundleQuicksightUserProcessor
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface $assetBundleImportFileContentLoader
      */
     public function __construct(
         AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
@@ -66,7 +73,8 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
         AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager,
         AmazonQuicksightRepositoryInterface $amazonQuicksightRepository,
         QuicksightAnalyticsRequestValidatorInterface $quicksightAnalyticsRequestValidator,
-        AssetBundleQuicksightUserProcessorInterface $assetBundleQuicksightUserProcessor
+        AssetBundleQuicksightUserProcessorInterface $assetBundleQuicksightUserProcessor,
+        AssetBundleImportFileContentLoaderInterface $assetBundleImportFileContentLoader
     ) {
         $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
         $this->amazonQuicksightConfig = $amazonQuicksightConfig;
@@ -74,6 +82,7 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
         $this->amazonQuicksightRepository = $amazonQuicksightRepository;
         $this->quicksightAnalyticsRequestValidator = $quicksightAnalyticsRequestValidator;
         $this->assetBundleQuicksightUserProcessor = $assetBundleQuicksightUserProcessor;
+        $this->assetBundleImportFileContentLoader = $assetBundleImportFileContentLoader;
     }
 
     /**
@@ -108,7 +117,9 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
             return $enableQuicksightAnalyticsResponseTransfer->setErrors($userCollectionResponseTransfer->getErrors());
         }
 
-        $enableQuicksightAnalyticsRequestTransfer->setAssetBundleImportSourceBody($this->getAssetBundleImportFileContent());
+        $enableQuicksightAnalyticsRequestTransfer->setAssetBundleImportSourceBody(
+            $this->assetBundleImportFileContentLoader->getAssetBundleImportFileContent(),
+        );
 
         $quicksightStartAssetBundleImportJobResponseTransfer = $this->amazonQuicksightApiClient
             ->startAssetBundleImportJobByEnableQuicksightAnalyticsRequest($enableQuicksightAnalyticsRequestTransfer);
@@ -150,7 +161,9 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
             return $resetQuicksightAnalyticsResponseTransfer;
         }
 
-        $resetQuicksightAnalyticsRequestTransfer->setAssetBundleImportSourceBody($this->getAssetBundleImportFileContent());
+        $resetQuicksightAnalyticsRequestTransfer->setAssetBundleImportSourceBody(
+            $this->assetBundleImportFileContentLoader->getAssetBundleImportFileContent(),
+        );
 
         $quicksightStartAssetBundleImportJobResponseTransfer = $this->amazonQuicksightApiClient
             ->startAssetBundleImportJobByResetQuicksightAnalyticsRequest($resetQuicksightAnalyticsRequestTransfer);
@@ -204,13 +217,5 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
             ->updateQuicksightAssetBundleImportJob($quicksightAssetBundleImportJobTransfer);
 
         return $quicksightAssetBundleImportJobTransfer;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getAssetBundleImportFileContent(): string
-    {
-        return file_get_contents($this->amazonQuicksightConfig->getAssetBundleImportFilePath());
     }
 }

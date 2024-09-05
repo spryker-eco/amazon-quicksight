@@ -21,6 +21,8 @@ use SprykerEco\Zed\AmazonQuicksight\Business\Expander\AnalyticsExpander;
 use SprykerEco\Zed\AmazonQuicksight\Business\Expander\AnalyticsExpanderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpander;
 use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpanderInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoader;
+use SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Filter\QuicksightUserCollectionFilter;
 use SprykerEco\Zed\AmazonQuicksight\Business\Filter\QuicksightUserCollectionFilterInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilter;
@@ -213,6 +215,7 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
             $this->getRepository(),
             $this->createQuicksightAnalyticsRequestValidator(),
             $this->createAssetBundleQuicksightUserProcessor(),
+            $this->createAssetBundleImportFileContentLoader(),
         );
     }
 
@@ -240,6 +243,14 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
             $this->createQuicksightAnalyticsRequestValidator(),
             $this->createAmazonQuicksightMapper(),
         );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface
+     */
+    public function createAssetBundleImportFileContentLoader(): AssetBundleImportFileContentLoaderInterface
+    {
+        return new AssetBundleImportFileContentLoader($this->getConfig());
     }
 
     /**
