@@ -16,11 +16,6 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     /**
      * @var string
      */
-    protected const QUICKSIGHT_REGISTER_USER_NAMESPACE = 'spryker-test';
-
-    /**
-     * @var string
-     */
     protected const QUICKSIGHT_USER_ROLE_READER = 'READER';
 
     /**
@@ -92,7 +87,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
      *
      * @return string
      */
-    public function getQuicksightNamespace(): string
+    public function getAwsQuicksightNamespace(): string
     {
         return $this->get(AmazonQuicksightConstants::AWS_QUICKSIGHT_NAMESPACE);
     }
