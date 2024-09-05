@@ -16,15 +16,8 @@ use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use Spryker\Shared\Kernel\Transfer\Exception\NullValueException;
 use Spryker\Shared\Kernel\Transfer\Exception\RequiredTransferPropertyException;
-use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
-use SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightBusinessFactory;
-use SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightFacadeInterface;
-use SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoader;
-use SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
-use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManager;
-use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepository;
 use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester;
 
 class EnableAnalyticsTest extends Unit
@@ -112,7 +105,7 @@ class EnableAnalyticsTest extends Unit
     }
 
     /**
-     * @dataProvider throwsExceptionWhenRequiredPropertiesAreNotSetDataProvider
+     * @dataProvider throwsRequiredTransferPropertyExceptionWhenRequiredPropertiesAreNotSetDataProvider
      *
      * @param \Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
      *
@@ -249,7 +242,8 @@ class EnableAnalyticsTest extends Unit
         );
 
         // Act
-        $enableQuicksightAnalyticsResponseTransfer = $this->getFacadeWithMocks()
+        $enableQuicksightAnalyticsResponseTransfer = $this->tester
+            ->getFacadeWithMocks()
             ->enableAnalytics($enableQuicksightAnalyticsRequestTransfer);
 
         // Assert
@@ -273,7 +267,8 @@ class EnableAnalyticsTest extends Unit
         );
 
         // Act
-        $enableQuicksightAnalyticsResponseTransfer = $this->getFacadeWithMocks()
+        $enableQuicksightAnalyticsResponseTransfer = $this->tester
+            ->getFacadeWithMocks()
             ->enableAnalytics($enableQuicksightAnalyticsRequestTransfer);
 
         // Assert
@@ -299,7 +294,8 @@ class EnableAnalyticsTest extends Unit
         );
 
         // Act
-        $enableQuicksightAnalyticsResponseTransfer = $this->getFacadeWithMocks()
+        $enableQuicksightAnalyticsResponseTransfer = $this->tester
+            ->getFacadeWithMocks()
             ->enableAnalytics($enableQuicksightAnalyticsRequestTransfer);
 
         // Assert
@@ -340,7 +336,8 @@ class EnableAnalyticsTest extends Unit
         $this->tester->setDependency(AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT, $awsQuicksightClientMock);
 
         // Act
-        $enableQuicksightAnalyticsResponseTransfer = $this->getFacadeWithMocks()
+        $enableQuicksightAnalyticsResponseTransfer = $this->tester
+            ->getFacadeWithMocks()
             ->enableAnalytics($enableQuicksightAnalyticsRequestTransfer);
 
         // Assert
@@ -381,7 +378,8 @@ class EnableAnalyticsTest extends Unit
         $this->tester->setDependency(AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT, $awsQuicksightClientMock);
 
         // Act
-        $enableQuicksightAnalyticsResponseTransfer = $this->getFacadeWithMocks()
+        $enableQuicksightAnalyticsResponseTransfer = $this->tester
+            ->getFacadeWithMocks()
             ->enableAnalytics($enableQuicksightAnalyticsRequestTransfer);
 
         // Assert
@@ -397,7 +395,7 @@ class EnableAnalyticsTest extends Unit
     /**
      * @return array<string, list<\Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer>>
      */
-    protected function throwsExceptionWhenRequiredPropertiesAreNotSetDataProvider(): array
+    protected function throwsRequiredTransferPropertyExceptionWhenRequiredPropertiesAreNotSetDataProvider(): array
     {
         return [
             'When Asset bundle import job ID is not set' => [
@@ -428,48 +426,6 @@ class EnableAnalyticsTest extends Unit
                     ->setStatus(static::ASSET_BUNDLE_IMPORT_JOB_STATUS_IN_PROGRESS),
             ],
         ];
-    }
-
-    /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightFacadeInterface
-     */
-    protected function getFacadeWithMocks(): AmazonQuicksightFacadeInterface
-    {
-        $amazonQuicksightBusinessFactoryMock = $this->createAmazonQuicksightBusinessFactoryMock();
-
-        return $this->tester->getFacade()->setFactory($amazonQuicksightBusinessFactoryMock);
-    }
-
-    /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightBusinessFactory|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function createAmazonQuicksightBusinessFactoryMock(): AmazonQuicksightBusinessFactory
-    {
-        $amazonQuicksightBusinessFactoryMock = $this->getMockBuilder(AmazonQuicksightBusinessFactory::class)
-            ->onlyMethods(['createAssetBundleImportFileContentLoader', 'resolveDependencyProvider'])
-            ->getMock();
-        $amazonQuicksightBusinessFactoryMock->method('createAssetBundleImportFileContentLoader')
-            ->willReturn($this->createAssetBundleImportFileContentLoaderMock());
-        $amazonQuicksightBusinessFactoryMock->method('resolveDependencyProvider')
-            ->willReturn(new AmazonQuicksightDependencyProvider());
-        $amazonQuicksightBusinessFactoryMock->setConfig(new AmazonQuicksightConfig());
-        $amazonQuicksightBusinessFactoryMock->setRepository(new AmazonQuicksightRepository());
-        $amazonQuicksightBusinessFactoryMock->setEntityManager(new AmazonQuicksightEntityManager());
-
-        return $amazonQuicksightBusinessFactoryMock;
-    }
-
-    /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function createAssetBundleImportFileContentLoaderMock(): AssetBundleImportFileContentLoaderInterface
-    {
-        $assetBundleEnablerMock = $this->getMockBuilder(AssetBundleImportFileContentLoader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $assetBundleEnablerMock->method('getAssetBundleImportFileContent')->willReturn('content');
-
-        return $assetBundleEnablerMock;
     }
 
     /**

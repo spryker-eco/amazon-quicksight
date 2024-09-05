@@ -22,7 +22,15 @@ use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJob;
 use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJobQuery;
 use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUser;
 use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUserQuery;
+use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
+use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
+use SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightBusinessFactory;
+use SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightFacadeInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoader;
+use SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManager;
+use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepository;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface;
 
 /**
@@ -241,6 +249,42 @@ class AmazonQuicksightBusinessTester extends Actor
     public function findQuicksightAssetBundleImportJobQueryByJobId(string $jobId): ?SpyQuicksightAssetBundleImportJob
     {
         return $this->getQuicksightAssetBundleImportJobQuery()->filterByJobId($jobId)->findOne();
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightFacadeInterface
+     */
+    public function getFacadeWithMocks(): AmazonQuicksightFacadeInterface
+    {
+        $amazonQuicksightBusinessFactoryMock = $this->createAmazonQuicksightBusinessFactoryMock();
+
+        return $this->getFacade()->setFactory($amazonQuicksightBusinessFactoryMock);
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightBusinessFactory
+     */
+    protected function createAmazonQuicksightBusinessFactoryMock(): AmazonQuicksightBusinessFactory
+    {
+        $amazonQuicksightBusinessFactoryStub = Stub::make(AmazonQuicksightBusinessFactory::class, [
+            'createAssetBundleImportFileContentLoader' => $this->createAssetBundleImportFileContentLoaderMock(),
+            'resolveDependencyProvider' => new AmazonQuicksightDependencyProvider(),
+            'config' => new AmazonQuicksightConfig(),
+            'repository' => new AmazonQuicksightRepository(),
+            'entityManager' => new AmazonQuicksightEntityManager(),
+        ]);
+
+        return $amazonQuicksightBusinessFactoryStub;
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface
+     */
+    protected function createAssetBundleImportFileContentLoaderMock(): AssetBundleImportFileContentLoaderInterface
+    {
+        return Stub::makeEmpty(AssetBundleImportFileContentLoader::class, [
+            'getAssetBundleImportFileContent' => 'content',
+        ]);
     }
 
     /**
