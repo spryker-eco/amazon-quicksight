@@ -292,7 +292,7 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
         return (new QuicksightUserRegisterRequestTransfer())
             ->setIdentityType(static::QUICKSIGHT_USER_IDENTITY_TYPE)
             ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
-            ->setNamespace($this->amazonQuicksightConfig->getQuicksightRegisterUserNamespace());
+            ->setNamespace($this->amazonQuicksightConfig->getAwsQuicksightNamespace());
     }
 
     /**
@@ -391,7 +391,7 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
     {
         return (new QuicksightDeleteUserRequestTransfer())
             ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
-            ->setNamespace($this->amazonQuicksightConfig->getQuicksightRegisterUserNamespace());
+            ->setNamespace($this->amazonQuicksightConfig->getAwsQuicksightNamespace());
     }
 
     /**
@@ -401,7 +401,7 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
     {
         return (new QuicksightListUsersRequestTransfer())
             ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
-            ->setNamespace($this->amazonQuicksightConfig->getQuicksightRegisterUserNamespace());
+            ->setNamespace($this->amazonQuicksightConfig->getAwsQuicksightNamespace());
     }
 
     /**
