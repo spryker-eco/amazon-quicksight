@@ -7,6 +7,7 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business\Mapper;
 
+use Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer;
@@ -58,4 +59,26 @@ interface AmazonQuicksightMapperInterface
         array $generateEmbedUrlResponseData,
         QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer
     ): QuicksightGenerateEmbedUrlResponseTransfer;
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
+     * @param \Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer
+     */
+    public function mapQuicksightUserTransferToQuicksightDeleteUserRequestTransfer(
+        QuicksightUserTransfer $quicksightUserTransfer,
+        QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
+    ): QuicksightDeleteUserRequestTransfer;
+
+    /**
+     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
+     * @param \Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer
+     */
+    public function mapUserTransferToQuicksightDeleteUserRequestTransfer(
+        UserTransfer $userTransfer,
+        QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
+    ): QuicksightDeleteUserRequestTransfer;
 }

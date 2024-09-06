@@ -29,6 +29,27 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     protected const QUICKSIGHT_USER_ROLE_AUTHOR = 'AUTHOR';
 
     /**
+     * @uses \Orm\Zed\User\Persistence\Map\SpyUserTableMap::COL_STATUS_ACTIVE
+     *
+     * @var string
+     */
+    protected const USER_STATUS_ACTIVE = 'active';
+
+    /**
+     * @uses \Orm\Zed\User\Persistence\Map\SpyUserTableMap::COL_STATUS_BLOCKED
+     *
+     * @var string
+     */
+    protected const USER_STATUS_BLOCKED = 'blocked';
+
+    /**
+     * @uses \Orm\Zed\User\Persistence\Map\SpyUserTableMap::COL_STATUS_DELETED
+     *
+     * @var string
+     */
+    protected const USER_STATUS_DELETED = 'deleted';
+
+    /**
      * @var string
      */
     protected const QUICKSIGHT_CONSOLE_INITIAL_PATH = '/start';
@@ -131,5 +152,36 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     public function getQuicksightConsoleInitialPath(): string
     {
         return static::QUICKSIGHT_CONSOLE_INITIAL_PATH;
+    }
+
+    /**
+     * Specification:
+     * - Returns a list of user statuses that allows users to be registered in Quicksight.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getUserStatusesApplicableForQuicksightUserRegistration(): array
+    {
+        return [
+            static::USER_STATUS_ACTIVE,
+        ];
+    }
+
+    /**
+     * Specification:
+     * - Returns a list of user statuses that allows user deletion from Quicksight.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getUserStatusesApplicableForQuicksightUserDeletion(): array
+    {
+        return [
+            static::USER_STATUS_BLOCKED,
+            static::USER_STATUS_DELETED,
+        ];
     }
 }
