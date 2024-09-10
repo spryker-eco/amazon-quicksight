@@ -127,7 +127,7 @@
         <property name="content" type="string"/>
     </transfer>
 
-    <transfer name="UserConditions">
+    <transfer name="UserConditions" strict="true">
         <property name="statuses" type="string[]" singular="status"/>
     </transfer>
 
