@@ -34,6 +34,16 @@ interface AmazonQuicksightConstants
 
     /**
      * Specification:
+     * - The API version of Quicksight Client API provider.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const AWS_CLIENT_API_VERSION = 'AMAZON_QUICKSIGHT:AWS_CLIENT_API_VERSION';
+
+    /**
+     * Specification:
      * - AWS access key ID.
      *
      * @api
@@ -61,4 +71,14 @@ interface AmazonQuicksightConstants
      * @var string
      */
     public const AWS_CREDENTIALS_TOKEN = 'AMAZON_QUICKSIGHT:AWS_CREDENTIALS_TOKEN';
+
+    /**
+     * Specification:
+     * - The name of Quicksight namespace.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const AWS_QUICKSIGHT_NAMESPACE = 'AMAZON_QUICKSIGHT:AWS_QUICKSIGHT_NAMESPACE';
 }

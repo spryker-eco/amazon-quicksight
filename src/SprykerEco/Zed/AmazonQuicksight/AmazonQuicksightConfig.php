@@ -17,11 +17,6 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     /**
      * @var string
      */
-    protected const QUICKSIGHT_REGISTER_USER_NAMESPACE = 'default';
-
-    /**
-     * @var string
-     */
     protected const QUICKSIGHT_USER_ROLE_READER = 'READER';
 
     /**
@@ -148,15 +143,15 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
 
     /**
      * Specification:
-     * - Returns the namespace for the Quicksight user registration.
+     * - Returns the name of the Quicksight namespace.
      *
      * @api
      *
      * @return string
      */
-    public function getQuicksightRegisterUserNamespace(): string
+    public function getAwsQuicksightNamespace(): string
     {
-        return static::QUICKSIGHT_REGISTER_USER_NAMESPACE;
+        return $this->get(AmazonQuicksightConstants::AWS_QUICKSIGHT_NAMESPACE);
     }
 
     /**
@@ -173,6 +168,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     {
         $quicksightClientConfiguration = [
             'region' => $this->get(AmazonQuicksightConstants::AWS_REGION),
+            'version' => $this->get(AmazonQuicksightConstants::AWS_CLIENT_API_VERSION),
         ];
 
         $awsCredentialsKey = $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY);
