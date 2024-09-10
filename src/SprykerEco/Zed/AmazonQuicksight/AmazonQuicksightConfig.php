@@ -11,6 +11,7 @@ use Aws\Credentials\Credentials;
 use Spryker\Zed\Kernel\AbstractBundleConfig;
 use SprykerEco\Shared\AmazonQuicksight\AmazonQuicksightConstants;
 use SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFilePathNotDefinedException;
+use function Symfony\Component\String\s;
 
 class AmazonQuicksightConfig extends AbstractBundleConfig
 {
@@ -110,6 +111,11 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
      * @var list<string>
      */
     protected const DEFAULT_DATA_SOURCE_PERMISSIONS_ACTIONS = [];
+
+    /**
+     * @var string
+     */
+    protected const DEFAULT_DATA_SOURCE_DATABASE_NAME = 'spryker_scos';
 
     /**
      * Specification:
@@ -352,5 +358,57 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     public function getDefaultDataSourcePermissionsActions(): array
     {
         return static::DEFAULT_DATA_SOURCE_PERMISSIONS_ACTIONS;
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source database name used during the default asset bundle import.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourceDatabaseName(): string
+    {
+        return static::DEFAULT_DATA_SOURCE_DATABASE_NAME;
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source username.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourceUsername(): string
+    {
+        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_USERNAME);
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source password.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourcePassword(): string
+    {
+        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_PASSWORD);
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source MySQL port.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourceMysqlPort(): string
+    {
+        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_MYSQL_PORT);
     }
 }

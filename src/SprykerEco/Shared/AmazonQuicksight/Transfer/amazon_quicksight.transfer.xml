@@ -165,10 +165,28 @@
         <property name="failureAction" type="string"/>
         <property name="assetBundleImportSource" type="QuicksightAssetBundleImportSource"/>
         <property name="overridePermissions" type="QuicksightOverridePermissions"/>
+        <property name="overrideParameters" type="QuicksightOverrideParameters"/>
     </transfer>
 
     <transfer name="QuicksightAssetBundleImportSource" strict="true">
         <property name="body" type="string"/>
+    </transfer>
+
+    <transfer name="QuicksightOverrideParameters" strict="true">
+        <property name="dataSources" type="QuicksightOverrideParametersDataSource[]" singular="quicksightOverrideParametersDataSource"/>
+    </transfer>
+
+    <transfer name="QuicksightOverrideParametersDataSource" strict="true">
+        <property name="credentials" type="QuicksightOverrideParametersDataSourceCredentials"/>
+    </transfer>
+
+    <transfer name="QuicksightOverrideParametersDataSourceCredentials" strict="true">
+        <property name="credentialPair" type="QuicksightOverrideParametersDataSourceCredentialPair"/>
+    </transfer>
+
+    <transfer name="QuicksightOverrideParametersDataSourceCredentialPair" strict="true">
+        <property name="username" type="string"/>
+        <property name="password" type="string"/>
     </transfer>
 
     <transfer name="QuicksightOverridePermissions" strict="true">
