@@ -106,6 +106,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     {
         $quicksightClientConfiguration = [
             'region' => $this->get(AmazonQuicksightConstants::AWS_REGION),
+            'version' => $this->get(AmazonQuicksightConstants::AWS_CLIENT_API_VERSION),
         ];
 
         $awsCredentialsKey = $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY);
