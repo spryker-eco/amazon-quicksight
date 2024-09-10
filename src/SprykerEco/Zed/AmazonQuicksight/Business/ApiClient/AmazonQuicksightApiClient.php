@@ -20,6 +20,12 @@ use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightListUsersRequestTransfer;
 use Generated\Shared\Transfer\QuicksightListUsersResponseTransfer;
+use Generated\Shared\Transfer\QuicksightOverridePermissionsAnalysisTransfer;
+use Generated\Shared\Transfer\QuicksightOverridePermissionsDashboardTransfer;
+use Generated\Shared\Transfer\QuicksightOverridePermissionsDataSetTransfer;
+use Generated\Shared\Transfer\QuicksightOverridePermissionsDataSourceTransfer;
+use Generated\Shared\Transfer\QuicksightOverridePermissionsTransfer;
+use Generated\Shared\Transfer\QuicksightPermissionsTransfer;
 use Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer;
 use Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer;
@@ -504,7 +510,35 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
     {
         return (new QuicksightStartAssetBundleImportJobRequestTransfer())
             ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
-            ->setFailureAction(static::START_ASSET_BUNDLE_IMPORT_JOB_FAILURE_ACTION);
+            ->setFailureAction(static::START_ASSET_BUNDLE_IMPORT_JOB_FAILURE_ACTION)
+            ->setOverridePermissions(
+                (new QuicksightOverridePermissionsTransfer())
+                    ->addQuicksightOverridePermissionsAnalysis(
+                        (new QuicksightOverridePermissionsAnalysisTransfer())
+                            ->addIdAnalysis('*')
+                            ->setPermissions((new QuicksightPermissionsTransfer())->setActions(
+                                $this->amazonQuicksightConfig->getDefaultAnalysisPermissionsActions(),
+                            )),
+                    )->addQuicksightOverridePermissionsDashboard(
+                        (new QuicksightOverridePermissionsDashboardTransfer())
+                            ->addIdDashboard('*')
+                            ->setPermissions((new QuicksightPermissionsTransfer())->setActions(
+                                $this->amazonQuicksightConfig->getDefaultDashboardPermissionsActions(),
+                            )),
+                    )->addQuicksightOverridePermissionsDataSet(
+                        (new QuicksightOverridePermissionsDataSetTransfer())
+                            ->addIdDataSet('*')
+                            ->setPermissions((new QuicksightPermissionsTransfer())->setActions(
+                                $this->amazonQuicksightConfig->getDefaultDataSetPermissionsActions(),
+                            )),
+                    )->addQuicksightOverridePermissionsDataSource(
+                        (new QuicksightOverridePermissionsDataSourceTransfer())
+                            ->addIdDataSource('*')
+                            ->setPermissions((new QuicksightPermissionsTransfer())->setActions(
+                                $this->amazonQuicksightConfig->getDefaultDataSourcePermissionsActions(),
+                            )),
+                    ),
+            );
     }
 
     /**

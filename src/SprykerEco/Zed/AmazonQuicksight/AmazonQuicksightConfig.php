@@ -88,6 +88,35 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     protected const DEFAULT_NEW_ASSET_BUNDLE_IMPORT_JOB_STATUS = 'QUEUED_FOR_IMMEDIATE_EXECUTION';
 
     /**
+     * @var list<string>
+     */
+    protected const DEFAULT_ANALYSIS_PERMISSIONS_ACTIONS = [];
+
+    /**
+     * @var list<string>
+     */
+    protected const DEFAULT_DASHBOARD_PERMISSIONS_ACTIONS = [
+        'quicksight:DescribeDashboard',
+        'quicksight:ListDashboardVersions',
+        'quicksight:UpdateDashboardPermissions',
+        'quicksight:QueryDashboard',
+        'quicksight:UpdateDashboard',
+        'quicksight:DeleteDashboard',
+        'quicksight:UpdateDashboardPublishedVersion',
+        'quicksight:DescribeDashboardPermissions',
+    ];
+
+    /**
+     * @var list<string>
+     */
+    protected const DEFAULT_DATA_SET_PERMISSIONS_ACTIONS = [];
+
+    /**
+     * @var list<string>
+     */
+    protected const DEFAULT_DATA_SOURCE_PERMISSIONS_ACTIONS = [];
+
+    /**
      * Specification:
      * - Returns the list of available Quicksight user roles.
      * - The list of available roles can be found here: {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_User.html#QS-Type-User-Role}.
@@ -275,5 +304,57 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     public function getDefaultNewAssetBundleImportJobStatus(): string
     {
         return static::DEFAULT_NEW_ASSET_BUNDLE_IMPORT_JOB_STATUS;
+    }
+
+    /**
+     * Specification:
+     * - Returns the list of IAM actions to assign to the analysis during the default asset bundle import.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getDefaultAnalysisPermissionsActions(): array
+    {
+        return static::DEFAULT_ANALYSIS_PERMISSIONS_ACTIONS;
+    }
+
+    /**
+     * Specification:
+     * - Returns the list of IAM actions to assign to the dashboards during the default asset bundle import.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getDefaultDashboardPermissionsActions(): array
+    {
+        return static::DEFAULT_DASHBOARD_PERMISSIONS_ACTIONS;
+    }
+
+    /**
+     * Specification:
+     * - Returns the list of IAM actions to assign to the data sets during the default asset bundle import.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getDefaultDataSetPermissionsActions(): array
+    {
+        return static::DEFAULT_DATA_SET_PERMISSIONS_ACTIONS;
+    }
+
+    /**
+     * Specification:
+     * - Returns the list of IAM actions to assign to the data sources during the default asset bundle import.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getDefaultDataSourcePermissionsActions(): array
+    {
+        return static::DEFAULT_DATA_SOURCE_PERMISSIONS_ACTIONS;
     }
 }

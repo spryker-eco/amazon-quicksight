@@ -164,10 +164,43 @@
         <property name="assetBundleImportJobId" type="string"/>
         <property name="failureAction" type="string"/>
         <property name="assetBundleImportSource" type="QuicksightAssetBundleImportSource"/>
+        <property name="overridePermissions" type="QuicksightOverridePermissions"/>
     </transfer>
 
     <transfer name="QuicksightAssetBundleImportSource" strict="true">
         <property name="body" type="string"/>
+    </transfer>
+
+    <transfer name="QuicksightOverridePermissions" strict="true">
+        <property name="analyses" type="QuicksightOverridePermissionsAnalysis[]" singular="quicksightOverridePermissionsAnalysis"/>
+        <property name="dashboards" type="QuicksightOverridePermissionsDashboard[]" singular="quicksightOverridePermissionsDashboard"/>
+        <property name="dataSets" type="QuicksightOverridePermissionsDataSet[]" singular="quicksightOverridePermissionsDataSet"/>
+        <property name="dataSources" type="QuicksightOverridePermissionsDataSource[]" singular="quicksightOverridePermissionsDataSource"/>
+    </transfer>
+
+    <transfer name="QuicksightOverridePermissionsAnalysis" strict="true">
+        <property name="analysisIds" type="string[]" singular="idAnalysis"/>
+        <property name="permissions" type="QuicksightPermissions"/>
+    </transfer>
+
+    <transfer name="QuicksightOverridePermissionsDashboard" strict="true">
+        <property name="dashboardIds" type="string[]" singular="idDashboard"/>
+        <property name="permissions" type="QuicksightPermissions"/>
+    </transfer>
+
+    <transfer name="QuicksightOverridePermissionsDataSet" strict="true">
+        <property name="dataSetIds" type="string[]" singular="idDataSet"/>
+        <property name="permissions" type="QuicksightPermissions"/>
+    </transfer>
+
+    <transfer name="QuicksightOverridePermissionsDataSource" strict="true">
+        <property name="dataSourceIds" type="string[]" singular="idDataSource"/>
+        <property name="permissions" type="QuicksightPermissions"/>
+    </transfer>
+
+    <transfer name="QuicksightPermissions" strict="true">
+        <property name="actions" type="string[]" singular="action"/>
+        <property name="principals" type="string[]" singular="principal"/>
     </transfer>
 
     <transfer name="QuicksightStartAssetBundleImportJobResponse" strict="true">
