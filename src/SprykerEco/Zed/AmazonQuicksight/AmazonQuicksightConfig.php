@@ -50,6 +50,11 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     protected const QUICKSIGHT_CONSOLE_INITIAL_PATH = '/start';
 
     /**
+     * @var string
+     */
+    protected const QUICKSIGHT_API_VERSION = '2018-04-01';
+
+    /**
      * Specification:
      * - Returns the list of available Quicksight user roles.
      * - The list of available roles can be found here: {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_User.html#QS-Type-User-Role}.
@@ -106,7 +111,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     {
         $quicksightClientConfiguration = [
             'region' => $this->get(AmazonQuicksightConstants::AWS_REGION),
-            'version' => $this->get(AmazonQuicksightConstants::AWS_CLIENT_API_VERSION),
+            'version' => static::QUICKSIGHT_API_VERSION,
         ];
 
         $awsCredentialsKey = $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY);
