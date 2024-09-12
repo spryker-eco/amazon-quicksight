@@ -147,6 +147,14 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
             (new QuicksightAssetBundleImportSourceTransfer())
                 ->setBody($enableQuicksightAnalyticsRequestTransfer->getAssetBundleImportSourceBody()),
         );
+        $quicksightStartAssetBundleImportJobRequestTransfer->getOverridePermissionsOrFail()
+            ->getDashboards()
+            ->getIterator()
+            ->current()
+            ->getPermissionsOrFail()
+            ->addPrincipal(
+                $enableQuicksightAnalyticsRequestTransfer->getUserOrFail()->getQuicksightUserOrFail()->getArnOrFail(),
+            );
 
         return $quicksightStartAssetBundleImportJobRequestTransfer;
     }
@@ -169,6 +177,14 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
             (new QuicksightAssetBundleImportSourceTransfer())
                 ->setBody($resetQuicksightAnalyticsRequestTransfer->getAssetBundleImportSourceBody()),
         );
+        $quicksightStartAssetBundleImportJobRequestTransfer->getOverridePermissionsOrFail()
+            ->getDashboards()
+            ->getIterator()
+            ->current()
+            ->getPermissionsOrFail()
+            ->addPrincipal(
+                $resetQuicksightAnalyticsRequestTransfer->getUserOrFail()->getQuicksightUserOrFail()->getArnOrFail(),
+            );
 
         return $quicksightStartAssetBundleImportJobRequestTransfer;
     }

@@ -11,14 +11,10 @@ use Aws\Credentials\Credentials;
 use Spryker\Zed\Kernel\AbstractBundleConfig;
 use SprykerEco\Shared\AmazonQuicksight\AmazonQuicksightConstants;
 use SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFilePathNotDefinedException;
+use function Symfony\Component\String\s;
 
 class AmazonQuicksightConfig extends AbstractBundleConfig
 {
-    /**
-     * @var string
-     */
-    protected const QUICKSIGHT_REGISTER_USER_NAMESPACE = 'default';
-
     /**
      * @var string
      */
@@ -88,6 +84,40 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     protected const DEFAULT_NEW_ASSET_BUNDLE_IMPORT_JOB_STATUS = 'QUEUED_FOR_IMMEDIATE_EXECUTION';
 
     /**
+     * @var list<string>
+     */
+    protected const DEFAULT_ANALYSIS_PERMISSIONS_ACTIONS = [];
+
+    /**
+     * @var list<string>
+     */
+    protected const DEFAULT_DASHBOARD_PERMISSIONS_ACTIONS = [
+        'quicksight:DescribeDashboard',
+        'quicksight:ListDashboardVersions',
+        'quicksight:UpdateDashboardPermissions',
+        'quicksight:QueryDashboard',
+        'quicksight:UpdateDashboard',
+        'quicksight:DeleteDashboard',
+        'quicksight:UpdateDashboardPublishedVersion',
+        'quicksight:DescribeDashboardPermissions',
+    ];
+
+    /**
+     * @var list<string>
+     */
+    protected const DEFAULT_DATA_SET_PERMISSIONS_ACTIONS = [];
+
+    /**
+     * @var list<string>
+     */
+    protected const DEFAULT_DATA_SOURCE_PERMISSIONS_ACTIONS = [];
+
+    /**
+     * @var string
+     */
+    protected const DEFAULT_DATA_SOURCE_DATABASE_NAME = 'spryker_scos';
+
+    /**
      * Specification:
      * - Returns the list of available Quicksight user roles.
      * - The list of available roles can be found here: {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_User.html#QS-Type-User-Role}.
@@ -119,15 +149,15 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
 
     /**
      * Specification:
-     * - Returns the namespace for the Quicksight user registration.
+     * - Returns the name of the Quicksight namespace.
      *
      * @api
      *
      * @return string
      */
-    public function getQuicksightRegisterUserNamespace(): string
+    public function getAwsQuicksightNamespace(): string
     {
-        return static::QUICKSIGHT_REGISTER_USER_NAMESPACE;
+        return $this->get(AmazonQuicksightConstants::AWS_QUICKSIGHT_NAMESPACE);
     }
 
     /**
@@ -144,6 +174,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     {
         $quicksightClientConfiguration = [
             'region' => $this->get(AmazonQuicksightConstants::AWS_REGION),
+            'version' => $this->get(AmazonQuicksightConstants::AWS_CLIENT_API_VERSION),
         ];
 
         $awsCredentialsKey = $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY);
@@ -275,5 +306,109 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     public function getDefaultNewAssetBundleImportJobStatus(): string
     {
         return static::DEFAULT_NEW_ASSET_BUNDLE_IMPORT_JOB_STATUS;
+    }
+
+    /**
+     * Specification:
+     * - Returns the list of IAM actions to assign to the analysis during the default asset bundle import.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getDefaultAnalysisPermissionsActions(): array
+    {
+        return static::DEFAULT_ANALYSIS_PERMISSIONS_ACTIONS;
+    }
+
+    /**
+     * Specification:
+     * - Returns the list of IAM actions to assign to the dashboards during the default asset bundle import.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getDefaultDashboardPermissionsActions(): array
+    {
+        return static::DEFAULT_DASHBOARD_PERMISSIONS_ACTIONS;
+    }
+
+    /**
+     * Specification:
+     * - Returns the list of IAM actions to assign to the data sets during the default asset bundle import.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getDefaultDataSetPermissionsActions(): array
+    {
+        return static::DEFAULT_DATA_SET_PERMISSIONS_ACTIONS;
+    }
+
+    /**
+     * Specification:
+     * - Returns the list of IAM actions to assign to the data sources during the default asset bundle import.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getDefaultDataSourcePermissionsActions(): array
+    {
+        return static::DEFAULT_DATA_SOURCE_PERMISSIONS_ACTIONS;
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source database name used during the default asset bundle import.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourceDatabaseName(): string
+    {
+        return static::DEFAULT_DATA_SOURCE_DATABASE_NAME;
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source username.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourceUsername(): string
+    {
+        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_USERNAME);
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source password.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourcePassword(): string
+    {
+        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_PASSWORD);
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source MySQL port.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourceMysqlPort(): string
+    {
+        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_MYSQL_PORT);
     }
 }
