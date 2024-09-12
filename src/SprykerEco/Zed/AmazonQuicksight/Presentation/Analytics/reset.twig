@@ -10,19 +10,15 @@
 {% endblock %}
 
 {% block content %}
-
     {% embed '@Gui/Partials/widget.twig' %}
-
         {% block widget_content %}
-            <p>{{ 'Please be aware that all Analytics dashboards and configurations, including your changes, will be reset and replaced with the default data.' | trans }}</p>
+            <h4 class="spacing-bottom-big">{{ 'Please be aware that all Analytics dashboards and configurations, including your changes, will be reset and replaced with the default data.' | trans }}</h4>
             <div>
                 {{ form_start(resetAnalyticsForm) }}
                     {{ viewActionButton(app.request.headers.get('referer'), 'Cancel' | trans) }}
-                    <button type="submit" class="btn btn-danger safe-submit"> {{ 'Reset Analytics' | trans }} </button>
+                    <button class="btn btn-danger spacing-left safe-submit"> {{ 'Reset Analytics' | trans }} </button>
                 {{ form_end(resetAnalyticsForm) }}
             </div>
         {% endblock %}
-
     {% endembed %}
-
 {% endblock %}

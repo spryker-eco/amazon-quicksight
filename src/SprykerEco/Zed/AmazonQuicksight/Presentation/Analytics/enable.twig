@@ -10,19 +10,15 @@
 {% endblock %}
 
 {% block content %}
-
     {% embed '@Gui/Partials/widget.twig' %}
-
         {% block widget_content %}
-            <p>{{ 'Please be aware that you will be the owner of all default assets (dashboards, analyses, datasets and data sources).' | trans }}</p>
+            <h4 class="spacing-bottom-big">{{ 'Please be aware that you will be the owner of all default assets (dashboards, analyses, datasets and data sources).' | trans }}</h4>
             <div>
                 {{ form_start(enableAnalyticsForm) }}
                     <a href="{{ app.request.headers.get('referer') }}" class="btn btn-view btn-outline">{{ 'Cancel' | trans }}</a>
-                    <button type="submit" class="btn safe-submit"> {{ 'Enable Analytics' | trans }} </button>
+                    <button class="btn spacing-left safe-submit"> {{ 'Enable Analytics' | trans }} </button>
                 {{ form_end(enableAnalyticsForm) }}
             </div>
         {% endblock %}
-
     {% endembed %}
-
 {% endblock %}
