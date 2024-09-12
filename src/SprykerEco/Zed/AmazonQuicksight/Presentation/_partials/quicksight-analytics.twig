@@ -4,8 +4,8 @@
 {% if quicksightAssetBundleImportJob and quicksightAssetBundleImportJob.errors | length %}
     <div class="alert alert-danger" role="alert">
         {{ quicksightAssetBundleImportJob.isInitialized
-            ? 'An error occurred during the Analytics reset. Please try again by clicking the ""Reset Analytics"" button.' | trans
-            : 'An error occurred during the Analytics activation. Please try again by clicking the ""Enable Analytics"" button.' | trans
+            ? 'An error occurred during the Analytics reset. Please try again by clicking the "Reset Analytics" button.' | trans
+            : 'An error occurred during the Analytics activation. Please try again by clicking the "Enable Analytics" button.' | trans
         }}
     </div>
     {% for error in quicksightAssetBundleImportJob.errors %}
@@ -21,15 +21,41 @@
             {% endfor %}
         {% endif %}
         {% if quicksightGenerateEmbedUrlResponse.embedUrl is not null and quicksightGenerateEmbedUrlResponse.embedUrl.url is not null %}
-            <iframe src="{{ quicksightGenerateEmbedUrlResponse.embedUrl.url }}" width="100%" height="800" frameborder="0"></iframe>
+            <div id="experience-container" data-embed-url="{{ quicksightGenerateEmbedUrlResponse.embedUrl.url | raw }}"></div>
+
+            <script src="{{ assetsPath('js/spryker-zed-quicksight-analytics-gui-main.js') }}"></script>
         {% endif %}
     {% else %}
-        {{ 'No Analytics permission has been granted to the current user.' | trans }}
+        <div class="alert alert-info">
+            {{ 'No Analytics permission has been granted to the current user.' | trans }}
+        </div>
     {% endif %}
 {% elseif isAssetBundleInitializationInProgress %}
     <div class="alert alert-info" role="alert">{{ 'Spryker Analytics is being activated. Please wait 1-2 minutes and reload the page.' | trans }}</div>
 {% else %}
-    <h3>{{ 'Spryker Analytics is not enabled yet' | trans }}</h3>
-    {{ 'You can enable Spryker Analytics to view and modify default dashboards with the ability to share them with other users. ' | trans }}
-    {{ viewActionButton(url('/amazon-quicksight/analytics/enable'), 'Enable Analytics' | trans) }}
+    <div class="analytics">
+        <div class="analytics__icon"><i class="fa fa-chart-bar"></i></div>
+
+        <div class="analytics__content">
+            <h3 class="analytics__heading">{{ 'Spryker Analytics is not enabled yet' | trans }}</h3>
+            <p>{{ 'You can enable Spryker Analytics to view and modify default dashboards with the ability to share them with other users. ' | trans }}</p>
+        </div>
+
+        <div class="analytics__button">
+            {{ viewActionButton(url('/amazon-quicksight/analytics/enable'), 'Enable Analytics' | trans) }}
+        </div>
+    </div>
 {% endif %}
+
+<div class="analytics">
+    <div class="analytics__icon"><i class="fa fa-chart-bar"></i></div>
+
+    <div class="analytics__content">
+        <h3 class="analytics__heading">{{ 'Spryker Analytics is not enabled yet' | trans }}</h3>
+        <p>{{ 'You can enable Spryker Analytics to view and modify default dashboards with the ability to share them with other users. ' | trans }}</p>
+    </div>
+
+    <div class="analytics__button">
+        {{ viewActionButton(url('/amazon-quicksight/analytics/enable'), 'Enable Analytics' | trans) }}
+    </div>
+</div>
