@@ -34,6 +34,16 @@ interface AmazonQuicksightConstants
 
     /**
      * Specification:
+     * - The API version of Quicksight Client API provider.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const AWS_CLIENT_API_VERSION = 'AMAZON_QUICKSIGHT:AWS_CLIENT_API_VERSION';
+
+    /**
+     * Specification:
      * - AWS access key ID.
      *
      * @api
@@ -61,4 +71,44 @@ interface AmazonQuicksightConstants
      * @var string
      */
     public const AWS_CREDENTIALS_TOKEN = 'AMAZON_QUICKSIGHT:AWS_CREDENTIALS_TOKEN';
+
+    /**
+     * Specification:
+     * - The name of Quicksight namespace.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const AWS_QUICKSIGHT_NAMESPACE = 'AMAZON_QUICKSIGHT:AWS_QUICKSIGHT_NAMESPACE';
+
+    /**
+     * Specification:
+     * - The default data source username.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const DEFAULT_DATA_SOURCE_USERNAME = 'AMAZON_QUICKSIGHT:DEFAULT_DATA_SOURCE_USERNAME';
+
+    /**
+     * Specification:
+     * - The default data source password.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const DEFAULT_DATA_SOURCE_PASSWORD = 'AMAZON_QUICKSIGHT:DEFAULT_DATA_SOURCE_PASSWORD';
+
+    /**
+     * Specification:
+     * - The default data source MySQL port.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const DEFAULT_DATA_SOURCE_MYSQL_PORT = 'AMAZON_QUICKSIGHT:DEFAULT_DATA_SOURCE_MYSQL_PORT';
 }
