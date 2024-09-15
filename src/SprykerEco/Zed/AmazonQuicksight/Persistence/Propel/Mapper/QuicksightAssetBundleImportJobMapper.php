@@ -9,10 +9,8 @@ namespace SprykerEco\Zed\AmazonQuicksight\Persistence\Propel\Mapper;
 
 use ArrayObject;
 use Generated\Shared\Transfer\ErrorTransfer;
-use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer;
 use Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer;
 use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJob;
-use Propel\Runtime\Collection\ObjectCollection;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\Service\AmazonQuicksightToUtilEncodingServiceInterface;
 
 class QuicksightAssetBundleImportJobMapper
@@ -28,28 +26,6 @@ class QuicksightAssetBundleImportJobMapper
     public function __construct(AmazonQuicksightToUtilEncodingServiceInterface $utilEncodingService)
     {
         $this->utilEncodingService = $utilEncodingService;
-    }
-
-    /**
-     * @param \Propel\Runtime\Collection\ObjectCollection<\Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJob> $quicksightAssetBundleImportJobEntities
-     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer $quicksightAssetBundleImportJobCollectionTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer
-     */
-    public function mapQuicksightAssetBundleImportJobEntitiesToQuicksightAssetBundleImportJobCollectionTransfer(
-        ObjectCollection $quicksightAssetBundleImportJobEntities,
-        QuicksightAssetBundleImportJobCollectionTransfer $quicksightAssetBundleImportJobCollectionTransfer
-    ): QuicksightAssetBundleImportJobCollectionTransfer {
-        foreach ($quicksightAssetBundleImportJobEntities as $quicksightAssetBundleImportJobEntity) {
-            $quicksightAssetBundleImportJobCollectionTransfer->addQuicksightAssetBundleImportJob(
-                $this->mapQuicksightAssetBundleImportJobEntityToQuicksightAssetBundleImportJobTransfer(
-                    $quicksightAssetBundleImportJobEntity,
-                    new QuicksightAssetBundleImportJobTransfer(),
-                ),
-            );
-        }
-
-        return $quicksightAssetBundleImportJobCollectionTransfer;
     }
 
     /**

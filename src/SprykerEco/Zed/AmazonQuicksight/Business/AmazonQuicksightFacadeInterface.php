@@ -11,8 +11,6 @@ use Generated\Shared\Transfer\AnalyticsCollectionTransfer;
 use Generated\Shared\Transfer\AnalyticsRequestTransfer;
 use Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\EnableQuicksightAnalyticsResponseTransfer;
-use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer;
-use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCriteriaTransfer;
 use Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsResponseTransfer;
@@ -84,11 +82,11 @@ interface AmazonQuicksightFacadeInterface
      * Specification:
      * - Requires `AnalyticsRequestTransfer.user` to be set.
      * - Requires `AnalyticsRequestTransfer.user.idUser` to be set.
-     * - If Quicksight user with the provided user ID does not exist in DB returns `AnalyticsCollectionTransfer` without any changes.
-     * - Otherwise sends request to AWS API to generate an embed URL for a registered Quicksight user. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_GenerateEmbedUrlForRegisteredUser.html}.
-     * - Renders a Quicksight analytics template with the generated embed URL.
+     * - If the provided user is able to see the Analytics sends request to AWS API to generate an embed URL for a registered Quicksight user. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_GenerateEmbedUrlForRegisteredUser.html}.
+     * - Renders a Quicksight analytics template.
      * - Creates `AnalyticsTransfer` and populates `AnalyticsTransfer.content` with the rendered content.
      * - Adds the newly introduced `AnalyticsTransfer` to `AnalyticsCollectionTransfer.analyticsList`.
+     * - If the provided user not able to reset the Analytics expands AnalyticsCollectionTransfer.analyticsActions with the reset action.
      *
      * @api
      *
@@ -137,21 +135,16 @@ interface AmazonQuicksightFacadeInterface
 
     /**
      * Specification:
-     * - TODO
-     *
-     * @api
-     *
-     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobCriteriaTransfer $quicksightAssetBundleImportJobCriteriaTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer
-     */
-    public function getQuicksightAssetBundleImportJobCollection(
-        QuicksightAssetBundleImportJobCriteriaTransfer $quicksightAssetBundleImportJobCriteriaTransfer
-    ): QuicksightAssetBundleImportJobCollectionTransfer;
-
-    /**
-     * Specification:
-     * - TODO
+     * - Requires `EnableQuicksightAnalyticsRequestTransfer.assetBundleImportJobId` to be set.
+     * - Requires `EnableQuicksightAnalyticsRequestTransfer.user` to be set.
+     * - Validates whether Analytics can be enabled and populates `EnableQuicksightAnalyticsResponseTransfer.errors` with errors encountered during the validation.
+     * - If validation fails, Analytics will not be enabled and `EnableQuicksightAnalyticsResponseTransfer` will be returned.
+     * - If current user is not a Quicksight user, creates a new Quicksight user with AUTHOR role.
+     * - If current user is a Quicksight user with READER role, upgrades the user to AUTHOR.
+     * - Starts the asset bundle import job for a file located at the path specified by {@link \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::getAssetBundleImportFilePath()} to Quicksight.
+     * - Throws {@link \SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFilePathNotDefinedException} if the path is not specified.
+     * - Saves asset bundle import job to DB and populates `EnableQuicksightAnalyticsResponseTransfer.quicksightAssetBundleImportJob` if the import job started successfully.
+     * - Otherwise populates `EnableQuicksightAnalyticsResponseTransfer.errors` with errors encountered during the starting the import job.
      *
      * @api
      *
@@ -165,7 +158,14 @@ interface AmazonQuicksightFacadeInterface
 
     /**
      * Specification:
-     * - TODO
+     * - Requires `ResetQuicksightAnalyticsRequestTransfer.assetBundleImportJobId` to be set.
+     * - Requires `ResetQuicksightAnalyticsRequestTransfer.user` to be set.
+     * - Validates whether Analytics can be reset and populates `ResetQuicksightAnalyticsResponseTransfer.errors` with errors encountered during the validation.
+     * - If validation fails, Analytics will not be reset and `ResetQuicksightAnalyticsResponseTransfer` will be returned.
+     * - Starts the asset bundle import job for a file located at the path specified by {@link \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::getAssetBundleImportFilePath()} to Quicksight.
+     * - Throws {@link \SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFilePathNotDefinedException} if the path is not specified.
+     * - Updates asset bundle import job in DB and populates `ResetQuicksightAnalyticsResponseTransfer.quicksightAssetBundleImportJob` if the import job started successfully.
+     * - Otherwise populates `ResetQuicksightAnalyticsResponseTransfer.errors` with errors encountered during the starting the import job.
      *
      * @api
      *

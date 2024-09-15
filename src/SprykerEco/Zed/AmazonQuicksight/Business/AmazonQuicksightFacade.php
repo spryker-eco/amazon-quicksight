@@ -11,8 +11,6 @@ use Generated\Shared\Transfer\AnalyticsCollectionTransfer;
 use Generated\Shared\Transfer\AnalyticsRequestTransfer;
 use Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\EnableQuicksightAnalyticsResponseTransfer;
-use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer;
-use Generated\Shared\Transfer\QuicksightAssetBundleImportJobCriteriaTransfer;
 use Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsResponseTransfer;
@@ -121,22 +119,6 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
         return $this->getFactory()
             ->createQuicksightUserDeleter()
             ->deleteNotMatchedQuicksightUsers();
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @api
-     *
-     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobCriteriaTransfer $quicksightAssetBundleImportJobCriteriaTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobCollectionTransfer
-     */
-    public function getQuicksightAssetBundleImportJobCollection(
-        QuicksightAssetBundleImportJobCriteriaTransfer $quicksightAssetBundleImportJobCriteriaTransfer
-    ): QuicksightAssetBundleImportJobCollectionTransfer {
-        return $this->getRepository()
-            ->getQuicksightAssetBundleImportJobCollection($quicksightAssetBundleImportJobCriteriaTransfer);
     }
 
     /**

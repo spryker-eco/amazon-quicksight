@@ -147,18 +147,6 @@
         <property name="errors" type="Error[]" singular="error"/>
     </transfer>
 
-    <transfer name="QuicksightAssetBundleImportJobCollection" strict="true">
-        <property name="quicksightAssetBundleImportJobs" type="QuicksightAssetBundleImportJob[]" singular="quicksightAssetBundleImportJob"/>
-    </transfer>
-
-    <transfer name="QuicksightAssetBundleImportJobCriteria" strict="true">
-        <property name="quicksightAssetBundleImportJobConditions" type="QuicksightAssetBundleImportJobConditions"/>
-    </transfer>
-
-    <transfer name="QuicksightAssetBundleImportJobConditions" strict="true">
-        <property name="jobIds" type="string[]" singular="idJob"/>
-    </transfer>
-
     <transfer name="QuicksightStartAssetBundleImportJobRequest" strict="true">
         <property name="awsAccountId" type="string"/>
         <property name="assetBundleImportJobId" type="string"/>
