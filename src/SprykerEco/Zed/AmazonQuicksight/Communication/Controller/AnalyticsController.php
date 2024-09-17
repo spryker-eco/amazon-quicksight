@@ -109,8 +109,6 @@ class AnalyticsController extends AbstractController
             ),
         );
 
-        return $userCollectionTransfer->getUsers()->offsetExists(0)
-            ? $userCollectionTransfer->getUsers()->offsetGet(0) :
-            null;
+        return $userCollectionTransfer->getUsers()->getIterator()->current();
     }
 }

@@ -5,7 +5,7 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerEco\Zed\AmazonQuicksight\Business\Syncer;
+namespace SprykerEco\Zed\AmazonQuicksight\Business\Synchronizer;
 
 use Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
@@ -15,7 +15,7 @@ use SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsReques
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface;
 
-class QuicksightAssetBundleImportJobSyncer implements QuicksightAssetBundleImportJobSyncerInterface
+class QuicksightAssetBundleImportJobSynchronizer implements QuicksightAssetBundleImportJobSynchronizerInterface
 {
     /**
      * @var string

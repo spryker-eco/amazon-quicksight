@@ -17,7 +17,7 @@ use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
-use SprykerEco\Zed\AmazonQuicksight\Business\Syncer\QuicksightAssetBundleImportJobSyncerInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Synchronizer\QuicksightAssetBundleImportJobSynchronizerInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsRequestValidatorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface;
 use Twig\Environment;
@@ -55,9 +55,9 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
     protected QuicksightAnalyticsRequestValidatorInterface $quicksightAnalyticsRequestValidator;
 
     /**
-     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Syncer\QuicksightAssetBundleImportJobSyncerInterface
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Synchronizer\QuicksightAssetBundleImportJobSynchronizerInterface
      */
-    protected QuicksightAssetBundleImportJobSyncerInterface $quicksightAssetBundleImportJobSyncer;
+    protected QuicksightAssetBundleImportJobSynchronizerInterface $quicksightAssetBundleImportJobSynchronizer;
 
     /**
      * @var \Twig\Environment
@@ -69,7 +69,7 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
      * @param \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig $amazonQuicksightConfig
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface $amazonQuicksightApiClient
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsRequestValidatorInterface $quicksightAnalyticsRequestValidator
-     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Syncer\QuicksightAssetBundleImportJobSyncerInterface $quicksightAssetBundleImportJobSyncer
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Synchronizer\QuicksightAssetBundleImportJobSynchronizerInterface $quicksightAssetBundleImportJobSynchronizer
      * @param \Twig\Environment $twigEnvironment
      */
     public function __construct(
@@ -77,14 +77,14 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
         AmazonQuicksightConfig $amazonQuicksightConfig,
         AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
         QuicksightAnalyticsRequestValidatorInterface $quicksightAnalyticsRequestValidator,
-        QuicksightAssetBundleImportJobSyncerInterface $quicksightAssetBundleImportJobSyncer,
+        QuicksightAssetBundleImportJobSynchronizerInterface $quicksightAssetBundleImportJobSynchronizer,
         Environment $twigEnvironment
     ) {
         $this->amazonQuicksightRepository = $amazonQuicksightRepository;
         $this->amazonQuicksightConfig = $amazonQuicksightConfig;
         $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
         $this->quicksightAnalyticsRequestValidator = $quicksightAnalyticsRequestValidator;
-        $this->quicksightAssetBundleImportJobSyncer = $quicksightAssetBundleImportJobSyncer;
+        $this->quicksightAssetBundleImportJobSynchronizer = $quicksightAssetBundleImportJobSynchronizer;
         $this->twigEnvironment = $twigEnvironment;
     }
 
@@ -101,7 +101,7 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
         $userTransfer = $analyticsRequestTransfer->getUserOrFail();
         $quicksightUserTransfer = $this->findQuicksightUser($userTransfer);
 
-        $quicksightAssetBundleImportJobTransfer = $this->quicksightAssetBundleImportJobSyncer
+        $quicksightAssetBundleImportJobTransfer = $this->quicksightAssetBundleImportJobSynchronizer
             ->findSyncedDefaultQuicksightAssetBundleImportJob();
 
         $analyticsCollectionTransfer = $this->expandAnalytics(

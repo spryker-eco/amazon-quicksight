@@ -130,7 +130,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
         'quicksight:CreateRefreshSchedule',
         'quicksight:DescribeRefreshSchedule',
         'quicksight:ListRefreshSchedules',
-        'quicksight:DescribeDataSetRefreshProperties'
+        'quicksight:DescribeDataSetRefreshProperties',
     ];
 
     /**
@@ -331,7 +331,10 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
      */
     public function getAssetBundleImportFilePath(): string
     {
-        throw new AssetBundleImportFilePathNotDefinedException('Asset bundle import file path is not defined.');
+        throw new AssetBundleImportFilePathNotDefinedException(
+            'Asset bundle import file path is not defined. You need to configure the asset bundle import file path
+            in your AmazonQuicksightConfig::getAssetBundleImportFilePath() to be able to import Quicksight asset bundle.',
+        );
     }
 
     /**

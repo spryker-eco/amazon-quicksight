@@ -78,6 +78,6 @@ class AssetBundleQuicksightUserProcessor implements AssetBundleQuicksightUserPro
                 ->setErrors($quicksightUpdateUserResponseTransfer->getErrors());
         }
 
-        return new UserCollectionResponseTransfer();
+        return (new UserCollectionResponseTransfer())->addUser($userTransfer);
     }
 }

@@ -144,7 +144,7 @@ interface AmazonQuicksightFacadeInterface
      * - Starts the asset bundle import job for a file located at the path specified by {@link \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::getAssetBundleImportFilePath()} to Quicksight.
      * - Throws {@link \SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFilePathNotDefinedException} if the path is not specified.
      * - Saves asset bundle import job to DB and populates `EnableQuicksightAnalyticsResponseTransfer.quicksightAssetBundleImportJob` if the import job started successfully.
-     * - Otherwise populates `EnableQuicksightAnalyticsResponseTransfer.errors` with errors encountered during the starting the import job.
+     * - Populates `EnableQuicksightAnalyticsResponseTransfer.errors` with errors encountered during the starting of the import job otherwise.
      *
      * @api
      *
@@ -165,7 +165,7 @@ interface AmazonQuicksightFacadeInterface
      * - Starts the asset bundle import job for a file located at the path specified by {@link \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::getAssetBundleImportFilePath()} to Quicksight.
      * - Throws {@link \SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFilePathNotDefinedException} if the path is not specified.
      * - Updates asset bundle import job in DB and populates `ResetQuicksightAnalyticsResponseTransfer.quicksightAssetBundleImportJob` if the import job started successfully.
-     * - Otherwise populates `ResetQuicksightAnalyticsResponseTransfer.errors` with errors encountered during the starting the import job.
+     * - Populates `ResetQuicksightAnalyticsResponseTransfer.errors` with errors encountered during the starting of the import job otherwise.
      *
      * @api
      *

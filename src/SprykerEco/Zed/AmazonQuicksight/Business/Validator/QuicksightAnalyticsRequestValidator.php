@@ -103,7 +103,7 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
     ): bool {
         return $this->isAssetBundleSuccessfullyInitialized($quicksightAssetBundleImportJobTransfer)
             && !$this->isAssetBundleInitializationInProgress($quicksightAssetBundleImportJobTransfer)
-            && $quicksightUserTransfer && $quicksightUserTransfer->getRole() === static::QUICKSIGHT_USER_ROLE_AUTHOR;
+            && $this->isQuicksightUserAuthor($quicksightUserTransfer);
     }
 
     /**
@@ -153,5 +153,15 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
             $quicksightUserTransfer->getRole(),
             $this->amazonQuicksightConfig->getQuicksightUserRoles(),
         );
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer|null $quicksightUserTransfer
+     *
+     * @return bool
+     */
+    protected function isQuicksightUserAuthor(?QuicksightUserTransfer $quicksightUserTransfer): bool
+    {
+        return $quicksightUserTransfer && $quicksightUserTransfer->getRole() === static::QUICKSIGHT_USER_ROLE_AUTHOR;
     }
 }

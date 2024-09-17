@@ -39,8 +39,8 @@ use SprykerEco\Zed\AmazonQuicksight\Business\Reader\QuicksightUserReader;
 use SprykerEco\Zed\AmazonQuicksight\Business\Reader\QuicksightUserReaderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Reader\UserReader;
 use SprykerEco\Zed\AmazonQuicksight\Business\Reader\UserReaderInterface;
-use SprykerEco\Zed\AmazonQuicksight\Business\Syncer\QuicksightAssetBundleImportJobSyncer;
-use SprykerEco\Zed\AmazonQuicksight\Business\Syncer\QuicksightAssetBundleImportJobSyncerInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Synchronizer\QuicksightAssetBundleImportJobSynchronizer;
+use SprykerEco\Zed\AmazonQuicksight\Business\Synchronizer\QuicksightAssetBundleImportJobSynchronizerInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Updater\QuicksightUserUpdater;
 use SprykerEco\Zed\AmazonQuicksight\Business\Updater\QuicksightUserUpdaterInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsRequestValidator;
@@ -190,7 +190,7 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
             $this->getConfig(),
             $this->createAmazonQuicksightApiClient(),
             $this->createQuicksightAnalyticsRequestValidator(),
-            $this->createQuicksightAssetBundleImportJobSyncer(),
+            $this->createQuicksightAssetBundleImportJobSynchronizer(),
             $this->getTwigEnvironment(),
         );
     }
@@ -231,11 +231,11 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Syncer\QuicksightAssetBundleImportJobSyncerInterface
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Synchronizer\QuicksightAssetBundleImportJobSynchronizerInterface
      */
-    public function createQuicksightAssetBundleImportJobSyncer(): QuicksightAssetBundleImportJobSyncerInterface
+    public function createQuicksightAssetBundleImportJobSynchronizer(): QuicksightAssetBundleImportJobSynchronizerInterface
     {
-        return new QuicksightAssetBundleImportJobSyncer(
+        return new QuicksightAssetBundleImportJobSynchronizer(
             $this->createAmazonQuicksightApiClient(),
             $this->getConfig(),
             $this->getEntityManager(),
