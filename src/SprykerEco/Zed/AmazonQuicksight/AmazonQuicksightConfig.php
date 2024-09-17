@@ -53,6 +53,11 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     /**
      * @var string
      */
+    protected const QUICKSIGHT_API_VERSION = '2018-04-01';
+
+    /**
+     * @var string
+     */
     protected const DEFAULT_ASSET_BUNDLE_IMPORT_JOB_ID = 'defaultAssetBundleImportJobId';
 
     /**
@@ -213,7 +218,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     {
         $quicksightClientConfiguration = [
             'region' => $this->get(AmazonQuicksightConstants::AWS_REGION),
-            'version' => $this->get(AmazonQuicksightConstants::AWS_CLIENT_API_VERSION),
+            'version' => static::QUICKSIGHT_API_VERSION,
         ];
 
         $awsCredentialsKey = $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY);
