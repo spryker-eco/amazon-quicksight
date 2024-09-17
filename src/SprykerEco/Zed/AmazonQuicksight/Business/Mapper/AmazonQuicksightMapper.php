@@ -147,14 +147,31 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
             (new QuicksightAssetBundleImportSourceTransfer())
                 ->setBody($enableQuicksightAnalyticsRequestTransfer->getAssetBundleImportSourceBody()),
         );
+        $userArn = $enableQuicksightAnalyticsRequestTransfer->getUserOrFail()->getQuicksightUserOrFail()->getArnOrFail();
         $quicksightStartAssetBundleImportJobRequestTransfer->getOverridePermissionsOrFail()
             ->getDashboards()
             ->getIterator()
             ->current()
             ->getPermissionsOrFail()
-            ->addPrincipal(
-                $enableQuicksightAnalyticsRequestTransfer->getUserOrFail()->getQuicksightUserOrFail()->getArnOrFail(),
-            );
+            ->addPrincipal($userArn);
+        $quicksightStartAssetBundleImportJobRequestTransfer->getOverridePermissionsOrFail()
+            ->getAnalyses()
+            ->getIterator()
+            ->current()
+            ->getPermissionsOrFail()
+            ->addPrincipal($userArn);
+        $quicksightStartAssetBundleImportJobRequestTransfer->getOverridePermissionsOrFail()
+            ->getDataSets()
+            ->getIterator()
+            ->current()
+            ->getPermissionsOrFail()
+            ->addPrincipal($userArn);
+        $quicksightStartAssetBundleImportJobRequestTransfer->getOverridePermissionsOrFail()
+            ->getDataSources()
+            ->getIterator()
+            ->current()
+            ->getPermissionsOrFail()
+            ->addPrincipal($userArn);
 
         return $quicksightStartAssetBundleImportJobRequestTransfer;
     }
@@ -177,14 +194,31 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
             (new QuicksightAssetBundleImportSourceTransfer())
                 ->setBody($resetQuicksightAnalyticsRequestTransfer->getAssetBundleImportSourceBody()),
         );
+        $userArn = $resetQuicksightAnalyticsRequestTransfer->getUserOrFail()->getQuicksightUserOrFail()->getArnOrFail();
         $quicksightStartAssetBundleImportJobRequestTransfer->getOverridePermissionsOrFail()
             ->getDashboards()
             ->getIterator()
             ->current()
             ->getPermissionsOrFail()
-            ->addPrincipal(
-                $resetQuicksightAnalyticsRequestTransfer->getUserOrFail()->getQuicksightUserOrFail()->getArnOrFail(),
-            );
+            ->addPrincipal($userArn);
+        $quicksightStartAssetBundleImportJobRequestTransfer->getOverridePermissionsOrFail()
+            ->getAnalyses()
+            ->getIterator()
+            ->current()
+            ->getPermissionsOrFail()
+            ->addPrincipal($userArn);
+        $quicksightStartAssetBundleImportJobRequestTransfer->getOverridePermissionsOrFail()
+            ->getDataSets()
+            ->getIterator()
+            ->current()
+            ->getPermissionsOrFail()
+            ->addPrincipal($userArn);
+        $quicksightStartAssetBundleImportJobRequestTransfer->getOverridePermissionsOrFail()
+            ->getDataSources()
+            ->getIterator()
+            ->current()
+            ->getPermissionsOrFail()
+            ->addPrincipal($userArn);
 
         return $quicksightStartAssetBundleImportJobRequestTransfer;
     }

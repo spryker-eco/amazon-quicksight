@@ -165,6 +165,7 @@
     </transfer>
 
     <transfer name="QuicksightOverrideParametersDataSource" strict="true">
+        <property name="dataSourceId" type="string"/>
         <property name="credentials" type="QuicksightOverrideParametersDataSourceCredentials"/>
     </transfer>
 

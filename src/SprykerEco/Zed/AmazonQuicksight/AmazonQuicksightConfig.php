@@ -11,7 +11,6 @@ use Aws\Credentials\Credentials;
 use Spryker\Zed\Kernel\AbstractBundleConfig;
 use SprykerEco\Shared\AmazonQuicksight\AmazonQuicksightConstants;
 use SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFilePathNotDefinedException;
-use function Symfony\Component\String\s;
 
 class AmazonQuicksightConfig extends AbstractBundleConfig
 {
@@ -86,36 +85,76 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     /**
      * @var list<string>
      */
-    protected const DEFAULT_ANALYSIS_PERMISSIONS_ACTIONS = [];
+    protected const DEFAULT_ANALYSIS_PERMISSIONS_ACTIONS = [
+        'quicksight:RestoreAnalysis',
+        'quicksight:DescribeAnalysis',
+        'quicksight:DescribeAnalysisPermissions',
+        'quicksight:UpdateAnalysis',
+        'quicksight:UpdateAnalysisPermissions',
+        'quicksight:QueryAnalysis',
+        'quicksight:DeleteAnalysis',
+    ];
 
     /**
      * @var list<string>
      */
     protected const DEFAULT_DASHBOARD_PERMISSIONS_ACTIONS = [
         'quicksight:DescribeDashboard',
-        'quicksight:ListDashboardVersions',
-        'quicksight:UpdateDashboardPermissions',
-        'quicksight:QueryDashboard',
-        'quicksight:UpdateDashboard',
-        'quicksight:DeleteDashboard',
-        'quicksight:UpdateDashboardPublishedVersion',
         'quicksight:DescribeDashboardPermissions',
+        'quicksight:ListDashboardVersions',
+        'quicksight:UpdateDashboard',
+        'quicksight:UpdateDashboardPermissions',
+        'quicksight:UpdateDashboardPublishedVersion',
+        'quicksight:QueryDashboard',
+        'quicksight:DeleteDashboard',
     ];
 
     /**
      * @var list<string>
      */
-    protected const DEFAULT_DATA_SET_PERMISSIONS_ACTIONS = [];
+    protected const DEFAULT_DATA_SET_PERMISSIONS_ACTIONS = [
+        'quicksight:DescribeDataSet',
+        'quicksight:DescribeDataSetPermissions',
+        'quicksight:PassDataSet',
+        'quicksight:DescribeIngestion',
+        'quicksight:ListIngestions',
+        'quicksight:UpdateDataSet',
+        'quicksight:DeleteDataSet',
+        'quicksight:CreateIngestion',
+        'quicksight:CancelIngestion',
+        'quicksight:UpdateDataSetPermissions',
+        'quicksight:PutDataSetRefreshProperties',
+        'quicksight:UpdateRefreshSchedule',
+        'quicksight:DeleteRefreshSchedule',
+        'quicksight:DeleteDataSetRefreshProperties',
+        'quicksight:CreateRefreshSchedule',
+        'quicksight:DescribeRefreshSchedule',
+        'quicksight:ListRefreshSchedules',
+        'quicksight:DescribeDataSetRefreshProperties'
+    ];
 
     /**
      * @var list<string>
      */
-    protected const DEFAULT_DATA_SOURCE_PERMISSIONS_ACTIONS = [];
+    protected const DEFAULT_DATA_SOURCE_PERMISSIONS_ACTIONS = [
+        'quicksight:DescribeDataSource',
+        'quicksight:DescribeDataSourcePermissions',
+        'quicksight:PassDataSource',
+        'quicksight:UpdateDataSource',
+        'quicksight:DeleteDataSource',
+        'quicksight:UpdateDataSourcePermissions',
+
+    ];
 
     /**
      * @var string
      */
     protected const DEFAULT_DATA_SOURCE_DATABASE_NAME = 'spryker_scos';
+
+    /**
+     * @var string
+     */
+    protected const DEFAULT_DATA_SOURCE_ID = 'SprykerDefaultDataSource';
 
     /**
      * Specification:
@@ -371,6 +410,19 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     public function getDefaultDataSourceDatabaseName(): string
     {
         return static::DEFAULT_DATA_SOURCE_DATABASE_NAME;
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source password.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourceId(): string
+    {
+        return static::DEFAULT_DATA_SOURCE_ID;
     }
 
     /**

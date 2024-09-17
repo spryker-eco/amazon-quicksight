@@ -20,6 +20,10 @@ use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightListUsersRequestTransfer;
 use Generated\Shared\Transfer\QuicksightListUsersResponseTransfer;
+use Generated\Shared\Transfer\QuicksightOverrideParametersDataSourceCredentialPairTransfer;
+use Generated\Shared\Transfer\QuicksightOverrideParametersDataSourceCredentialsTransfer;
+use Generated\Shared\Transfer\QuicksightOverrideParametersDataSourceTransfer;
+use Generated\Shared\Transfer\QuicksightOverrideParametersTransfer;
 use Generated\Shared\Transfer\QuicksightOverridePermissionsAnalysisTransfer;
 use Generated\Shared\Transfer\QuicksightOverridePermissionsDashboardTransfer;
 use Generated\Shared\Transfer\QuicksightOverridePermissionsDataSetTransfer;
@@ -511,6 +515,17 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
         return (new QuicksightStartAssetBundleImportJobRequestTransfer())
             ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
             ->setFailureAction(static::START_ASSET_BUNDLE_IMPORT_JOB_FAILURE_ACTION)
+            ->setOverrideParameters(
+                (new QuicksightOverrideParametersTransfer())->addQuicksightOverrideParametersDataSource(
+                    (new QuicksightOverrideParametersDataSourceTransfer())->setCredentials(
+                        (new QuicksightOverrideParametersDataSourceCredentialsTransfer())->setCredentialPair(
+                            (new QuicksightOverrideParametersDataSourceCredentialPairTransfer())
+                                ->setPassword($this->amazonQuicksightConfig->getDefaultDataSourcePassword())
+                                ->setUsername($this->amazonQuicksightConfig->getDefaultDataSourceUsername()),
+                        ),
+                    )->setDataSourceId($this->amazonQuicksightConfig->getDefaultDataSourceId()),
+                ),
+            )
             ->setOverridePermissions(
                 (new QuicksightOverridePermissionsTransfer())
                     ->addQuicksightOverridePermissionsAnalysis(
@@ -519,25 +534,28 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
                             ->setPermissions((new QuicksightPermissionsTransfer())->setActions(
                                 $this->amazonQuicksightConfig->getDefaultAnalysisPermissionsActions(),
                             )),
-                    )->addQuicksightOverridePermissionsDashboard(
+                    )
+                    ->addQuicksightOverridePermissionsDashboard(
                         (new QuicksightOverridePermissionsDashboardTransfer())
                             ->addIdDashboard('*')
                             ->setPermissions((new QuicksightPermissionsTransfer())->setActions(
                                 $this->amazonQuicksightConfig->getDefaultDashboardPermissionsActions(),
                             )),
-                    )->addQuicksightOverridePermissionsDataSet(
+                    )
+                    ->addQuicksightOverridePermissionsDataSet(
                         (new QuicksightOverridePermissionsDataSetTransfer())
                             ->addIdDataSet('*')
                             ->setPermissions((new QuicksightPermissionsTransfer())->setActions(
                                 $this->amazonQuicksightConfig->getDefaultDataSetPermissionsActions(),
                             )),
-                    )->addQuicksightOverridePermissionsDataSource(
-                        (new QuicksightOverridePermissionsDataSourceTransfer())
+                    )
+                      ->addQuicksightOverridePermissionsDataSource(
+                          (new QuicksightOverridePermissionsDataSourceTransfer())
                             ->addIdDataSource('*')
                             ->setPermissions((new QuicksightPermissionsTransfer())->setActions(
                                 $this->amazonQuicksightConfig->getDefaultDataSourcePermissionsActions(),
                             )),
-                    ),
+                      ),
             );
     }
 
