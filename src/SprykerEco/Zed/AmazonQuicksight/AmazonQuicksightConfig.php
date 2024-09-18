@@ -148,13 +148,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
         'quicksight:UpdateDataSource',
         'quicksight:DeleteDataSource',
         'quicksight:UpdateDataSourcePermissions',
-
     ];
-
-    /**
-     * @var string
-     */
-    protected const DEFAULT_DATA_SOURCE_DATABASE_NAME = 'spryker_scos';
 
     /**
      * @var string
@@ -409,19 +403,6 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
 
     /**
      * Specification:
-     * - Returns the default data source database name used during the default asset bundle import.
-     *
-     * @api
-     *
-     * @return string
-     */
-    public function getDefaultDataSourceDatabaseName(): string
-    {
-        return static::DEFAULT_DATA_SOURCE_DATABASE_NAME;
-    }
-
-    /**
-     * Specification:
      * - Returns the default data source ID.
      *
      * @api
@@ -461,14 +442,53 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
 
     /**
      * Specification:
-     * - Returns the default data source MySQL port.
+     * - Returns the default data source database name.
      *
      * @api
      *
      * @return string
      */
-    public function getDefaultDataSourceMysqlPort(): string
+    public function getDefaultDataSourceDatabaseName(): string
     {
-        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_MYSQL_PORT);
+        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_DATABASE_NAME);
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source database port.
+     *
+     * @api
+     *
+     * @return int
+     */
+    public function getDefaultDataSourceDatabasePort(): int
+    {
+        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_DATABASE_PORT);
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source database host.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourceDatabaseHost(): string
+    {
+        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_DATABASE_HOST);
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source VPC connection ARN.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourceVpcConnectionArn(): string
+    {
+        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_VPC_CONNECTION_ARN);
     }
 }

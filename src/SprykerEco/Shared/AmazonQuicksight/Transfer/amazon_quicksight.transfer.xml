@@ -167,6 +167,8 @@
     <transfer name="QuicksightOverrideParametersDataSource" strict="true">
         <property name="dataSourceId" type="string"/>
         <property name="credentials" type="QuicksightOverrideParametersDataSourceCredentials"/>
+        <property name="vpcConnectionProperties" type="QuicksightOverrideParametersDataSourceVpcConnectionProperties"/>
+        <property name="dataSourceParameters" type="QuicksightOverrideParametersDataSourceParameters"/>
     </transfer>
 
     <transfer name="QuicksightOverrideParametersDataSourceCredentials" strict="true">
@@ -176,6 +178,20 @@
     <transfer name="QuicksightOverrideParametersDataSourceCredentialPair" strict="true">
         <property name="username" type="string"/>
         <property name="password" type="string"/>
+    </transfer>
+
+    <transfer name="QuicksightOverrideParametersDataSourceParameters" strict="true">
+        <property name="mariaDbParameters" type="QuicksightOverrideParametersDataSourceMariaDbParameters"/>
+    </transfer>
+
+    <transfer name="QuicksightOverrideParametersDataSourceMariaDbParameters" strict="true">
+        <property name="database" type="string"/>
+        <property name="host" type="string"/>
+        <property name="port" type="int"/>
+    </transfer>
+
+    <transfer name="QuicksightOverrideParametersDataSourceVpcConnectionProperties" strict="true">
+        <property name="vpcConnectionArn" type="string"/>
     </transfer>
 
     <transfer name="QuicksightOverridePermissions" strict="true">

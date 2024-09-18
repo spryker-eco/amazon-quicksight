@@ -94,11 +94,41 @@ interface AmazonQuicksightConstants
 
     /**
      * Specification:
-     * - The default data source MySQL port.
+     * - The default data source database name.
      *
      * @api
      *
      * @var string
      */
-    public const DEFAULT_DATA_SOURCE_MYSQL_PORT = 'AMAZON_QUICKSIGHT:DEFAULT_DATA_SOURCE_MYSQL_PORT';
+    public const DEFAULT_DATA_SOURCE_DATABASE_NAME = 'AMAZON_QUICKSIGHT:DEFAULT_DATA_SOURCE_DATABASE_NAME';
+
+    /**
+     * Specification:
+     * - The default data source database port.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const DEFAULT_DATA_SOURCE_DATABASE_PORT = 'AMAZON_QUICKSIGHT:DEFAULT_DATA_SOURCE_DATABASE_PORT';
+
+    /**
+     * Specification:
+     * - The default data source database host.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const DEFAULT_DATA_SOURCE_DATABASE_HOST = 'AMAZON_QUICKSIGHT:DEFAULT_DATA_SOURCE_DATABASE_HOST';
+
+    /**
+     * Specification:
+     * - The default data source VPC connection ARN.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const DEFAULT_DATA_SOURCE_VPC_CONNECTION_ARN = 'AMAZON_QUICKSIGHT:DEFAULT_DATA_SOURCE_VPC_CONNECTION_ARN';
 }

@@ -22,7 +22,11 @@ use Generated\Shared\Transfer\QuicksightListUsersRequestTransfer;
 use Generated\Shared\Transfer\QuicksightListUsersResponseTransfer;
 use Generated\Shared\Transfer\QuicksightOverrideParametersDataSourceCredentialPairTransfer;
 use Generated\Shared\Transfer\QuicksightOverrideParametersDataSourceCredentialsTransfer;
+use Generated\Shared\Transfer\QuicksightOverrideParametersDataSourceMariaDbParametersTransfer;
+use Generated\Shared\Transfer\QuicksightOverrideParametersDataSourceMySqlParametersTransfer;
+use Generated\Shared\Transfer\QuicksightOverrideParametersDataSourceParametersTransfer;
 use Generated\Shared\Transfer\QuicksightOverrideParametersDataSourceTransfer;
+use Generated\Shared\Transfer\QuicksightOverrideParametersDataSourceVpcConnectionPropertiesTransfer;
 use Generated\Shared\Transfer\QuicksightOverrideParametersTransfer;
 use Generated\Shared\Transfer\QuicksightOverridePermissionsAnalysisTransfer;
 use Generated\Shared\Transfer\QuicksightOverridePermissionsDashboardTransfer;
@@ -523,7 +527,19 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
                                 ->setPassword($this->amazonQuicksightConfig->getDefaultDataSourcePassword())
                                 ->setUsername($this->amazonQuicksightConfig->getDefaultDataSourceUsername()),
                         ),
-                    )->setDataSourceId($this->amazonQuicksightConfig->getDefaultDataSourceId()),
+                    )->setDataSourceId($this->amazonQuicksightConfig->getDefaultDataSourceId())
+                    ->setDataSourceParameters(
+                        (new QuicksightOverrideParametersDataSourceParametersTransfer())->setMariaDbParameters(
+                            (new QuicksightOverrideParametersDataSourceMariaDbParametersTransfer())
+                                ->setDatabase($this->amazonQuicksightConfig->getDefaultDataSourceDatabaseName())
+                                ->setHost($this->amazonQuicksightConfig->getDefaultDataSourceDatabaseHost())
+                                ->setPort($this->amazonQuicksightConfig->getDefaultDataSourceDatabasePort()),
+                        ),
+                    )
+                    ->setVpcConnectionProperties(
+                        (new QuicksightOverrideParametersDataSourceVpcConnectionPropertiesTransfer())
+                            ->setVpcConnectionArn($this->amazonQuicksightConfig->getDefaultDataSourceVpcConnectionArn()),
+                    ),
                 ),
             )
             ->setOverridePermissions(
