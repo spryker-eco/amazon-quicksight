@@ -218,7 +218,7 @@ class AmazonQuicksightBusinessTester extends Actor
      */
     public function ensureQuicksightAssetBundleImportJobTableIsEmpty(): void
     {
-        $this->ensureDatabaseTableIsEmpty($this->getQuicksightUserQuery());
+        $this->ensureDatabaseTableIsEmpty($this->getQuicksightAssetBundleImportJobQuery());
     }
 
     /**

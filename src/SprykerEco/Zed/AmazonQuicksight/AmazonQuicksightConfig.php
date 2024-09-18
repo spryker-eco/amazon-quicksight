@@ -422,7 +422,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
 
     /**
      * Specification:
-     * - Returns the default data source password.
+     * - Returns the default data source ID.
      *
      * @api
      *

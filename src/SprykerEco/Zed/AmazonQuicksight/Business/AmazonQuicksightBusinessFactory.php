@@ -227,6 +227,7 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
         return new AssetBundleQuicksightUserProcessor(
             $this->createQuicksightUserCreator(),
             $this->createQuicksightUserUpdater(),
+            $this->getRepository(),
         );
     }
 

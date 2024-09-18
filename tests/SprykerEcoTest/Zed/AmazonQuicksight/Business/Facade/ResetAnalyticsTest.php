@@ -280,7 +280,7 @@ class ResetAnalyticsTest extends Unit
         return (new ResetQuicksightAnalyticsRequestTransfer())
             ->setAssetBundleImportJobId(static::DEFAULT_ASSET_BUNDLE_IMPORT_JOB_ID)
             ->setUser((new UserTransfer())->setQuicksightUser(
-                (new QuicksightUserTransfer())->setRole(static::QUICKSIGHT_USER_ROLE_AUTHOR),
+                (new QuicksightUserTransfer())->setRole(static::QUICKSIGHT_USER_ROLE_AUTHOR)->setArn('testArn'),
             ));
     }
 }

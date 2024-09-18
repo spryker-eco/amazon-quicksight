@@ -7,11 +7,14 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business\Processor;
 
+use Generated\Shared\Transfer\QuicksightUserConditionsTransfer;
+use Generated\Shared\Transfer\QuicksightUserCriteriaTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreatorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Updater\QuicksightUserUpdaterInterface;
+use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface;
 
 class AssetBundleQuicksightUserProcessor implements AssetBundleQuicksightUserProcessorInterface
 {
@@ -40,15 +43,23 @@ class AssetBundleQuicksightUserProcessor implements AssetBundleQuicksightUserPro
     protected QuicksightUserUpdaterInterface $quicksightUserUpdater;
 
     /**
+     * @var \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface
+     */
+    protected AmazonQuicksightRepositoryInterface $amazonQuicksightRepository;
+
+    /**
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreatorInterface $quicksightUserCreator
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Updater\QuicksightUserUpdaterInterface $quicksightUserUpdater
+     * @param \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface $amazonQuicksightRepository
      */
     public function __construct(
         QuicksightUserCreatorInterface $quicksightUserCreator,
-        QuicksightUserUpdaterInterface $quicksightUserUpdater
+        QuicksightUserUpdaterInterface $quicksightUserUpdater,
+        AmazonQuicksightRepositoryInterface $amazonQuicksightRepository
     ) {
         $this->quicksightUserCreator = $quicksightUserCreator;
         $this->quicksightUserUpdater = $quicksightUserUpdater;
+        $this->amazonQuicksightRepository = $amazonQuicksightRepository;
     }
 
     /**
@@ -59,7 +70,11 @@ class AssetBundleQuicksightUserProcessor implements AssetBundleQuicksightUserPro
     public function processQuicksightUserBeforeAnalyticsEnabling(
         UserTransfer $userTransfer
     ): UserCollectionResponseTransfer {
-        $quicksightUserTransfer = $userTransfer->getQuicksightUser();
+        $quicksightUserTransfer = $this->amazonQuicksightRepository->getQuicksightUserCollection(
+            (new QuicksightUserCriteriaTransfer())->setQuicksightUserConditions(
+                (new QuicksightUserConditionsTransfer())->addIdUser($userTransfer->getIdUserOrFail()),
+            ),
+        )->getQuicksightUsers()->getIterator()->current();
 
         if (!$quicksightUserTransfer) {
             return $this->quicksightUserCreator->createQuicksightUsersByUserCollectionResponse(

@@ -579,6 +579,6 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
     {
         return (new QuicksightUpdateUserRequestTransfer())
             ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
-            ->setNamespace($this->amazonQuicksightConfig->getQuicksightRegisterUserNamespace());
+            ->setNamespace($this->amazonQuicksightConfig->getAwsQuicksightNamespace());
     }
 }

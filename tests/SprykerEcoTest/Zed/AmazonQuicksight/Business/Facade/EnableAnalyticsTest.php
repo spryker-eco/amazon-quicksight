@@ -436,7 +436,10 @@ class EnableAnalyticsTest extends Unit
     protected function createEnableQuicksightAnalyticsRequestTransferWithUser(
         string $quicksightUserRole = self::QUICKSIGHT_USER_ROLE_AUTHOR
     ): EnableQuicksightAnalyticsRequestTransfer {
-        $userTransfer = $this->tester->haveUserWithNotPersistedQuicksightUserRole($quicksightUserRole);
+        $userTransfer = $this->tester->haveUser();
+        $userTransfer->setQuicksightUser($this->tester->haveQuicksightUser($userTransfer, [
+            QuicksightUserTransfer::ROLE => $quicksightUserRole,
+        ]));
 
         return (new EnableQuicksightAnalyticsRequestTransfer())
             ->setUser($userTransfer->setStatus(static::USER_STATUS_ACTIVE))
