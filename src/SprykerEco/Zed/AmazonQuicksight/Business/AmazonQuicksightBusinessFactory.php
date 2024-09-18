@@ -213,7 +213,6 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     public function createAssetBundleEnabler(): AssetBundleEnablerInterface
     {
         return new AssetBundleEnabler(
-            $this->createAmazonQuicksightApiClient(),
             $this->createQuicksightAssetBundleImportJobCreator(),
             $this->createQuicksightAssetBundleImportJobUpdater(),
             $this->getRepository(),
@@ -263,7 +262,12 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
      */
     public function createQuicksightAssetBundleImportJobCreator(): QuicksightAssetBundleImportJobCreatorInterface
     {
-        return new QuicksightAssetBundleImportJobCreator($this->getConfig(), $this->getEntityManager());
+        return new QuicksightAssetBundleImportJobCreator(
+            $this->createAmazonQuicksightApiClient(),
+            $this->getConfig(),
+            $this->getEntityManager(),
+            $this->createQuicksightAssetBundleImportJobUpdater(),
+        );
     }
 
     /**
@@ -271,7 +275,11 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
      */
     public function createQuicksightAssetBundleImportJobUpdater(): QuicksightAssetBundleImportJobUpdaterInterface
     {
-        return new QuicksightAssetBundleImportJobUpdater($this->getConfig(), $this->getEntityManager());
+        return new QuicksightAssetBundleImportJobUpdater(
+            $this->createAmazonQuicksightApiClient(),
+            $this->getConfig(),
+            $this->getEntityManager(),
+        );
     }
 
     /**

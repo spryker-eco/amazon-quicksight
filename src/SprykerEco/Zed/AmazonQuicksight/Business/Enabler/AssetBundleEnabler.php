@@ -9,10 +9,8 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business\Enabler;
 
 use Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\EnableQuicksightAnalyticsResponseTransfer;
-use Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsResponseTransfer;
-use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightAssetBundleImportJobCreatorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Processor\AssetBundleQuicksightUserProcessorInterface;
@@ -22,11 +20,6 @@ use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterf
 
 class AssetBundleEnabler implements AssetBundleEnablerInterface
 {
-    /**
-     * @var \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface
-     */
-    protected AmazonQuicksightApiClientInterface $amazonQuicksightApiClient;
-
     /**
      * @var \SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightAssetBundleImportJobCreatorInterface
      */
@@ -58,7 +51,6 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
     protected AssetBundleImportFileContentLoaderInterface $assetBundleImportFileContentLoader;
 
     /**
-     * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface $amazonQuicksightApiClient
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightAssetBundleImportJobCreatorInterface $quicksightAssetBundleImportJobCreator
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Updater\QuicksightAssetBundleImportJobUpdaterInterface $quicksightAssetBundleImportJobUpdater
      * @param \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface $amazonQuicksightRepository
@@ -67,7 +59,6 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface $assetBundleImportFileContentLoader
      */
     public function __construct(
-        AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
         QuicksightAssetBundleImportJobCreatorInterface $quicksightAssetBundleImportJobCreator,
         QuicksightAssetBundleImportJobUpdaterInterface $quicksightAssetBundleImportJobUpdater,
         AmazonQuicksightRepositoryInterface $amazonQuicksightRepository,
@@ -75,7 +66,6 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
         AssetBundleQuicksightUserProcessorInterface $assetBundleQuicksightUserProcessor,
         AssetBundleImportFileContentLoaderInterface $assetBundleImportFileContentLoader
     ) {
-        $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
         $this->quicksightAssetBundleImportJobCreator = $quicksightAssetBundleImportJobCreator;
         $this->quicksightAssetBundleImportJobUpdater = $quicksightAssetBundleImportJobUpdater;
         $this->amazonQuicksightRepository = $amazonQuicksightRepository;
@@ -120,19 +110,8 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
             $this->assetBundleImportFileContentLoader->getAssetBundleImportFileContent(),
         );
 
-        $quicksightStartAssetBundleImportJobResponseTransfer = $this->amazonQuicksightApiClient
-            ->startAssetBundleImportJobByEnableQuicksightAnalyticsRequest($enableQuicksightAnalyticsRequestTransfer);
-
-        if ($quicksightStartAssetBundleImportJobResponseTransfer->getErrors()->count() !== 0) {
-            return $enableQuicksightAnalyticsResponseTransfer->setErrors(
-                $quicksightStartAssetBundleImportJobResponseTransfer->getErrors(),
-            );
-        }
-
-        $quicksightAssetBundleImportJobTransfer = $this->saveNewQuicksightAssetBundleImportJob($enableQuicksightAnalyticsRequestTransfer);
-
-        return $enableQuicksightAnalyticsResponseTransfer
-            ->setQuicksightAssetBundleImportJob($quicksightAssetBundleImportJobTransfer);
+        return $this->quicksightAssetBundleImportJobCreator
+            ->createDefaultAssetBundleImportJobByEnableQuicksightAnalyticsRequest($enableQuicksightAnalyticsRequestTransfer);
     }
 
     /**
@@ -164,40 +143,7 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
             $this->assetBundleImportFileContentLoader->getAssetBundleImportFileContent(),
         );
 
-        $quicksightStartAssetBundleImportJobResponseTransfer = $this->amazonQuicksightApiClient
-            ->startAssetBundleImportJobByResetQuicksightAnalyticsRequest($resetQuicksightAnalyticsRequestTransfer);
-
-        if ($quicksightStartAssetBundleImportJobResponseTransfer->getErrors()->count() !== 0) {
-            return $resetQuicksightAnalyticsResponseTransfer->setErrors(
-                $quicksightStartAssetBundleImportJobResponseTransfer->getErrors(),
-            );
-        }
-
-        $quicksightAssetBundleImportJobTransfer = $this->quicksightAssetBundleImportJobUpdater
-            ->resetDefaultQuicksightAssetBundleImportJob(
-                $resetQuicksightAnalyticsRequestTransfer->getQuicksightAssetBundleImportJobOrFail(),
-            );
-
-        return $resetQuicksightAnalyticsResponseTransfer
-            ->setQuicksightAssetBundleImportJob($quicksightAssetBundleImportJobTransfer);
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
-     */
-    protected function saveNewQuicksightAssetBundleImportJob(
-        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
-    ): QuicksightAssetBundleImportJobTransfer {
-        $quicksightAssetBundleImportJobTransfer = $enableQuicksightAnalyticsRequestTransfer->getQuicksightAssetBundleImportJob();
-
-        if ($quicksightAssetBundleImportJobTransfer) {
-            return $this->quicksightAssetBundleImportJobUpdater
-                ->resetDefaultQuicksightAssetBundleImportJob($quicksightAssetBundleImportJobTransfer);
-        }
-
-        return $this->quicksightAssetBundleImportJobCreator
-            ->createDefaultAssetBundleImportJobByEnableQuicksightAnalyticsRequest($enableQuicksightAnalyticsRequestTransfer);
+        return $this->quicksightAssetBundleImportJobUpdater
+            ->resetDefaultQuicksightAssetBundleImportJob($resetQuicksightAnalyticsRequestTransfer);
     }
 }
