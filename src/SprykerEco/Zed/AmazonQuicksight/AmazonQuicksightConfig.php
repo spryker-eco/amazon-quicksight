@@ -118,24 +118,16 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
      * @var list<string>
      */
     protected const DEFAULT_DATA_SET_PERMISSIONS_ACTIONS = [
-        'quicksight:DescribeDataSet',
+        'quicksight:DeleteDataSet',
+        'quicksight:ListIngestions',
+        'quicksight:UpdateDataSetPermissions',
+        'quicksight:CancelIngestion',
         'quicksight:DescribeDataSetPermissions',
         'quicksight:PassDataSet',
-        'quicksight:DescribeIngestion',
-        'quicksight:ListIngestions',
         'quicksight:UpdateDataSet',
-        'quicksight:DeleteDataSet',
+        'quicksight:DescribeDataSet',
         'quicksight:CreateIngestion',
-        'quicksight:CancelIngestion',
-        'quicksight:UpdateDataSetPermissions',
-        'quicksight:PutDataSetRefreshProperties',
-        'quicksight:UpdateRefreshSchedule',
-        'quicksight:DeleteRefreshSchedule',
-        'quicksight:DeleteDataSetRefreshProperties',
-        'quicksight:CreateRefreshSchedule',
-        'quicksight:DescribeRefreshSchedule',
-        'quicksight:ListRefreshSchedules',
-        'quicksight:DescribeDataSetRefreshProperties',
+        'quicksight:DescribeIngestion',
     ];
 
     /**
