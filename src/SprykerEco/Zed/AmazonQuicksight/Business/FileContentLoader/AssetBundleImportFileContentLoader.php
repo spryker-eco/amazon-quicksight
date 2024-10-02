@@ -8,6 +8,7 @@
 namespace SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader;
 
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
+use SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFileReadFailureException;
 
 class AssetBundleImportFileContentLoader implements AssetBundleImportFileContentLoaderInterface
 {
@@ -25,10 +26,18 @@ class AssetBundleImportFileContentLoader implements AssetBundleImportFileContent
     }
 
     /**
+     * @throws \SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFileReadFailureException
+     *
      * @return string
      */
     public function getAssetBundleImportFileContent(): string
     {
-        return file_get_contents($this->amazonQuicksightConfig->getAssetBundleImportFilePath());
+        $assetBundleImportFileContent = file_get_contents($this->amazonQuicksightConfig->getAssetBundleImportFilePath());
+
+        if ($assetBundleImportFileContent === false) {
+            throw new AssetBundleImportFileReadFailureException('Failed to read asset bundle import file content.');
+        }
+
+        return $assetBundleImportFileContent;
     }
 }
