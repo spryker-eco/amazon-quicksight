@@ -46,7 +46,7 @@ interface AmazonQuicksightEntityManagerInterface
      * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
      */
     public function createQuicksightAssetBundleImportJob(
-        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
     ): QuicksightAssetBundleImportJobTransfer;
 
     /**
@@ -55,6 +55,6 @@ interface AmazonQuicksightEntityManagerInterface
      * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
      */
     public function updateQuicksightAssetBundleImportJob(
-        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
     ): QuicksightAssetBundleImportJobTransfer;
 }

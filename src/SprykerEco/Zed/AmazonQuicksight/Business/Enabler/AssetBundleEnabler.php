@@ -64,7 +64,7 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
         AmazonQuicksightRepositoryInterface $amazonQuicksightRepository,
         QuicksightAnalyticsRequestValidatorInterface $quicksightAnalyticsRequestValidator,
         AssetBundleQuicksightUserProcessorInterface $assetBundleQuicksightUserProcessor,
-        AssetBundleImportFileContentLoaderInterface $assetBundleImportFileContentLoader
+        AssetBundleImportFileContentLoaderInterface $assetBundleImportFileContentLoader,
     ) {
         $this->quicksightAssetBundleImportJobCreator = $quicksightAssetBundleImportJobCreator;
         $this->quicksightAssetBundleImportJobUpdater = $quicksightAssetBundleImportJobUpdater;
@@ -80,7 +80,7 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
      * @return \Generated\Shared\Transfer\EnableQuicksightAnalyticsResponseTransfer
      */
     public function enableAnalytics(
-        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
+        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
     ): EnableQuicksightAnalyticsResponseTransfer {
         $enableQuicksightAnalyticsRequestTransfer->requireAssetBundleImportJobId();
         $enableQuicksightAnalyticsRequestTransfer->requireUser();
@@ -120,7 +120,7 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
      * @return \Generated\Shared\Transfer\ResetQuicksightAnalyticsResponseTransfer
      */
     public function resetAnalytics(
-        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
+        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer,
     ): ResetQuicksightAnalyticsResponseTransfer {
         $resetQuicksightAnalyticsRequestTransfer->requireAssetBundleImportJobId();
         $resetQuicksightAnalyticsRequestTransfer->requireUser();

@@ -20,6 +20,6 @@ interface AnalyticsExpanderInterface
      */
     public function expandAnalyticsCollectionWithQuicksightAnalytics(
         AnalyticsRequestTransfer $analyticsRequestTransfer,
-        AnalyticsCollectionTransfer $analyticsCollectionTransfer
+        AnalyticsCollectionTransfer $analyticsCollectionTransfer,
     ): AnalyticsCollectionTransfer;
 }

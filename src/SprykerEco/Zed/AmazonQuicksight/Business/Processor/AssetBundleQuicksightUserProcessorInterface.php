@@ -18,6 +18,6 @@ interface AssetBundleQuicksightUserProcessorInterface
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
     public function processQuicksightUserBeforeAnalyticsEnabling(
-        UserTransfer $userTransfer
+        UserTransfer $userTransfer,
     ): UserCollectionResponseTransfer;
 }

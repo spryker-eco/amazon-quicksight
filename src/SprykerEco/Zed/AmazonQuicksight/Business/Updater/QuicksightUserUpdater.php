@@ -30,7 +30,7 @@ class QuicksightUserUpdater implements QuicksightUserUpdaterInterface
      */
     public function __construct(
         AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
-        AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager
+        AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager,
     ) {
         $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
         $this->amazonQuicksightEntityManager = $amazonQuicksightEntityManager;

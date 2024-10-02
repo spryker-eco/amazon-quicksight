@@ -40,7 +40,7 @@ class QuicksightAssetBundleImportJobUpdater implements QuicksightAssetBundleImpo
     public function __construct(
         AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
         AmazonQuicksightConfig $amazonQuicksightConfig,
-        AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager
+        AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager,
     ) {
         $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
         $this->amazonQuicksightConfig = $amazonQuicksightConfig;
@@ -53,7 +53,7 @@ class QuicksightAssetBundleImportJobUpdater implements QuicksightAssetBundleImpo
      * @return \Generated\Shared\Transfer\ResetQuicksightAnalyticsResponseTransfer
      */
     public function resetDefaultQuicksightAssetBundleImportJob(
-        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
+        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer,
     ): ResetQuicksightAnalyticsResponseTransfer {
         $resetQuicksightAnalyticsResponseTransfer = new ResetQuicksightAnalyticsResponseTransfer();
 
@@ -80,7 +80,7 @@ class QuicksightAssetBundleImportJobUpdater implements QuicksightAssetBundleImpo
      * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
      */
     public function resetDefaultQuicksightAssetBundleImportJobInDb(
-        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
     ): QuicksightAssetBundleImportJobTransfer {
         $quicksightAssetBundleImportJobTransfer->setStatus($this->amazonQuicksightConfig->getDefaultNewAssetBundleImportJobStatus());
         $quicksightAssetBundleImportJobTransfer->setErrors(new ArrayObject());

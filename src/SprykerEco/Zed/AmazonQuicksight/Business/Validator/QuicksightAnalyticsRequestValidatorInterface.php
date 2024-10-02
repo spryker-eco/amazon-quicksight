@@ -24,7 +24,7 @@ interface QuicksightAnalyticsRequestValidatorInterface
      */
     public function validateEnableQuicksightAnalyticsRequest(
         EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
-        EnableQuicksightAnalyticsResponseTransfer $enableQuicksightAnalyticsResponseTransfer
+        EnableQuicksightAnalyticsResponseTransfer $enableQuicksightAnalyticsResponseTransfer,
     ): EnableQuicksightAnalyticsResponseTransfer;
 
     /**
@@ -35,7 +35,7 @@ interface QuicksightAnalyticsRequestValidatorInterface
      */
     public function validateResetQuicksightAnalyticsRequest(
         ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer,
-        ResetQuicksightAnalyticsResponseTransfer $resetQuicksightAnalyticsResponseTransfer
+        ResetQuicksightAnalyticsResponseTransfer $resetQuicksightAnalyticsResponseTransfer,
     ): ResetQuicksightAnalyticsResponseTransfer;
 
     /**
@@ -46,7 +46,7 @@ interface QuicksightAnalyticsRequestValidatorInterface
      */
     public function isResetAnalyticsEnabled(
         ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
-        ?QuicksightUserTransfer $quicksightUserTransfer
+        ?QuicksightUserTransfer $quicksightUserTransfer,
     ): bool;
 
     /**
@@ -55,7 +55,7 @@ interface QuicksightAnalyticsRequestValidatorInterface
      * @return bool
      */
     public function isEnableAnalyticsEnabled(
-        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
     ): bool;
 
     /**
@@ -64,7 +64,7 @@ interface QuicksightAnalyticsRequestValidatorInterface
      * @return bool
      */
     public function isAssetBundleSuccessfullyInitialized(
-        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
     ): bool;
 
     /**
@@ -73,7 +73,7 @@ interface QuicksightAnalyticsRequestValidatorInterface
      * @return bool
      */
     public function isAssetBundleInitializationInProgress(
-        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
     ): bool;
 
     /**

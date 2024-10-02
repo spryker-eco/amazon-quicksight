@@ -18,6 +18,6 @@ interface QuicksightAssetBundleImportJobCreatorInterface
      * @return \Generated\Shared\Transfer\EnableQuicksightAnalyticsResponseTransfer
      */
     public function createDefaultAssetBundleImportJobByEnableQuicksightAnalyticsRequest(
-        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
+        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
     ): EnableQuicksightAnalyticsResponseTransfer;
 }

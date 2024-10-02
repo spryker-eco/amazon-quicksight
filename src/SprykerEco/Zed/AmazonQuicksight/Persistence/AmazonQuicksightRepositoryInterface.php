@@ -26,7 +26,7 @@ interface AmazonQuicksightRepositoryInterface
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionTransfer
      */
     public function getQuicksightUserCollection(
-        QuicksightUserCriteriaTransfer $quicksightUserCriteriaTransfer
+        QuicksightUserCriteriaTransfer $quicksightUserCriteriaTransfer,
     ): QuicksightUserCollectionTransfer;
 
     /**

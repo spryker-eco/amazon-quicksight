@@ -47,7 +47,7 @@ class QuicksightAssetBundleImportJobCreator implements QuicksightAssetBundleImpo
         AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
         AmazonQuicksightConfig $amazonQuicksightConfig,
         AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager,
-        QuicksightAssetBundleImportJobUpdaterInterface $quicksightAssetBundleImportJobUpdater
+        QuicksightAssetBundleImportJobUpdaterInterface $quicksightAssetBundleImportJobUpdater,
     ) {
         $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
         $this->amazonQuicksightConfig = $amazonQuicksightConfig;
@@ -61,7 +61,7 @@ class QuicksightAssetBundleImportJobCreator implements QuicksightAssetBundleImpo
      * @return \Generated\Shared\Transfer\EnableQuicksightAnalyticsResponseTransfer
      */
     public function createDefaultAssetBundleImportJobByEnableQuicksightAnalyticsRequest(
-        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
+        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
     ): EnableQuicksightAnalyticsResponseTransfer {
         $enableQuicksightAnalyticsResponseTransfer = new EnableQuicksightAnalyticsResponseTransfer();
 
@@ -86,7 +86,7 @@ class QuicksightAssetBundleImportJobCreator implements QuicksightAssetBundleImpo
      * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
      */
     protected function saveNewQuicksightAssetBundleImportJob(
-        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
+        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
     ): QuicksightAssetBundleImportJobTransfer {
         $quicksightAssetBundleImportJobTransfer = $enableQuicksightAnalyticsRequestTransfer->getQuicksightAssetBundleImportJob();
 
@@ -104,7 +104,7 @@ class QuicksightAssetBundleImportJobCreator implements QuicksightAssetBundleImpo
      * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
      */
     protected function createDefaultAssetBundleImportJobInDb(
-        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
+        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
     ): QuicksightAssetBundleImportJobTransfer {
         return $this->amazonQuicksightEntityManager->createQuicksightAssetBundleImportJob(
             (new QuicksightAssetBundleImportJobTransfer())

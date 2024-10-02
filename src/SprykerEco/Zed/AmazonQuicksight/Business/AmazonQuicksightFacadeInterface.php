@@ -33,7 +33,7 @@ interface AmazonQuicksightFacadeInterface
      * @return \Generated\Shared\Transfer\UserCollectionTransfer
      */
     public function expandUserCollectionWithQuicksightUsers(
-        UserCollectionTransfer $userCollectionTransfer
+        UserCollectionTransfer $userCollectionTransfer,
     ): UserCollectionTransfer;
 
     /**
@@ -55,7 +55,7 @@ interface AmazonQuicksightFacadeInterface
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
     public function createQuicksightUsersByUserCollectionResponse(
-        UserCollectionResponseTransfer $userCollectionResponseTransfer
+        UserCollectionResponseTransfer $userCollectionResponseTransfer,
     ): UserCollectionResponseTransfer;
 
     /**
@@ -75,7 +75,7 @@ interface AmazonQuicksightFacadeInterface
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
     public function deleteQuicksightUsersByUserCollectionResponse(
-        UserCollectionResponseTransfer $userCollectionResponseTransfer
+        UserCollectionResponseTransfer $userCollectionResponseTransfer,
     ): UserCollectionResponseTransfer;
 
     /**
@@ -97,7 +97,7 @@ interface AmazonQuicksightFacadeInterface
      */
     public function expandAnalyticsCollectionWithQuicksightAnalytics(
         AnalyticsRequestTransfer $analyticsRequestTransfer,
-        AnalyticsCollectionTransfer $analyticsCollectionTransfer
+        AnalyticsCollectionTransfer $analyticsCollectionTransfer,
     ): AnalyticsCollectionTransfer;
 
     /**
@@ -153,7 +153,7 @@ interface AmazonQuicksightFacadeInterface
      * @return \Generated\Shared\Transfer\EnableQuicksightAnalyticsResponseTransfer
      */
     public function enableAnalytics(
-        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
+        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
     ): EnableQuicksightAnalyticsResponseTransfer;
 
     /**
@@ -174,6 +174,6 @@ interface AmazonQuicksightFacadeInterface
      * @return \Generated\Shared\Transfer\ResetQuicksightAnalyticsResponseTransfer
      */
     public function resetAnalytics(
-        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
+        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer,
     ): ResetQuicksightAnalyticsResponseTransfer;
 }

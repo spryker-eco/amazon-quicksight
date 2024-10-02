@@ -70,7 +70,7 @@ class QuicksightUserFormExpander implements QuicksightUserFormExpanderInterface
     public function __construct(
         DataTransformerInterface $quicksightUserRoleDataTransformer,
         QuicksightUserFormDataProviderInterface $quicksightUserFormDataProvider,
-        AmazonQuicksightConfig $amazonQuicksightConfig
+        AmazonQuicksightConfig $amazonQuicksightConfig,
     ) {
         $this->quicksightUserRoleDataTransformer = $quicksightUserRoleDataTransformer;
         $this->quicksightUserFormDataProvider = $quicksightUserFormDataProvider;

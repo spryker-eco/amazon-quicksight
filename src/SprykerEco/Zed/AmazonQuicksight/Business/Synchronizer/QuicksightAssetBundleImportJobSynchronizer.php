@@ -66,7 +66,7 @@ class QuicksightAssetBundleImportJobSynchronizer implements QuicksightAssetBundl
         AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager,
         AmazonQuicksightRepositoryInterface $amazonQuicksightRepository,
         QuicksightAnalyticsRequestValidatorInterface $quicksightAnalyticsRequestValidator,
-        AmazonQuicksightMapperInterface $amazonQuicksightMapper
+        AmazonQuicksightMapperInterface $amazonQuicksightMapper,
     ) {
         $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
         $this->amazonQuicksightConfig = $amazonQuicksightConfig;

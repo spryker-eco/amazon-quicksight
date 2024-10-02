@@ -62,7 +62,7 @@ class AssetBundleQuicksightUserProcessor implements AssetBundleQuicksightUserPro
     public function __construct(
         QuicksightUserCreatorInterface $quicksightUserCreator,
         QuicksightUserUpdaterInterface $quicksightUserUpdater,
-        AmazonQuicksightRepositoryInterface $amazonQuicksightRepository
+        AmazonQuicksightRepositoryInterface $amazonQuicksightRepository,
     ) {
         $this->quicksightUserCreator = $quicksightUserCreator;
         $this->quicksightUserUpdater = $quicksightUserUpdater;
@@ -75,7 +75,7 @@ class AssetBundleQuicksightUserProcessor implements AssetBundleQuicksightUserPro
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
     public function processQuicksightUserBeforeAnalyticsEnabling(
-        UserTransfer $userTransfer
+        UserTransfer $userTransfer,
     ): UserCollectionResponseTransfer {
         $quicksightUserTransfer = $this->amazonQuicksightRepository->getQuicksightUserCollection(
             (new QuicksightUserCriteriaTransfer())->setQuicksightUserConditions(

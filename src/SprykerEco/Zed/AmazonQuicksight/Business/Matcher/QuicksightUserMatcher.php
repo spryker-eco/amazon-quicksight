@@ -37,7 +37,7 @@ class QuicksightUserMatcher implements QuicksightUserMatcherInterface
     public function __construct(
         UserReaderInterface $userReader,
         UserCollectionFilterInterface $userCollectionFilter,
-        QuicksightUserCollectionFilterInterface $quicksightUserCollectionFilter
+        QuicksightUserCollectionFilterInterface $quicksightUserCollectionFilter,
     ) {
         $this->userReader = $userReader;
         $this->userCollectionFilter = $userCollectionFilter;

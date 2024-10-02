@@ -95,7 +95,7 @@ class AmazonQuicksightEntityManager extends AbstractEntityManager implements Ama
      * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
      */
     public function createQuicksightAssetBundleImportJob(
-        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
     ): QuicksightAssetBundleImportJobTransfer {
         $quicksightAssetBundleImportJobEntity = $this->getFactory()
             ->createQuicksightAssetBundleImportJobMapper()
@@ -120,7 +120,7 @@ class AmazonQuicksightEntityManager extends AbstractEntityManager implements Ama
      * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
      */
     public function updateQuicksightAssetBundleImportJob(
-        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
     ): QuicksightAssetBundleImportJobTransfer {
         $quicksightAssetBundleImportJobQuery = $this->getFactory()->getQuicksightAssetBundleImportJobQuery();
         $quicksightAssetBundleImportJobQuery->filterByJobId($quicksightAssetBundleImportJobTransfer->getJobIdOrFail());

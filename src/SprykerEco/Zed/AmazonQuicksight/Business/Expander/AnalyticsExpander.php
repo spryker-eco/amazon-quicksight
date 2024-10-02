@@ -78,7 +78,7 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
         AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
         QuicksightAnalyticsRequestValidatorInterface $quicksightAnalyticsRequestValidator,
         QuicksightAssetBundleImportJobSynchronizerInterface $quicksightAssetBundleImportJobSynchronizer,
-        Environment $twigEnvironment
+        Environment $twigEnvironment,
     ) {
         $this->amazonQuicksightRepository = $amazonQuicksightRepository;
         $this->amazonQuicksightConfig = $amazonQuicksightConfig;
@@ -96,7 +96,7 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
      */
     public function expandAnalyticsCollectionWithQuicksightAnalytics(
         AnalyticsRequestTransfer $analyticsRequestTransfer,
-        AnalyticsCollectionTransfer $analyticsCollectionTransfer
+        AnalyticsCollectionTransfer $analyticsCollectionTransfer,
     ): AnalyticsCollectionTransfer {
         $userTransfer = $analyticsRequestTransfer->getUserOrFail();
         $quicksightUserTransfer = $this->findQuicksightUser($userTransfer);
@@ -127,7 +127,7 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
     protected function expandAnalytics(
         AnalyticsCollectionTransfer $analyticsCollectionTransfer,
         ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
-        ?QuicksightUserTransfer $quicksightUserTransfer
+        ?QuicksightUserTransfer $quicksightUserTransfer,
     ): AnalyticsCollectionTransfer {
         $isAssetBundleSuccessfullyInitialized = $this->quicksightAnalyticsRequestValidator
             ->isAssetBundleSuccessfullyInitialized($quicksightAssetBundleImportJobTransfer);
@@ -166,7 +166,7 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
     protected function expandAnalyticsActions(
         AnalyticsCollectionTransfer $analyticsCollectionTransfer,
         ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
-        ?QuicksightUserTransfer $quicksightUserTransfer
+        ?QuicksightUserTransfer $quicksightUserTransfer,
     ): AnalyticsCollectionTransfer {
         if (!$this->quicksightAnalyticsRequestValidator->isResetAnalyticsEnabled($quicksightAssetBundleImportJobTransfer, $quicksightUserTransfer)) {
             return $analyticsCollectionTransfer;
@@ -205,7 +205,7 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
     protected function getQuicksightGenerateEmbedUrlResponseTransfer(
         bool $isAssetBundleSuccessfullyInitialized,
         bool $isQuicksightUserRoleAvailable,
-        ?QuicksightUserTransfer $quicksightUserTransfer
+        ?QuicksightUserTransfer $quicksightUserTransfer,
     ): QuicksightGenerateEmbedUrlResponseTransfer {
         if (!$isAssetBundleSuccessfullyInitialized || !$isQuicksightUserRoleAvailable || !$quicksightUserTransfer) {
             return new QuicksightGenerateEmbedUrlResponseTransfer();

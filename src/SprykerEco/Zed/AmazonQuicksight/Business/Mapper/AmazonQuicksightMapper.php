@@ -54,7 +54,7 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
      */
     public function mapUserTransferToQuicksightUserRegisterRequestTransfer(
         UserTransfer $userTransfer,
-        QuicksightUserRegisterRequestTransfer $quicksightUserRegisterRequestTransfer
+        QuicksightUserRegisterRequestTransfer $quicksightUserRegisterRequestTransfer,
     ): QuicksightUserRegisterRequestTransfer {
         return $quicksightUserRegisterRequestTransfer
             ->setEmail($userTransfer->getUsernameOrFail())
@@ -70,7 +70,7 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
      */
     public function mapQuicksightUserDataToQuicksightUserTransfer(
         array $quicksightUserData,
-        QuicksightUserTransfer $quicksightUserTransfer
+        QuicksightUserTransfer $quicksightUserTransfer,
     ): QuicksightUserTransfer {
         return $quicksightUserTransfer->fromArray($quicksightUserData, true);
     }
@@ -83,7 +83,7 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
      */
     public function mapQuicksightUserTransferToQuicksightGenerateEmbedUrlRequestTransfer(
         QuicksightUserTransfer $quicksightUserTransfer,
-        QuicksightGenerateEmbedUrlRequestTransfer $quicksightGenerateEmbedUrlRequestTransfer
+        QuicksightGenerateEmbedUrlRequestTransfer $quicksightGenerateEmbedUrlRequestTransfer,
     ): QuicksightGenerateEmbedUrlRequestTransfer {
         return $quicksightGenerateEmbedUrlRequestTransfer->setUserArn($quicksightUserTransfer->getArnOrFail());
     }
@@ -96,7 +96,7 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
      */
     public function mapGenerateEmbedUrlResponseDataToQuicksightGenerateEmbedUrlResponseTransfer(
         array $generateEmbedUrlResponseData,
-        QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer
+        QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer,
     ): QuicksightGenerateEmbedUrlResponseTransfer {
         return $quicksightGenerateEmbedUrlResponseTransfer->setEmbedUrl(
             (new QuicksightEmbedUrlTransfer())->setUrl($generateEmbedUrlResponseData[static::RESPONSE_KEY_EMBED_URL]),
@@ -111,7 +111,7 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
      */
     public function mapQuicksightUserTransferToQuicksightDeleteUserRequestTransfer(
         QuicksightUserTransfer $quicksightUserTransfer,
-        QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
+        QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer,
     ): QuicksightDeleteUserRequestTransfer {
         return $quicksightDeleteUserRequestTransfer->fromArray($quicksightUserTransfer->toArray(), true);
     }
@@ -124,7 +124,7 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
      */
     public function mapUserTransferToQuicksightDeleteUserRequestTransfer(
         UserTransfer $userTransfer,
-        QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
+        QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer,
     ): QuicksightDeleteUserRequestTransfer {
         return $quicksightDeleteUserRequestTransfer->setUserName($userTransfer->getUsernameOrFail());
     }
@@ -137,7 +137,7 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
      */
     public function mapEnableQuicksightAnalyticsRequestTransferToQuicksightStartAssetBundleImportJobRequestTransfer(
         EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
-        QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer
+        QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer,
     ): QuicksightStartAssetBundleImportJobRequestTransfer {
         $quicksightStartAssetBundleImportJobRequestTransfer->fromArray(
             $enableQuicksightAnalyticsRequestTransfer->toArray(),
@@ -184,7 +184,7 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
      */
     public function mapResetQuicksightAnalyticsRequestTransferToQuicksightStartAssetBundleImportJobRequestTransfer(
         ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer,
-        QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer
+        QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer,
     ): QuicksightStartAssetBundleImportJobRequestTransfer {
         $quicksightStartAssetBundleImportJobRequestTransfer->fromArray(
             $resetQuicksightAnalyticsRequestTransfer->toArray(),
@@ -231,7 +231,7 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
      */
     public function mapDescribeAssetBundleImportJobDataToQuicksightDescribeAssetBundleImportJobResponseTransfer(
         array $describeAssetBundleImportJobData,
-        QuicksightDescribeAssetBundleImportJobResponseTransfer $quicksightDescribeAssetBundleImportJobResponseTransfer
+        QuicksightDescribeAssetBundleImportJobResponseTransfer $quicksightDescribeAssetBundleImportJobResponseTransfer,
     ): QuicksightDescribeAssetBundleImportJobResponseTransfer {
         if (isset($describeAssetBundleImportJobData[static::RESPONSE_KEY_ERRORS])) {
             foreach ($describeAssetBundleImportJobData[static::RESPONSE_KEY_ERRORS] as $error) {
@@ -257,7 +257,7 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
      */
     public function mapQuicksightDescribeAssetBundleImportJobResponseTransferToQuicksightAssetBundleImportJobTransfer(
         QuicksightDescribeAssetBundleImportJobResponseTransfer $quicksightDescribeAssetBundleImportJobResponseTransfer,
-        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
     ): QuicksightAssetBundleImportJobTransfer {
         $quicksightAssetBundleImportJobTransfer->setStatus(
             $quicksightDescribeAssetBundleImportJobResponseTransfer->getJobStatusOrFail(),
@@ -274,7 +274,7 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
      */
     public function mapUserTransferToQuicksightUpdateUserRequestTransfer(
         UserTransfer $userTransfer,
-        QuicksightUpdateUserRequestTransfer $quicksightUpdateUserRequestTransfer
+        QuicksightUpdateUserRequestTransfer $quicksightUpdateUserRequestTransfer,
     ): QuicksightUpdateUserRequestTransfer {
         return $quicksightUpdateUserRequestTransfer
             ->setEmail($userTransfer->getUsernameOrFail())
