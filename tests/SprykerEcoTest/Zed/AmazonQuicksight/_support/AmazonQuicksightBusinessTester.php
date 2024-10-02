@@ -99,7 +99,7 @@ class AmazonQuicksightBusinessTester extends Actor
      */
     public function getAwsQuicksightClientMockWithSuccessfulResponse(
         ResultInterface $result,
-        string $methodName,
+        string $methodName
     ): AmazonQuicksightToAwsQuicksightClientInterface {
         $awsQuicksightClientMock = $this->getAwsQuicksightClientMock();
         $awsQuicksightClientMock->method($methodName)->willReturn($result);
@@ -115,7 +115,7 @@ class AmazonQuicksightBusinessTester extends Actor
      */
     public function getAwsQuicksightClientMockWithErrorResponse(
         QuickSightException $quickSightException,
-        string $methodName,
+        string $methodName
     ): AmazonQuicksightToAwsQuicksightClientInterface {
         $awsQuicksightClientMock = $this->getAwsQuicksightClientMock();
         $awsQuicksightClientMock->method($methodName)->willThrowException($quickSightException);

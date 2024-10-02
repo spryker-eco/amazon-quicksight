@@ -18,7 +18,7 @@ interface QuicksightUserCreatorInterface
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
     public function createQuicksightUsersByUserCollectionResponse(
-        UserCollectionResponseTransfer $userCollectionResponseTransfer,
+        UserCollectionResponseTransfer $userCollectionResponseTransfer
     ): UserCollectionResponseTransfer;
 
     /**

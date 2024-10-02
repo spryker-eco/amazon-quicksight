@@ -45,7 +45,7 @@ class AmazonQuicksightRepository extends AbstractRepository implements AmazonQui
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionTransfer
      */
     public function getQuicksightUserCollection(
-        QuicksightUserCriteriaTransfer $quicksightUserCriteriaTransfer,
+        QuicksightUserCriteriaTransfer $quicksightUserCriteriaTransfer
     ): QuicksightUserCollectionTransfer {
         $quicksightUserQuery = $this->getFactory()->getQuicksightUserQuery();
         $quicksightUserQuery = $this->applyQuicksightUserFilters($quicksightUserQuery, $quicksightUserCriteriaTransfer);
@@ -96,7 +96,7 @@ class AmazonQuicksightRepository extends AbstractRepository implements AmazonQui
      */
     protected function applyQuicksightUserFilters(
         SpyQuicksightUserQuery $quicksightUserQuery,
-        QuicksightUserCriteriaTransfer $quicksightUserCriteriaTransfer,
+        QuicksightUserCriteriaTransfer $quicksightUserCriteriaTransfer
     ): SpyQuicksightUserQuery {
         $quicksightUserConditions = $quicksightUserCriteriaTransfer->getQuicksightUserConditions();
         if ($quicksightUserConditions === null) {

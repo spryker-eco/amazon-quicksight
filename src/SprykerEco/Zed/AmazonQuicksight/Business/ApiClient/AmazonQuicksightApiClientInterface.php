@@ -34,7 +34,7 @@ interface AmazonQuicksightApiClientInterface
      * @return \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer
      */
     public function generateEmbedUrlForRegisteredUser(
-        QuicksightUserTransfer $quicksightUserTransfer,
+        QuicksightUserTransfer $quicksightUserTransfer
     ): QuicksightGenerateEmbedUrlResponseTransfer;
 
     /**
@@ -69,7 +69,7 @@ interface AmazonQuicksightApiClientInterface
      * @return \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobResponseTransfer
      */
     public function startAssetBundleImportJobByEnableQuicksightAnalyticsRequest(
-        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
+        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
     ): QuicksightStartAssetBundleImportJobResponseTransfer;
 
     /**
@@ -78,7 +78,7 @@ interface AmazonQuicksightApiClientInterface
      * @return \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobResponseTransfer
      */
     public function startAssetBundleImportJobByResetQuicksightAnalyticsRequest(
-        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer,
+        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
     ): QuicksightStartAssetBundleImportJobResponseTransfer;
 
     /**
@@ -87,6 +87,6 @@ interface AmazonQuicksightApiClientInterface
      * @return \Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTransfer
      */
     public function describeAssetBundleImportJob(
-        string $assetBundleImportJobId,
+        string $assetBundleImportJobId
     ): QuicksightDescribeAssetBundleImportJobResponseTransfer;
 }

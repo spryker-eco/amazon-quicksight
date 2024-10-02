@@ -65,7 +65,7 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
         QuicksightUserMatcherInterface $quicksightUserMatcher,
         AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager,
         AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
-        AmazonQuicksightToMessengerFacadeInterface $messengerFacade,
+        AmazonQuicksightToMessengerFacadeInterface $messengerFacade
     ) {
         $this->userCollectionFilter = $userCollectionFilter;
         $this->quicksightUserMatcher = $quicksightUserMatcher;
@@ -80,7 +80,7 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
     public function deleteQuicksightUsersByUserCollectionResponse(
-        UserCollectionResponseTransfer $userCollectionResponseTransfer,
+        UserCollectionResponseTransfer $userCollectionResponseTransfer
     ): UserCollectionResponseTransfer {
         $filteredUserTransfers = $this->userCollectionFilter->filterOutUserTransfersNotApplicableForQuicksightUserDeletion(
             $userCollectionResponseTransfer->getUsers()->getArrayCopy(),
@@ -139,7 +139,7 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
      */
     protected function executeDeleteQuicksightUsersByUserCollectionResponseTransaction(
         UserCollectionResponseTransfer $userCollectionResponseTransfer,
-        array $userTransfers,
+        array $userTransfers
     ): UserCollectionResponseTransfer {
         $userIdsToDelete = [];
         foreach ($userTransfers as $entityIdentifier => $userTransfer) {
@@ -174,7 +174,7 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
      */
     protected function deleteQuicksightUser(
         QuicksightUserTransfer $quicksightUserTransfer,
-        QuicksightUserCollectionResponseTransfer $quicksightUserCollectionResponseTransfer,
+        QuicksightUserCollectionResponseTransfer $quicksightUserCollectionResponseTransfer
     ): QuicksightUserCollectionResponseTransfer {
         $quicksightDeleteUserResponseTransfer = $this->amazonQuicksightApiClient->deleteUserByPrincipalId(
             $quicksightUserTransfer,
@@ -200,7 +200,7 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
      */
     protected function addErrorsToQuicksightUserCollectionResponse(
         QuicksightUserCollectionResponseTransfer $quicksightUserCollectionResponseTransfer,
-        ArrayObject $errorTransfers,
+        ArrayObject $errorTransfers
     ): QuicksightUserCollectionResponseTransfer {
         foreach ($errorTransfers as $errorTransfer) {
             $quicksightUserCollectionResponseTransfer->addError($errorTransfer);
@@ -219,7 +219,7 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
     protected function addErrorsToUserCollectionResponse(
         UserCollectionResponseTransfer $userCollectionResponseTransfer,
         ArrayObject $errorTransfers,
-        string $entityIdentifier,
+        string $entityIdentifier
     ): UserCollectionResponseTransfer {
         foreach ($errorTransfers as $errorTransfer) {
             $errorTransfer->setEntityIdentifier($entityIdentifier);

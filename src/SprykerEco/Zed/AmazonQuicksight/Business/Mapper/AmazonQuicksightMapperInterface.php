@@ -30,7 +30,7 @@ interface AmazonQuicksightMapperInterface
      */
     public function mapUserTransferToQuicksightUserRegisterRequestTransfer(
         UserTransfer $userTransfer,
-        QuicksightUserRegisterRequestTransfer $quicksightUserRegisterRequestTransfer,
+        QuicksightUserRegisterRequestTransfer $quicksightUserRegisterRequestTransfer
     ): QuicksightUserRegisterRequestTransfer;
 
     /**
@@ -41,7 +41,7 @@ interface AmazonQuicksightMapperInterface
      */
     public function mapQuicksightUserDataToQuicksightUserTransfer(
         array $quicksightUserData,
-        QuicksightUserTransfer $quicksightUserTransfer,
+        QuicksightUserTransfer $quicksightUserTransfer
     ): QuicksightUserTransfer;
 
     /**
@@ -52,7 +52,7 @@ interface AmazonQuicksightMapperInterface
      */
     public function mapQuicksightUserTransferToQuicksightGenerateEmbedUrlRequestTransfer(
         QuicksightUserTransfer $quicksightUserTransfer,
-        QuicksightGenerateEmbedUrlRequestTransfer $quicksightGenerateEmbedUrlRequestTransfer,
+        QuicksightGenerateEmbedUrlRequestTransfer $quicksightGenerateEmbedUrlRequestTransfer
     ): QuicksightGenerateEmbedUrlRequestTransfer;
 
     /**
@@ -63,7 +63,7 @@ interface AmazonQuicksightMapperInterface
      */
     public function mapGenerateEmbedUrlResponseDataToQuicksightGenerateEmbedUrlResponseTransfer(
         array $generateEmbedUrlResponseData,
-        QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer,
+        QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer
     ): QuicksightGenerateEmbedUrlResponseTransfer;
 
     /**
@@ -74,7 +74,7 @@ interface AmazonQuicksightMapperInterface
      */
     public function mapQuicksightUserTransferToQuicksightDeleteUserRequestTransfer(
         QuicksightUserTransfer $quicksightUserTransfer,
-        QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer,
+        QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
     ): QuicksightDeleteUserRequestTransfer;
 
     /**
@@ -85,7 +85,7 @@ interface AmazonQuicksightMapperInterface
      */
     public function mapUserTransferToQuicksightDeleteUserRequestTransfer(
         UserTransfer $userTransfer,
-        QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer,
+        QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
     ): QuicksightDeleteUserRequestTransfer;
 
     /**
@@ -96,7 +96,7 @@ interface AmazonQuicksightMapperInterface
      */
     public function mapEnableQuicksightAnalyticsRequestTransferToQuicksightStartAssetBundleImportJobRequestTransfer(
         EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
-        QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer,
+        QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer
     ): QuicksightStartAssetBundleImportJobRequestTransfer;
 
     /**
@@ -107,7 +107,7 @@ interface AmazonQuicksightMapperInterface
      */
     public function mapResetQuicksightAnalyticsRequestTransferToQuicksightStartAssetBundleImportJobRequestTransfer(
         ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer,
-        QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer,
+        QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer
     ): QuicksightStartAssetBundleImportJobRequestTransfer;
 
     /**
@@ -118,7 +118,7 @@ interface AmazonQuicksightMapperInterface
      */
     public function mapDescribeAssetBundleImportJobDataToQuicksightDescribeAssetBundleImportJobResponseTransfer(
         array $describeAssetBundleImportJobData,
-        QuicksightDescribeAssetBundleImportJobResponseTransfer $quicksightDescribeAssetBundleImportJobResponseTransfer,
+        QuicksightDescribeAssetBundleImportJobResponseTransfer $quicksightDescribeAssetBundleImportJobResponseTransfer
     ): QuicksightDescribeAssetBundleImportJobResponseTransfer;
 
     /**
@@ -129,7 +129,7 @@ interface AmazonQuicksightMapperInterface
      */
     public function mapQuicksightDescribeAssetBundleImportJobResponseTransferToQuicksightAssetBundleImportJobTransfer(
         QuicksightDescribeAssetBundleImportJobResponseTransfer $quicksightDescribeAssetBundleImportJobResponseTransfer,
-        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
+        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
     ): QuicksightAssetBundleImportJobTransfer;
 
     /**
@@ -140,6 +140,6 @@ interface AmazonQuicksightMapperInterface
      */
     public function mapUserTransferToQuicksightUpdateUserRequestTransfer(
         UserTransfer $userTransfer,
-        QuicksightUpdateUserRequestTransfer $quicksightUpdateUserRequestTransfer,
+        QuicksightUpdateUserRequestTransfer $quicksightUpdateUserRequestTransfer
     ): QuicksightUpdateUserRequestTransfer;
 }

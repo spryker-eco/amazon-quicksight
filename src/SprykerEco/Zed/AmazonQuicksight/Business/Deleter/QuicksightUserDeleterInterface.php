@@ -18,7 +18,7 @@ interface QuicksightUserDeleterInterface
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
     public function deleteQuicksightUsersByUserCollectionResponse(
-        UserCollectionResponseTransfer $userCollectionResponseTransfer,
+        UserCollectionResponseTransfer $userCollectionResponseTransfer
     ): UserCollectionResponseTransfer;
 
     /**

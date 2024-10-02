@@ -35,7 +35,7 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
      * @return \Generated\Shared\Transfer\UserCollectionTransfer
      */
     public function expandUserCollectionWithQuicksightUsers(
-        UserCollectionTransfer $userCollectionTransfer,
+        UserCollectionTransfer $userCollectionTransfer
     ): UserCollectionTransfer {
         return $this->getFactory()->createUserExpander()->expandUserCollectionWithQuicksightUsers($userCollectionTransfer);
     }
@@ -50,7 +50,7 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
     public function createQuicksightUsersByUserCollectionResponse(
-        UserCollectionResponseTransfer $userCollectionResponseTransfer,
+        UserCollectionResponseTransfer $userCollectionResponseTransfer
     ): UserCollectionResponseTransfer {
         return $this->getFactory()
             ->createQuicksightUserCreator()
@@ -69,7 +69,7 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
      */
     public function expandAnalyticsCollectionWithQuicksightAnalytics(
         AnalyticsRequestTransfer $analyticsRequestTransfer,
-        AnalyticsCollectionTransfer $analyticsCollectionTransfer,
+        AnalyticsCollectionTransfer $analyticsCollectionTransfer
     ): AnalyticsCollectionTransfer {
         return $this->getFactory()
             ->createAnalyticsExpander()
@@ -86,7 +86,7 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
     public function deleteQuicksightUsersByUserCollectionResponse(
-        UserCollectionResponseTransfer $userCollectionResponseTransfer,
+        UserCollectionResponseTransfer $userCollectionResponseTransfer
     ): UserCollectionResponseTransfer {
         return $this->getFactory()
             ->createQuicksightUserDeleter()
@@ -131,7 +131,7 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
      * @return \Generated\Shared\Transfer\EnableQuicksightAnalyticsResponseTransfer
      */
     public function enableAnalytics(
-        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
+        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
     ): EnableQuicksightAnalyticsResponseTransfer {
         return $this->getFactory()
             ->createAssetBundleEnabler()
@@ -148,7 +148,7 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
      * @return \Generated\Shared\Transfer\ResetQuicksightAnalyticsResponseTransfer
      */
     public function resetAnalytics(
-        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer,
+        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
     ): ResetQuicksightAnalyticsResponseTransfer {
         return $this->getFactory()
             ->createAssetBundleEnabler()

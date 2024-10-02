@@ -144,7 +144,7 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
         AmazonQuicksightConfig $amazonQuicksightConfig,
         AmazonQuicksightMapperInterface $amazonQuicksightMapper,
         AmazonQuicksightRequestDataFormatterInterface $amazonQuicksightRequestDataFormatter,
-        AmazonQuicksightToAwsQuicksightClientInterface $amazonQuicksightToAwsQuicksightClient,
+        AmazonQuicksightToAwsQuicksightClientInterface $amazonQuicksightToAwsQuicksightClient
     ) {
         $this->amazonQuicksightConfig = $amazonQuicksightConfig;
         $this->amazonQuicksightMapper = $amazonQuicksightMapper;
@@ -198,7 +198,7 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
      * @return \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer
      */
     public function generateEmbedUrlForRegisteredUser(
-        QuicksightUserTransfer $quicksightUserTransfer,
+        QuicksightUserTransfer $quicksightUserTransfer
     ): QuicksightGenerateEmbedUrlResponseTransfer {
         $quicksightGenerateEmbedUrlRequestTransfer = $this->createQuicksightGenerateEmbedUrlRequestTransfer();
         $quicksightGenerateEmbedUrlRequestTransfer = $this->amazonQuicksightMapper
@@ -377,7 +377,7 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
      * @return \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobResponseTransfer
      */
     public function startAssetBundleImportJobByEnableQuicksightAnalyticsRequest(
-        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
+        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
     ): QuicksightStartAssetBundleImportJobResponseTransfer {
         $quicksightStartAssetBundleImportJobRequestTransfer = $this->createQuicksightStartAssetBundleImportJobRequestTransfer();
         $quicksightStartAssetBundleImportJobRequestTransfer = $this->amazonQuicksightMapper
@@ -395,7 +395,7 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
      * @return \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobResponseTransfer
      */
     public function startAssetBundleImportJobByResetQuicksightAnalyticsRequest(
-        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer,
+        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
     ): QuicksightStartAssetBundleImportJobResponseTransfer {
         $quicksightStartAssetBundleImportJobRequestTransfer = $this->createQuicksightStartAssetBundleImportJobRequestTransfer();
         $quicksightStartAssetBundleImportJobRequestTransfer = $this->amazonQuicksightMapper
@@ -413,7 +413,7 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
      * @return \Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTransfer
      */
     public function describeAssetBundleImportJob(
-        string $assetBundleImportJobId,
+        string $assetBundleImportJobId
     ): QuicksightDescribeAssetBundleImportJobResponseTransfer {
         $quicksightDescribeAssetBundleImportJobRequestTransfer = $this->createQuicksightDescribeAssetBundleImportJobRequestTransfer($assetBundleImportJobId);
         $requestData = $this->amazonQuicksightRequestDataFormatter->formatRequestData(
@@ -447,7 +447,7 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
      * @return \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobResponseTransfer
      */
     protected function startAssetBundleImportJob(
-        QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer,
+        QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer
     ): QuicksightStartAssetBundleImportJobResponseTransfer {
         $requestData = $this->amazonQuicksightRequestDataFormatter->formatRequestData(
             $quicksightStartAssetBundleImportJobRequestTransfer->toArray(true, true),
@@ -580,7 +580,7 @@ class AmazonQuicksightApiClient implements AmazonQuicksightApiClientInterface
      * @return \Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobRequestTransfer
      */
     protected function createQuicksightDescribeAssetBundleImportJobRequestTransfer(
-        string $assetBundleImportJobId,
+        string $assetBundleImportJobId
     ): QuicksightDescribeAssetBundleImportJobRequestTransfer {
         return (new QuicksightDescribeAssetBundleImportJobRequestTransfer())
             ->setAssetBundleImportJobId($assetBundleImportJobId)

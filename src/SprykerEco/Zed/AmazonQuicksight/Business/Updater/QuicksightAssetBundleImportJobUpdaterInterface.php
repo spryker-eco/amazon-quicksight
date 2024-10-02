@@ -19,7 +19,7 @@ interface QuicksightAssetBundleImportJobUpdaterInterface
      * @return \Generated\Shared\Transfer\ResetQuicksightAnalyticsResponseTransfer
      */
     public function resetDefaultQuicksightAssetBundleImportJob(
-        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer,
+        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
     ): ResetQuicksightAnalyticsResponseTransfer;
 
     /**
@@ -28,6 +28,6 @@ interface QuicksightAssetBundleImportJobUpdaterInterface
      * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
      */
     public function resetDefaultQuicksightAssetBundleImportJobInDb(
-        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
+        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
     ): QuicksightAssetBundleImportJobTransfer;
 }

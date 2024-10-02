@@ -36,7 +36,7 @@ class QuicksightAssetBundleImportJobMapper
      */
     public function mapQuicksightAssetBundleImportJobEntityToQuicksightAssetBundleImportJobTransfer(
         SpyQuicksightAssetBundleImportJob $quicksightAssetBundleImportJobEntity,
-        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
+        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
     ): QuicksightAssetBundleImportJobTransfer {
         $quicksightAssetBundleImportJobData = $quicksightAssetBundleImportJobEntity->toArray();
         $quicksightAssetBundleImportJobData[QuicksightAssetBundleImportJobTransfer::ERRORS] = $this->utilEncodingService
@@ -60,7 +60,7 @@ class QuicksightAssetBundleImportJobMapper
      */
     public function mapQuicksightAssetBundleImportJobTransferToQuicksightAssetBundleImportJobEntity(
         QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
-        SpyQuicksightAssetBundleImportJob $quicksightAssetBundleImportJobEntity,
+        SpyQuicksightAssetBundleImportJob $quicksightAssetBundleImportJobEntity
     ): SpyQuicksightAssetBundleImportJob {
         $quicksightAssetBundleImportJobData = $quicksightAssetBundleImportJobTransfer->toArray();
         $quicksightAssetBundleImportJobData[QuicksightAssetBundleImportJobTransfer::ERRORS] = $this->utilEncodingService

@@ -38,7 +38,7 @@ class QuicksightAnalyticsCollectionExpanderPlugin extends AbstractPlugin impleme
      */
     public function expand(
         AnalyticsRequestTransfer $analyticsRequestTransfer,
-        AnalyticsCollectionTransfer $analyticsCollectionTransfer,
+        AnalyticsCollectionTransfer $analyticsCollectionTransfer
     ): AnalyticsCollectionTransfer {
         return $this->getFacade()
             ->expandAnalyticsCollectionWithQuicksightAnalytics($analyticsRequestTransfer, $analyticsCollectionTransfer);

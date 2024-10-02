@@ -22,7 +22,7 @@ class QuicksightUserMapper
      */
     public function mapQuicksightUserEntitiesToQuicksightUserCollectionTransfer(
         Collection $quicksightUserEntities,
-        QuicksightUserCollectionTransfer $quicksightUserCollectionTransfer,
+        QuicksightUserCollectionTransfer $quicksightUserCollectionTransfer
     ): QuicksightUserCollectionTransfer {
         foreach ($quicksightUserEntities as $quicksightUserEntity) {
             $quicksightUserCollectionTransfer->addQuicksightUser(
@@ -44,7 +44,7 @@ class QuicksightUserMapper
      */
     public function mapQuicksightUserEntitiesToQuicksightUserTransfers(
         Collection $quicksightUserEntities,
-        array $quicksightUserTransfers,
+        array $quicksightUserTransfers
     ): array {
         foreach ($quicksightUserEntities as $quicksightUserEntity) {
             $quicksightUserTransfers[] = $this->mapQuicksightUserEntityToQuicksightUserTransfer(
@@ -64,7 +64,7 @@ class QuicksightUserMapper
      */
     public function mapQuicksightUserTransferToQuicksightUserEntity(
         QuicksightUserTransfer $quicksightUserTransfer,
-        SpyQuicksightUser $quicksightUserEntity,
+        SpyQuicksightUser $quicksightUserEntity
     ): SpyQuicksightUser {
         return $quicksightUserEntity->fromArray($quicksightUserTransfer->modifiedToArray());
     }
@@ -77,7 +77,7 @@ class QuicksightUserMapper
      */
     public function mapQuicksightUserEntityToQuicksightUserTransfer(
         SpyQuicksightUser $quicksightUserEntity,
-        QuicksightUserTransfer $quicksightUserTransfer,
+        QuicksightUserTransfer $quicksightUserTransfer
     ): QuicksightUserTransfer {
         return $quicksightUserTransfer->fromArray($quicksightUserEntity->toArray(), true);
     }

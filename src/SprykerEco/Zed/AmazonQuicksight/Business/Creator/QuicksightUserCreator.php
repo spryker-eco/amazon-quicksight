@@ -64,7 +64,7 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
         QuicksightUserMatcherInterface $quicksightUserMatcher,
         AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager,
         AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
-        AmazonQuicksightToMessengerFacadeInterface $messengerFacade,
+        AmazonQuicksightToMessengerFacadeInterface $messengerFacade
     ) {
         $this->userCollectionFilter = $userCollectionFilter;
         $this->quicksightUserMatcher = $quicksightUserMatcher;
@@ -79,7 +79,7 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
     public function createQuicksightUsersByUserCollectionResponse(
-        UserCollectionResponseTransfer $userCollectionResponseTransfer,
+        UserCollectionResponseTransfer $userCollectionResponseTransfer
     ): UserCollectionResponseTransfer {
         $filteredUserTransfers = $this->userCollectionFilter->filterOutUserTransfersNotApplicableForQuicksightUserRegistration(
             $userCollectionResponseTransfer->getUsers()->getArrayCopy(),
@@ -138,7 +138,7 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
      */
     protected function executeCreateQuicksightUsersForUserCollectionResponseTransaction(
         UserCollectionResponseTransfer $userCollectionResponseTransfer,
-        array $userTransfers,
+        array $userTransfers
     ): UserCollectionResponseTransfer {
         foreach ($userTransfers as $entityIdentifier => $userTransfer) {
             $quicksightUserRegisterResponseTransfer = $this->amazonQuicksightApiClient->registerUser($userTransfer);
@@ -172,7 +172,7 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
      * @return array<int|string, \Generated\Shared\Transfer\QuicksightUserTransfer>
      */
     protected function executeCreateQuicksightUsersForRegisteredQuicksightUsersMatchedExistingUsersTransaction(
-        array $quicksightUserTransfers,
+        array $quicksightUserTransfers
     ): array {
         foreach ($quicksightUserTransfers as $quicksightUserTransfer) {
             $this->amazonQuicksightEntityManager->createQuicksightUser($quicksightUserTransfer);
@@ -191,7 +191,7 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
     protected function addErrorsToUserCollectionResponse(
         UserCollectionResponseTransfer $userCollectionResponseTransfer,
         ArrayObject $errorTransfers,
-        string $entityIdentifier,
+        string $entityIdentifier
     ): UserCollectionResponseTransfer {
         foreach ($errorTransfers as $errorTransfer) {
             $errorTransfer->setEntityIdentifier($entityIdentifier);

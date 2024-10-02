@@ -63,7 +63,7 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
      */
     public function validateEnableQuicksightAnalyticsRequest(
         EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
-        EnableQuicksightAnalyticsResponseTransfer $enableQuicksightAnalyticsResponseTransfer,
+        EnableQuicksightAnalyticsResponseTransfer $enableQuicksightAnalyticsResponseTransfer
     ): EnableQuicksightAnalyticsResponseTransfer {
         $quicksightAssetBundleImportJobTransfer = $enableQuicksightAnalyticsRequestTransfer->getQuicksightAssetBundleImportJob();
 
@@ -84,7 +84,7 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
      */
     public function validateResetQuicksightAnalyticsRequest(
         ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer,
-        ResetQuicksightAnalyticsResponseTransfer $resetQuicksightAnalyticsResponseTransfer,
+        ResetQuicksightAnalyticsResponseTransfer $resetQuicksightAnalyticsResponseTransfer
     ): ResetQuicksightAnalyticsResponseTransfer {
         $quicksightAssetBundleImportJobTransfer = $resetQuicksightAnalyticsRequestTransfer->getQuicksightAssetBundleImportJob();
         $quicksightUserTransfer = $resetQuicksightAnalyticsRequestTransfer->getUserOrFail()->getQuicksightUser();
@@ -106,7 +106,7 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
      */
     public function isResetAnalyticsEnabled(
         ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
-        ?QuicksightUserTransfer $quicksightUserTransfer,
+        ?QuicksightUserTransfer $quicksightUserTransfer
     ): bool {
         return $this->isAssetBundleSuccessfullyInitialized($quicksightAssetBundleImportJobTransfer)
             && !$this->isAssetBundleInitializationInProgress($quicksightAssetBundleImportJobTransfer)
@@ -119,7 +119,7 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
      * @return bool
      */
     public function isEnableAnalyticsEnabled(
-        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
+        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
     ): bool {
         return !$this->isAssetBundleSuccessfullyInitialized($quicksightAssetBundleImportJobTransfer)
             && !$this->isAssetBundleInitializationInProgress($quicksightAssetBundleImportJobTransfer);
@@ -131,7 +131,7 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
      * @return bool
      */
     public function isAssetBundleSuccessfullyInitialized(
-        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
+        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
     ): bool {
         return $quicksightAssetBundleImportJobTransfer
             && $quicksightAssetBundleImportJobTransfer->getIsInitialized();
@@ -143,7 +143,7 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
      * @return bool
      */
     public function isAssetBundleInitializationInProgress(
-        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
+        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
     ): bool {
         return $quicksightAssetBundleImportJobTransfer
             && !in_array($quicksightAssetBundleImportJobTransfer->getStatus(), $this->amazonQuicksightConfig->getAssetBundleImportJobCompletionStatuses());

@@ -226,7 +226,7 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
         bool $isInitializedAfterSync,
         bool $isInitializationInProgress,
         string $jobStatusAfterSync,
-        QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer,
+        QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer
     ): void {
         // Arrange
         $this->tester->getContainer()->set(static::SERVICE_TWIG, $this->getTwigMock(
@@ -369,7 +369,7 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
         string $initialJobStatus,
         QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer,
         QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
-        array $errorTransfers,
+        array $errorTransfers
     ): void {
         // Arrange
         $this->tester->getContainer()->set(static::SERVICE_TWIG, $this->getTwigMock(
@@ -404,7 +404,7 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
      * @return void
      */
     public function testThrowsExceptionWhenRequiredPropertiesAreNotSet(
-        AnalyticsRequestTransfer $analyticsRequestTransfer,
+        AnalyticsRequestTransfer $analyticsRequestTransfer
     ): void {
         // Arrange
         $this->tester->mockFactoryMethod('getRepository', $this->tester->getAmazonQuicksightRepositoryMock());
@@ -568,7 +568,7 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
         bool $isAssetBundleInitializationInProgress,
         bool $isQuicksightUserRoleAvailable,
         QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer,
-        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer = null,
+        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer = null
     ): Environment {
         $twigMock = $this->getMockBuilder(Environment::class)
             ->disableOriginalConstructor()
@@ -605,7 +605,7 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
     protected function haveQuicksightAssetBundleImportJob(
         bool $isInitializedInitially,
         string $status = self::ASSET_BUNDLE_IMPORT_JOB_STATUS_IN_PROGRESS,
-        array $errorTransfers = [],
+        array $errorTransfers = []
     ): void {
         $this->tester->haveQuicksightAssetBundleImportJob([
             QuicksightAssetBundleImportJobTransfer::IS_INITIALIZED => $isInitializedInitially,

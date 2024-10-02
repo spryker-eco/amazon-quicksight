@@ -20,7 +20,7 @@ interface AssetBundleEnablerInterface
      * @return \Generated\Shared\Transfer\EnableQuicksightAnalyticsResponseTransfer
      */
     public function enableAnalytics(
-        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
+        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
     ): EnableQuicksightAnalyticsResponseTransfer;
 
     /**
@@ -29,6 +29,6 @@ interface AssetBundleEnablerInterface
      * @return \Generated\Shared\Transfer\ResetQuicksightAnalyticsResponseTransfer
      */
     public function resetAnalytics(
-        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer,
+        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
     ): ResetQuicksightAnalyticsResponseTransfer;
 }

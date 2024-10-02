@@ -112,7 +112,7 @@ class EnableAnalyticsTest extends Unit
      * @return void
      */
     public function testThrowsRequiredTransferPropertyExceptionWhenRequiredPropertiesAreNotSet(
-        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer,
+        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
     ): void {
         // Assert
         $this->expectException(RequiredTransferPropertyException::class);
@@ -146,7 +146,7 @@ class EnableAnalyticsTest extends Unit
      * @return void
      */
     public function testReturnsResponseWithErrorWhenValidationFails(
-        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
+        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
     ): void {
         // Arrange
         $this->tester->haveQuicksightAssetBundleImportJob($quicksightAssetBundleImportJobTransfer->toArray());
@@ -434,7 +434,7 @@ class EnableAnalyticsTest extends Unit
      * @return \Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer
      */
     protected function createEnableQuicksightAnalyticsRequestTransferWithUser(
-        string $quicksightUserRole = self::QUICKSIGHT_USER_ROLE_AUTHOR,
+        string $quicksightUserRole = self::QUICKSIGHT_USER_ROLE_AUTHOR
     ): EnableQuicksightAnalyticsRequestTransfer {
         $userTransfer = $this->tester->haveUser();
         $userTransfer->setQuicksightUser($this->tester->haveQuicksightUser($userTransfer, [
@@ -454,7 +454,7 @@ class EnableAnalyticsTest extends Unit
      */
     protected function getAwsQuicksightClientMockWithExpectation(
         ResultInterface $result,
-        string $methodName,
+        string $methodName
     ): AmazonQuicksightToAwsQuicksightClientInterface {
         $awsQuicksightClientMock = $this->getMockBuilder(AmazonQuicksightToAwsQuicksightClientInterface::class)
             ->getMock();

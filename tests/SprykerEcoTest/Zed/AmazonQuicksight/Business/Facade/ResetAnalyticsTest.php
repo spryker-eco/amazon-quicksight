@@ -98,7 +98,7 @@ class ResetAnalyticsTest extends Unit
      * @return void
      */
     public function testThrowsRequiredTransferPropertyExceptionWhenRequiredPropertiesAreNotSet(
-        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer,
+        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
     ): void {
         // Assert
         $this->expectException(RequiredTransferPropertyException::class);
@@ -117,7 +117,7 @@ class ResetAnalyticsTest extends Unit
      */
     public function testReturnsResponseWithErrorWhenValidationFails(
         ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
-        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer,
+        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
     ): void {
         // Arrange
         if ($quicksightAssetBundleImportJobTransfer) {
