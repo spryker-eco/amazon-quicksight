@@ -7,6 +7,7 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Persistence;
 
+use Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 
 interface AmazonQuicksightEntityManagerInterface
@@ -17,6 +18,13 @@ interface AmazonQuicksightEntityManagerInterface
      * @return \Generated\Shared\Transfer\QuicksightUserTransfer
      */
     public function createQuicksightUser(QuicksightUserTransfer $quicksightUserTransfer): QuicksightUserTransfer;
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightUserTransfer
+     */
+    public function updateQuicksightUser(QuicksightUserTransfer $quicksightUserTransfer): QuicksightUserTransfer;
 
     /**
      * @param list<int> $quicksightUserIds
@@ -31,4 +39,22 @@ interface AmazonQuicksightEntityManagerInterface
      * @return void
      */
     public function deleteQuicksightUsersByUserIds(array $userIds): void;
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
+     */
+    public function createQuicksightAssetBundleImportJob(
+        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+    ): QuicksightAssetBundleImportJobTransfer;
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
+     */
+    public function updateQuicksightAssetBundleImportJob(
+        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+    ): QuicksightAssetBundleImportJobTransfer;
 }

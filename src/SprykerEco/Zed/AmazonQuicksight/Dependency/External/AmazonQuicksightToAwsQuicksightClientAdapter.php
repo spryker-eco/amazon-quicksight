@@ -74,4 +74,34 @@ class AmazonQuicksightToAwsQuicksightClientAdapter implements AmazonQuicksightTo
     {
         return $this->quicksightClient->listUsers($listUsersRequestData);
     }
+
+    /**
+     * @param array<string, mixed> $updateUserRequestData
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function updateUser(array $updateUserRequestData): ResultInterface
+    {
+        return $this->quicksightClient->updateUser($updateUserRequestData);
+    }
+
+    /**
+     * @param array<string, mixed> $startAssetBundleImportJobRequestData
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function startAssetBundleImportJob(array $startAssetBundleImportJobRequestData): ResultInterface
+    {
+        return $this->quicksightClient->startAssetBundleImportJob($startAssetBundleImportJobRequestData);
+    }
+
+    /**
+     * @param array<string, mixed> $describeAssetBundleImportJobRequestData
+     *
+     * @return \Aws\ResultInterface
+     */
+    public function describeAssetBundleImportJob(array $describeAssetBundleImportJobRequestData): ResultInterface
+    {
+        return $this->quicksightClient->describeAssetBundleImportJob($describeAssetBundleImportJobRequestData);
+    }
 }

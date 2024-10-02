@@ -71,4 +71,64 @@ interface AmazonQuicksightConstants
      * @var string
      */
     public const AWS_QUICKSIGHT_NAMESPACE = 'AMAZON_QUICKSIGHT:AWS_QUICKSIGHT_NAMESPACE';
+
+    /**
+     * Specification:
+     * - The default data source username.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const DEFAULT_DATA_SOURCE_USERNAME = 'AMAZON_QUICKSIGHT:DEFAULT_DATA_SOURCE_USERNAME';
+
+    /**
+     * Specification:
+     * - The default data source password.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const DEFAULT_DATA_SOURCE_PASSWORD = 'AMAZON_QUICKSIGHT:DEFAULT_DATA_SOURCE_PASSWORD';
+
+    /**
+     * Specification:
+     * - The default data source database name.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const DEFAULT_DATA_SOURCE_DATABASE_NAME = 'AMAZON_QUICKSIGHT:DEFAULT_DATA_SOURCE_DATABASE_NAME';
+
+    /**
+     * Specification:
+     * - The default data source database port.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const DEFAULT_DATA_SOURCE_DATABASE_PORT = 'AMAZON_QUICKSIGHT:DEFAULT_DATA_SOURCE_DATABASE_PORT';
+
+    /**
+     * Specification:
+     * - The default data source database host.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const DEFAULT_DATA_SOURCE_DATABASE_HOST = 'AMAZON_QUICKSIGHT:DEFAULT_DATA_SOURCE_DATABASE_HOST';
+
+    /**
+     * Specification:
+     * - The default data source VPC connection ARN.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const DEFAULT_DATA_SOURCE_VPC_CONNECTION_ARN = 'AMAZON_QUICKSIGHT:DEFAULT_DATA_SOURCE_VPC_CONNECTION_ARN';
 }

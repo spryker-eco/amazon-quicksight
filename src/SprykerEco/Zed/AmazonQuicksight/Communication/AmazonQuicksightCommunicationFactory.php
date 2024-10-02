@@ -8,12 +8,17 @@
 namespace SprykerEco\Zed\AmazonQuicksight\Communication;
 
 use Spryker\Zed\Kernel\Communication\AbstractCommunicationFactory;
+use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
 use SprykerEco\Zed\AmazonQuicksight\Communication\DataProvider\QuicksightUserFormDataProvider;
 use SprykerEco\Zed\AmazonQuicksight\Communication\DataProvider\QuicksightUserFormDataProviderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Communication\Expander\QuicksightUserFormExpander;
 use SprykerEco\Zed\AmazonQuicksight\Communication\Expander\QuicksightUserFormExpanderInterface;
+use SprykerEco\Zed\AmazonQuicksight\Communication\Form\EnableAnalyticsForm;
+use SprykerEco\Zed\AmazonQuicksight\Communication\Form\ResetAnalyticsForm;
 use SprykerEco\Zed\AmazonQuicksight\Communication\Transformer\QuicksightUserRoleDataTransformer;
+use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToUserFacadeInterface;
 use Symfony\Component\Form\DataTransformerInterface;
+use Symfony\Component\Form\FormInterface;
 
 /**
  * @method \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig getConfig()
@@ -49,5 +54,29 @@ class AmazonQuicksightCommunicationFactory extends AbstractCommunicationFactory
     public function createQuicksightUserFormDataProvider(): QuicksightUserFormDataProviderInterface
     {
         return new QuicksightUserFormDataProvider($this->getConfig());
+    }
+
+    /**
+     * @return \Symfony\Component\Form\FormInterface
+     */
+    public function getEnableAnalyticsForm(): FormInterface
+    {
+        return $this->getFormFactory()->create(EnableAnalyticsForm::class);
+    }
+
+    /**
+     * @return \Symfony\Component\Form\FormInterface
+     */
+    public function getResetAnalyticsForm(): FormInterface
+    {
+        return $this->getFormFactory()->create(ResetAnalyticsForm::class);
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToUserFacadeInterface
+     */
+    public function getUserFacade(): AmazonQuicksightToUserFacadeInterface
+    {
+        return $this->getProvidedDependency(AmazonQuicksightDependencyProvider::FACADE_USER);
     }
 }

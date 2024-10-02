@@ -11,14 +11,20 @@ use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClient;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightAssetBundleImportJobCreator;
+use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightAssetBundleImportJobCreatorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreator;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreatorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Deleter\QuicksightUserDeleter;
 use SprykerEco\Zed\AmazonQuicksight\Business\Deleter\QuicksightUserDeleterInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Enabler\AssetBundleEnabler;
+use SprykerEco\Zed\AmazonQuicksight\Business\Enabler\AssetBundleEnablerInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Expander\AnalyticsExpander;
 use SprykerEco\Zed\AmazonQuicksight\Business\Expander\AnalyticsExpanderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpander;
 use SprykerEco\Zed\AmazonQuicksight\Business\Expander\UserExpanderInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoader;
+use SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Filter\QuicksightUserCollectionFilter;
 use SprykerEco\Zed\AmazonQuicksight\Business\Filter\QuicksightUserCollectionFilterInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilter;
@@ -29,10 +35,20 @@ use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapper;
 use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Matcher\QuicksightUserMatcher;
 use SprykerEco\Zed\AmazonQuicksight\Business\Matcher\QuicksightUserMatcherInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Processor\AssetBundleQuicksightUserProcessor;
+use SprykerEco\Zed\AmazonQuicksight\Business\Processor\AssetBundleQuicksightUserProcessorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Reader\QuicksightUserReader;
 use SprykerEco\Zed\AmazonQuicksight\Business\Reader\QuicksightUserReaderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Reader\UserReader;
 use SprykerEco\Zed\AmazonQuicksight\Business\Reader\UserReaderInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Synchronizer\QuicksightAssetBundleImportJobSynchronizer;
+use SprykerEco\Zed\AmazonQuicksight\Business\Synchronizer\QuicksightAssetBundleImportJobSynchronizerInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Updater\QuicksightAssetBundleImportJobUpdater;
+use SprykerEco\Zed\AmazonQuicksight\Business\Updater\QuicksightAssetBundleImportJobUpdaterInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Updater\QuicksightUserUpdater;
+use SprykerEco\Zed\AmazonQuicksight\Business\Updater\QuicksightUserUpdaterInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsRequestValidator;
+use SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsRequestValidatorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToUserFacadeInterface;
@@ -65,6 +81,14 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
             $this->createAmazonQuicksightApiClient(),
             $this->getMessengerFacade(),
         );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Updater\QuicksightUserUpdaterInterface
+     */
+    public function createQuicksightUserUpdater(): QuicksightUserUpdaterInterface
+    {
+        return new QuicksightUserUpdater($this->createAmazonQuicksightApiClient(), $this->getEntityManager());
     }
 
     /**
@@ -167,8 +191,94 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     {
         return new AnalyticsExpander(
             $this->getRepository(),
+            $this->getConfig(),
             $this->createAmazonQuicksightApiClient(),
+            $this->createQuicksightAnalyticsRequestValidator(),
+            $this->createQuicksightAssetBundleImportJobSynchronizer(),
             $this->getTwigEnvironment(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsRequestValidatorInterface
+     */
+    public function createQuicksightAnalyticsRequestValidator(): QuicksightAnalyticsRequestValidatorInterface
+    {
+        return new QuicksightAnalyticsRequestValidator($this->getConfig());
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Enabler\AssetBundleEnablerInterface
+     */
+    public function createAssetBundleEnabler(): AssetBundleEnablerInterface
+    {
+        return new AssetBundleEnabler(
+            $this->createQuicksightAssetBundleImportJobCreator(),
+            $this->createQuicksightAssetBundleImportJobUpdater(),
+            $this->getRepository(),
+            $this->createQuicksightAnalyticsRequestValidator(),
+            $this->createAssetBundleQuicksightUserProcessor(),
+            $this->createAssetBundleImportFileContentLoader(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Processor\AssetBundleQuicksightUserProcessorInterface
+     */
+    public function createAssetBundleQuicksightUserProcessor(): AssetBundleQuicksightUserProcessorInterface
+    {
+        return new AssetBundleQuicksightUserProcessor(
+            $this->createQuicksightUserCreator(),
+            $this->createQuicksightUserUpdater(),
+            $this->getRepository(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Synchronizer\QuicksightAssetBundleImportJobSynchronizerInterface
+     */
+    public function createQuicksightAssetBundleImportJobSynchronizer(): QuicksightAssetBundleImportJobSynchronizerInterface
+    {
+        return new QuicksightAssetBundleImportJobSynchronizer(
+            $this->createAmazonQuicksightApiClient(),
+            $this->getConfig(),
+            $this->getEntityManager(),
+            $this->getRepository(),
+            $this->createQuicksightAnalyticsRequestValidator(),
+            $this->createAmazonQuicksightMapper(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface
+     */
+    public function createAssetBundleImportFileContentLoader(): AssetBundleImportFileContentLoaderInterface
+    {
+        return new AssetBundleImportFileContentLoader($this->getConfig());
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightAssetBundleImportJobCreatorInterface
+     */
+    public function createQuicksightAssetBundleImportJobCreator(): QuicksightAssetBundleImportJobCreatorInterface
+    {
+        return new QuicksightAssetBundleImportJobCreator(
+            $this->createAmazonQuicksightApiClient(),
+            $this->getConfig(),
+            $this->getEntityManager(),
+            $this->createQuicksightAssetBundleImportJobUpdater(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Updater\QuicksightAssetBundleImportJobUpdaterInterface
+     */
+    public function createQuicksightAssetBundleImportJobUpdater(): QuicksightAssetBundleImportJobUpdaterInterface
+    {
+        return new QuicksightAssetBundleImportJobUpdater(
+            $this->createAmazonQuicksightApiClient(),
+            $this->getConfig(),
+            $this->getEntityManager(),
         );
     }
 

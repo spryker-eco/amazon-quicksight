@@ -7,7 +7,9 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Persistence;
 
+use Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
+use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJob;
 use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUser;
 use Spryker\Zed\Kernel\Persistence\AbstractEntityManager;
 
@@ -26,6 +28,33 @@ class AmazonQuicksightEntityManager extends AbstractEntityManager implements Ama
         $quicksightUserEntity = $this->getFactory()
             ->createQuicksightUserMapper()
             ->mapQuicksightUserTransferToQuicksightUserEntity($quicksightUserTransfer, new SpyQuicksightUser());
+
+        $quicksightUserEntity->save();
+
+        return $this->getFactory()
+            ->createQuicksightUserMapper()
+            ->mapQuicksightUserEntityToQuicksightUserTransfer($quicksightUserEntity, $quicksightUserTransfer);
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightUserTransfer
+     */
+    public function updateQuicksightUser(QuicksightUserTransfer $quicksightUserTransfer): QuicksightUserTransfer
+    {
+        $quicksightUserQuery = $this->getFactory()->getQuicksightUserQuery();
+        $quicksightUserQuery->filterByIdQuicksightUser($quicksightUserTransfer->getIdQuicksightUserOrFail());
+
+        $quicksightUserEntity = $quicksightUserQuery->findOne();
+
+        if ($quicksightUserEntity === null) {
+            return $quicksightUserTransfer;
+        }
+
+        $quicksightUserEntity = $this->getFactory()
+            ->createQuicksightUserMapper()
+            ->mapQuicksightUserTransferToQuicksightUserEntity($quicksightUserTransfer, $quicksightUserEntity);
 
         $quicksightUserEntity->save();
 
@@ -58,5 +87,64 @@ class AmazonQuicksightEntityManager extends AbstractEntityManager implements Ama
             ->getQuicksightUserQuery()
             ->filterByFkUser_In($userIds)
             ->delete();
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
+     */
+    public function createQuicksightAssetBundleImportJob(
+        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+    ): QuicksightAssetBundleImportJobTransfer {
+        $quicksightAssetBundleImportJobEntity = $this->getFactory()
+            ->createQuicksightAssetBundleImportJobMapper()
+            ->mapQuicksightAssetBundleImportJobTransferToQuicksightAssetBundleImportJobEntity(
+                $quicksightAssetBundleImportJobTransfer,
+                new SpyQuicksightAssetBundleImportJob(),
+            );
+
+        $quicksightAssetBundleImportJobEntity->save();
+
+        return $this->getFactory()
+            ->createQuicksightAssetBundleImportJobMapper()
+            ->mapQuicksightAssetBundleImportJobEntityToQuicksightAssetBundleImportJobTransfer(
+                $quicksightAssetBundleImportJobEntity,
+                $quicksightAssetBundleImportJobTransfer,
+            );
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
+     */
+    public function updateQuicksightAssetBundleImportJob(
+        QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+    ): QuicksightAssetBundleImportJobTransfer {
+        $quicksightAssetBundleImportJobQuery = $this->getFactory()->getQuicksightAssetBundleImportJobQuery();
+        $quicksightAssetBundleImportJobQuery->filterByJobId($quicksightAssetBundleImportJobTransfer->getJobIdOrFail());
+
+        $quicksightAssetBundleImportJobEntity = $quicksightAssetBundleImportJobQuery->findOne();
+
+        if ($quicksightAssetBundleImportJobEntity === null) {
+            return $quicksightAssetBundleImportJobTransfer;
+        }
+
+        $quicksightAssetBundleImportJobEntity = $this->getFactory()
+            ->createQuicksightAssetBundleImportJobMapper()
+            ->mapQuicksightAssetBundleImportJobTransferToQuicksightAssetBundleImportJobEntity(
+                $quicksightAssetBundleImportJobTransfer,
+                $quicksightAssetBundleImportJobEntity,
+            );
+
+        $quicksightAssetBundleImportJobEntity->save();
+
+        return $this->getFactory()
+            ->createQuicksightAssetBundleImportJobMapper()
+            ->mapQuicksightAssetBundleImportJobEntityToQuicksightAssetBundleImportJobTransfer(
+                $quicksightAssetBundleImportJobEntity,
+                $quicksightAssetBundleImportJobTransfer,
+            );
     }
 }

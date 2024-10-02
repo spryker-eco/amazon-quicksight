@@ -7,17 +7,30 @@
 
 namespace SprykerEcoTest\Zed\AmazonQuicksight;
 
+use ArrayObject;
 use Aws\QuickSight\Exception\QuickSightException;
 use Aws\ResultInterface;
 use Codeception\Actor;
 use Codeception\Stub;
+use Generated\Shared\DataBuilder\QuicksightAssetBundleImportJobBuilder;
 use Generated\Shared\DataBuilder\QuicksightUserBuilder;
 use Generated\Shared\Transfer\AnalyticsRequestTransfer;
+use Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserTransfer;
+use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJob;
+use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJobQuery;
 use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUser;
 use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUserQuery;
+use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
+use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
+use SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightBusinessFactory;
+use SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightFacadeInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoader;
+use SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManager;
+use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepository;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface;
 
 /**
@@ -56,6 +69,7 @@ class AmazonQuicksightBusinessTester extends Actor
         $quicksightUserEntity->save();
 
         $quicksightUserTransfer->setFkUser($quicksightUserEntity->getFkUser());
+        $quicksightUserTransfer->setIdQuicksightUser($quicksightUserEntity->getIdQuicksightUser());
 
         return $quicksightUserTransfer;
     }
@@ -148,7 +162,20 @@ class AmazonQuicksightBusinessTester extends Actor
     public function haveAnalyticsRequestWithUser(): AnalyticsRequestTransfer
     {
         $userTransfer = $this->haveUser();
-        $quicksightUserTransfer = $this->haveQuicksightUser($userTransfer);
+
+        return (new AnalyticsRequestTransfer())->setUser($userTransfer);
+    }
+
+    /**
+     * @param string|null $quicksightUserRole
+     *
+     * @return \Generated\Shared\Transfer\AnalyticsRequestTransfer
+     */
+    public function haveAnalyticsRequestWithQuicksightUser(?string $quicksightUserRole = null): AnalyticsRequestTransfer
+    {
+        $userTransfer = $this->haveUser();
+        $quicksightUserSeedData = $quicksightUserRole ? ['role' => $quicksightUserRole] : [];
+        $quicksightUserTransfer = $this->haveQuicksightUser($userTransfer, $quicksightUserSeedData);
         $userTransfer->setQuicksightUser($quicksightUserTransfer);
 
         return (new AnalyticsRequestTransfer())->setUser($userTransfer);
@@ -179,10 +206,100 @@ class AmazonQuicksightBusinessTester extends Actor
     }
 
     /**
+     * @return void
+     */
+    public function ensureQuicksightUserTableIsEmpty(): void
+    {
+        $this->ensureDatabaseTableIsEmpty($this->getQuicksightUserQuery());
+    }
+
+    /**
+     * @return void
+     */
+    public function ensureQuicksightAssetBundleImportJobTableIsEmpty(): void
+    {
+        $this->ensureDatabaseTableIsEmpty($this->getQuicksightAssetBundleImportJobQuery());
+    }
+
+    /**
+     * @param array<string, mixed> $seedData
+     * @param list<\Generated\Shared\Transfer\ErrorTransfer> $errorTransfers
+     *
+     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer
+     */
+    public function haveQuicksightAssetBundleImportJob(array $seedData, array $errorTransfers = []): QuicksightAssetBundleImportJobTransfer
+    {
+        $quicksightAssetBundleImportJobTransfer = (new QuicksightAssetBundleImportJobBuilder($seedData))->build();
+        $quicksightAssetBundleImportJobTransfer->setErrors(new ArrayObject($errorTransfers));
+        $quicksightAssetBundleImportJobData = $quicksightAssetBundleImportJobTransfer->toArray();
+        $quicksightAssetBundleImportJobData[QuicksightAssetBundleImportJobTransfer::ERRORS] = json_encode(
+            $quicksightAssetBundleImportJobData[QuicksightAssetBundleImportJobTransfer::ERRORS],
+        );
+        $quicksightAssetBundleImportJobEntity = (new SpyQuicksightAssetBundleImportJob())->fromArray($quicksightAssetBundleImportJobData);
+        $quicksightAssetBundleImportJobEntity->save();
+
+        return $quicksightAssetBundleImportJobTransfer;
+    }
+
+    /**
+     * @param string $jobId
+     *
+     * @return \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJob|null
+     */
+    public function findQuicksightAssetBundleImportJobQueryByJobId(string $jobId): ?SpyQuicksightAssetBundleImportJob
+    {
+        return $this->getQuicksightAssetBundleImportJobQuery()->filterByJobId($jobId)->findOne();
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightFacadeInterface
+     */
+    public function getFacadeWithMocks(): AmazonQuicksightFacadeInterface
+    {
+        $amazonQuicksightBusinessFactoryMock = $this->createAmazonQuicksightBusinessFactoryMock();
+
+        return $this->getFacade()->setFactory($amazonQuicksightBusinessFactoryMock);
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightBusinessFactory
+     */
+    protected function createAmazonQuicksightBusinessFactoryMock(): AmazonQuicksightBusinessFactory
+    {
+        $amazonQuicksightBusinessFactoryStub = Stub::make(AmazonQuicksightBusinessFactory::class, [
+            'createAssetBundleImportFileContentLoader' => $this->createAssetBundleImportFileContentLoaderMock(),
+            'resolveDependencyProvider' => new AmazonQuicksightDependencyProvider(),
+            'config' => new AmazonQuicksightConfig(),
+            'repository' => new AmazonQuicksightRepository(),
+            'entityManager' => new AmazonQuicksightEntityManager(),
+        ]);
+
+        return $amazonQuicksightBusinessFactoryStub;
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface
+     */
+    protected function createAssetBundleImportFileContentLoaderMock(): AssetBundleImportFileContentLoaderInterface
+    {
+        return Stub::makeEmpty(AssetBundleImportFileContentLoader::class, [
+            'getAssetBundleImportFileContent' => 'content',
+        ]);
+    }
+
+    /**
      * @return \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUserQuery
      */
     protected function getQuicksightUserQuery(): SpyQuicksightUserQuery
     {
         return SpyQuicksightUserQuery::create();
+    }
+
+    /**
+     * @return \Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightAssetBundleImportJobQuery
+     */
+    protected function getQuicksightAssetBundleImportJobQuery(): SpyQuicksightAssetBundleImportJobQuery
+    {
+        return SpyQuicksightAssetBundleImportJobQuery::create();
     }
 }

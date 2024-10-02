@@ -9,6 +9,7 @@ namespace SprykerEco\Zed\AmazonQuicksight\Dependency\Facade;
 
 use Generated\Shared\Transfer\UserCollectionTransfer;
 use Generated\Shared\Transfer\UserCriteriaTransfer;
+use Generated\Shared\Transfer\UserTransfer;
 
 class AmazonQuicksightToUserFacadeBridge implements AmazonQuicksightToUserFacadeInterface
 {
@@ -33,5 +34,13 @@ class AmazonQuicksightToUserFacadeBridge implements AmazonQuicksightToUserFacade
     public function getUserCollection(UserCriteriaTransfer $userCriteriaTransfer): UserCollectionTransfer
     {
         return $this->userFacade->getUserCollection($userCriteriaTransfer);
+    }
+
+    /**
+     * @return \Generated\Shared\Transfer\UserTransfer
+     */
+    public function getCurrentUser(): UserTransfer
+    {
+        return $this->userFacade->getCurrentUser();
     }
 }

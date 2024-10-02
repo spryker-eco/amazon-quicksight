@@ -10,6 +10,7 @@ namespace SprykerEco\Zed\AmazonQuicksight;
 use Aws\Credentials\Credentials;
 use Spryker\Zed\Kernel\AbstractBundleConfig;
 use SprykerEco\Shared\AmazonQuicksight\AmazonQuicksightConstants;
+use SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFilePathNotDefinedException;
 
 class AmazonQuicksightConfig extends AbstractBundleConfig
 {
@@ -53,6 +54,98 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
      * @var string
      */
     protected const QUICKSIGHT_API_VERSION = '2018-04-01';
+
+    /**
+     * @var string
+     */
+    protected const DEFAULT_ASSET_BUNDLE_IMPORT_JOB_ID = 'defaultAssetBundleImportJobId';
+
+    /**
+     * @var string
+     */
+    protected const ASSET_BUNDLE_IMPORT_JOB_STATUS_SUCCESSFUL = 'SUCCESSFUL';
+
+    /**
+     * @var string
+     */
+    protected const ASSET_BUNDLE_IMPORT_JOB_STATUS_FAILED = 'FAILED';
+
+    /**
+     * @var string
+     */
+    protected const ASSET_BUNDLE_IMPORT_JOB_STATUS_FAILED_ROLLBACK_COMPLETED = 'FAILED_ROLLBACK_COMPLETED';
+
+    /**
+     * @var string
+     */
+    protected const ASSET_BUNDLE_IMPORT_JOB_STATUS_FAILED_ROLLBACK_ERROR = 'FAILED_ROLLBACK_ERROR';
+
+    /**
+     * @link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_DescribeAssetBundleImportJob.html#API_DescribeAssetBundleImportJob_ResponseSyntax
+     *
+     * @var string
+     */
+    protected const DEFAULT_NEW_ASSET_BUNDLE_IMPORT_JOB_STATUS = 'QUEUED_FOR_IMMEDIATE_EXECUTION';
+
+    /**
+     * @var list<string>
+     */
+    protected const DEFAULT_ANALYSIS_PERMISSIONS_ACTIONS = [
+        'quicksight:RestoreAnalysis',
+        'quicksight:DescribeAnalysis',
+        'quicksight:DescribeAnalysisPermissions',
+        'quicksight:UpdateAnalysis',
+        'quicksight:UpdateAnalysisPermissions',
+        'quicksight:QueryAnalysis',
+        'quicksight:DeleteAnalysis',
+    ];
+
+    /**
+     * @var list<string>
+     */
+    protected const DEFAULT_DASHBOARD_PERMISSIONS_ACTIONS = [
+        'quicksight:DescribeDashboard',
+        'quicksight:DescribeDashboardPermissions',
+        'quicksight:ListDashboardVersions',
+        'quicksight:UpdateDashboard',
+        'quicksight:UpdateDashboardPermissions',
+        'quicksight:UpdateDashboardPublishedVersion',
+        'quicksight:QueryDashboard',
+        'quicksight:DeleteDashboard',
+    ];
+
+    /**
+     * @var list<string>
+     */
+    protected const DEFAULT_DATA_SET_PERMISSIONS_ACTIONS = [
+        'quicksight:DeleteDataSet',
+        'quicksight:ListIngestions',
+        'quicksight:UpdateDataSetPermissions',
+        'quicksight:CancelIngestion',
+        'quicksight:DescribeDataSetPermissions',
+        'quicksight:PassDataSet',
+        'quicksight:UpdateDataSet',
+        'quicksight:DescribeDataSet',
+        'quicksight:CreateIngestion',
+        'quicksight:DescribeIngestion',
+    ];
+
+    /**
+     * @var list<string>
+     */
+    protected const DEFAULT_DATA_SOURCE_PERMISSIONS_ACTIONS = [
+        'quicksight:DescribeDataSource',
+        'quicksight:DescribeDataSourcePermissions',
+        'quicksight:PassDataSource',
+        'quicksight:UpdateDataSource',
+        'quicksight:DeleteDataSource',
+        'quicksight:UpdateDataSourcePermissions',
+    ];
+
+    /**
+     * @var string
+     */
+    protected const DEFAULT_DATA_SOURCE_ID = 'SprykerDefaultDataSource';
 
     /**
      * Specification:
@@ -184,5 +277,210 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
             static::USER_STATUS_BLOCKED,
             static::USER_STATUS_DELETED,
         ];
+    }
+
+    /**
+     * Specification:
+     * - Returns the default asset bundle import job ID.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultAssetBundleImportJobId(): string
+    {
+        return static::DEFAULT_ASSET_BUNDLE_IMPORT_JOB_ID;
+    }
+
+    /**
+     * Specification:
+     * - Returns the list of statuses that indicate the completion of the asset bundle import job.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getAssetBundleImportJobCompletionStatuses(): array
+    {
+        return [
+            static::ASSET_BUNDLE_IMPORT_JOB_STATUS_SUCCESSFUL,
+            static::ASSET_BUNDLE_IMPORT_JOB_STATUS_FAILED,
+            static::ASSET_BUNDLE_IMPORT_JOB_STATUS_FAILED_ROLLBACK_COMPLETED,
+            static::ASSET_BUNDLE_IMPORT_JOB_STATUS_FAILED_ROLLBACK_ERROR,
+        ];
+    }
+
+    /**
+     * Specification:
+     * - Returns the path to the asset bundle import file.
+     *
+     * @api
+     *
+     * @throws \SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFilePathNotDefinedException
+     *
+     * @return string
+     */
+    public function getAssetBundleImportFilePath(): string
+    {
+        throw new AssetBundleImportFilePathNotDefinedException(
+            'Asset bundle import file path is not defined. You need to configure the asset bundle import file path
+            in your AmazonQuicksightConfig::getAssetBundleImportFilePath() to be able to import Quicksight asset bundle.',
+        );
+    }
+
+    /**
+     * Specification:
+     * - Returns the default status for new asset bundle import jobs.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultNewAssetBundleImportJobStatus(): string
+    {
+        return static::DEFAULT_NEW_ASSET_BUNDLE_IMPORT_JOB_STATUS;
+    }
+
+    /**
+     * Specification:
+     * - Returns the list of IAM actions to assign to the analysis during the default asset bundle import.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getDefaultAnalysisPermissionsActions(): array
+    {
+        return static::DEFAULT_ANALYSIS_PERMISSIONS_ACTIONS;
+    }
+
+    /**
+     * Specification:
+     * - Returns the list of IAM actions to assign to the dashboards during the default asset bundle import.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getDefaultDashboardPermissionsActions(): array
+    {
+        return static::DEFAULT_DASHBOARD_PERMISSIONS_ACTIONS;
+    }
+
+    /**
+     * Specification:
+     * - Returns the list of IAM actions to assign to the data sets during the default asset bundle import.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getDefaultDataSetPermissionsActions(): array
+    {
+        return static::DEFAULT_DATA_SET_PERMISSIONS_ACTIONS;
+    }
+
+    /**
+     * Specification:
+     * - Returns the list of IAM actions to assign to the data sources during the default asset bundle import.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getDefaultDataSourcePermissionsActions(): array
+    {
+        return static::DEFAULT_DATA_SOURCE_PERMISSIONS_ACTIONS;
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source ID.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourceId(): string
+    {
+        return static::DEFAULT_DATA_SOURCE_ID;
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source username.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourceUsername(): string
+    {
+        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_USERNAME);
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source password.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourcePassword(): string
+    {
+        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_PASSWORD);
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source database name.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourceDatabaseName(): string
+    {
+        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_DATABASE_NAME);
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source database port.
+     *
+     * @api
+     *
+     * @return int
+     */
+    public function getDefaultDataSourceDatabasePort(): int
+    {
+        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_DATABASE_PORT);
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source database host.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourceDatabaseHost(): string
+    {
+        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_DATABASE_HOST);
+    }
+
+    /**
+     * Specification:
+     * - Returns the default data source VPC connection ARN.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getDefaultDataSourceVpcConnectionArn(): string
+    {
+        return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_VPC_CONNECTION_ARN);
     }
 }

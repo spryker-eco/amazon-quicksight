@@ -7,6 +7,7 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Persistence;
 
+use Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer;
 use Generated\Shared\Transfer\QuicksightUserCollectionTransfer;
 use Generated\Shared\Transfer\QuicksightUserCriteriaTransfer;
 use Orm\Zed\AmazonQuicksight\Persistence\SpyQuicksightUserQuery;
@@ -60,6 +61,30 @@ class AmazonQuicksightRepository extends AbstractRepository implements AmazonQui
             ->mapQuicksightUserEntitiesToQuicksightUserCollectionTransfer(
                 $quicksightUserEntities,
                 $quicksightUserCollectionTransfer,
+            );
+    }
+
+    /**
+     * @param string $jobId
+     *
+     * @return \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer|null
+     */
+    public function findQuicksightAssetBundleImportJobByJobId(string $jobId): ?QuicksightAssetBundleImportJobTransfer
+    {
+        $quicksightAssetBundleImportJobEntity = $this->getFactory()
+            ->getQuicksightAssetBundleImportJobQuery()
+            ->filterByJobId($jobId)
+            ->findOne();
+
+        if ($quicksightAssetBundleImportJobEntity === null) {
+            return null;
+        }
+
+        return $this->getFactory()
+            ->createQuicksightAssetBundleImportJobMapper()
+            ->mapQuicksightAssetBundleImportJobEntityToQuicksightAssetBundleImportJobTransfer(
+                $quicksightAssetBundleImportJobEntity,
+                new QuicksightAssetBundleImportJobTransfer(),
             );
     }
 
