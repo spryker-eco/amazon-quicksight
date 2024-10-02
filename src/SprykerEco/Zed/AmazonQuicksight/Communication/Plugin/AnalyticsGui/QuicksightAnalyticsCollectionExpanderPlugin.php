@@ -9,7 +9,7 @@ namespace SprykerEco\Zed\AmazonQuicksight\Communication\Plugin\AnalyticsGui;
 
 use Generated\Shared\Transfer\AnalyticsCollectionTransfer;
 use Generated\Shared\Transfer\AnalyticsRequestTransfer;
-use Spryker\Zed\AnalyticsGuiExtension\Communication\Dependency\Plugin\AnalyticsCollectionExpanderPluginInterface;
+use Spryker\Zed\AnalyticsGuiExtension\Dependency\Plugin\AnalyticsCollectionExpanderPluginInterface;
 use Spryker\Zed\Kernel\Communication\AbstractPlugin;
 
 /**
