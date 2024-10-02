@@ -16,3 +16,5 @@ parameters:
         - '#Parameter \$.+ of method .+ has invalid typehint type Orm\\.+#'
         - '#Access to constant .+ on an unknown class .+Transfer#'
         - '#Call to method .+\(\) on an unknown class Generated\\Zed\\Ide\\AutoCompletion#'
+        - '#Parameter .+ of anonymous function has invalid typehint type .+Transfer#'
+        - '#Parameter \$request of method .+ has invalid typehint type Symfony\\Component\\HttpFoundation\\Request.#'
