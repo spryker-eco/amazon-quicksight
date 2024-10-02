@@ -33,6 +33,7 @@ class QuicksightAssetBundleImportJobUpdater implements QuicksightAssetBundleImpo
     protected AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager;
 
     /**
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface $amazonQuicksightApiClient
      * @param \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig $amazonQuicksightConfig
      * @param \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager
      */
