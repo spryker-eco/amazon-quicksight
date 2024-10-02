@@ -33,6 +33,13 @@ class AssetBundleQuicksightUserProcessor implements AssetBundleQuicksightUserPro
     protected const QUICKSIGHT_USER_ROLE_READER = 'READER';
 
     /**
+     * @var list<string>
+     */
+    protected const QUICKSIGHT_USER_ROLES_TO_UPDATE_TO_AUTHOR = [
+        self::QUICKSIGHT_USER_ROLE_READER,
+    ];
+
+    /**
      * @var \SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreatorInterface
      */
     protected QuicksightUserCreatorInterface $quicksightUserCreator;
@@ -83,7 +90,7 @@ class AssetBundleQuicksightUserProcessor implements AssetBundleQuicksightUserPro
             );
         }
 
-        if ($quicksightUserTransfer->getRole() === static::QUICKSIGHT_USER_ROLE_READER) {
+        if (in_array($quicksightUserTransfer->getRole(), static::QUICKSIGHT_USER_ROLES_TO_UPDATE_TO_AUTHOR)) {
             $userTransfer->getQuicksightUserOrFail()->setRole(static::QUICKSIGHT_USER_ROLE_AUTHOR);
             $quicksightUpdateUserResponseTransfer = $this->quicksightUserUpdater->updateQuicksightUser($userTransfer);
             $userTransfer->setQuicksightUser($quicksightUpdateUserResponseTransfer->getQuicksightUserOrFail());

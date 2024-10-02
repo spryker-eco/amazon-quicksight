@@ -31,6 +31,11 @@ class AnalyticsController extends AbstractController
     protected const URL_ANALYTICS = '/analytics-gui/analytics';
 
     /**
+     * @var string
+     */
+    protected const ERROR_MESSAGE_CSRF_TOKEN_INVALID = 'CSRF token is not valid';
+
+    /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|array<string, mixed>
@@ -47,7 +52,7 @@ class AnalyticsController extends AbstractController
         }
 
         if (!$enableAnalyticsForm->isValid()) {
-            $this->addErrorMessage('CSRF token is not valid');
+            $this->addErrorMessage(static::ERROR_MESSAGE_CSRF_TOKEN_INVALID);
         }
 
         $enableQuicksightAnalyticsResponseTransfer = $this->getFacade()->enableAnalytics(
@@ -80,7 +85,7 @@ class AnalyticsController extends AbstractController
         }
 
         if (!$resetAnalyticsForm->isValid()) {
-            $this->addErrorMessage('CSRF token is not valid');
+            $this->addErrorMessage(static::ERROR_MESSAGE_CSRF_TOKEN_INVALID);
         }
 
         $resetQuicksightAnalyticsResponseTransfer = $this->getFacade()->resetAnalytics(

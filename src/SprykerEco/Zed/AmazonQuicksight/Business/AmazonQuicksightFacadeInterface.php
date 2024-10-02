@@ -86,7 +86,7 @@ interface AmazonQuicksightFacadeInterface
      * - Renders a Quicksight analytics template.
      * - Creates `AnalyticsTransfer` and populates `AnalyticsTransfer.content` with the rendered content.
      * - Adds the newly introduced `AnalyticsTransfer` to `AnalyticsCollectionTransfer.analyticsList`.
-     * - If the provided user not able to reset the Analytics expands AnalyticsCollectionTransfer.analyticsActions with the reset action.
+     * - If the provided user is allowed to reset the Analytics expands `AnalyticsCollectionTransfer.analyticsActions` with the reset action.
      *
      * @api
      *

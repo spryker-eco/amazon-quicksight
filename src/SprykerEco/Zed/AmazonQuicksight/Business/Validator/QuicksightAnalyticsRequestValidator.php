@@ -36,6 +36,13 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
     protected const QUICKSIGHT_USER_ROLE_AUTHOR = 'AUTHOR';
 
     /**
+     * @var list<string>
+     */
+    protected const QUICKSIGHT_USER_AUTHOR_ROLES = [
+        self::QUICKSIGHT_USER_ROLE_AUTHOR,
+    ];
+
+    /**
      * @var \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig
      */
     protected AmazonQuicksightConfig $amazonQuicksightConfig;
@@ -162,6 +169,6 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
      */
     protected function isQuicksightUserAuthor(?QuicksightUserTransfer $quicksightUserTransfer): bool
     {
-        return $quicksightUserTransfer && $quicksightUserTransfer->getRole() === static::QUICKSIGHT_USER_ROLE_AUTHOR;
+        return $quicksightUserTransfer && in_array($quicksightUserTransfer->getRole(), static::QUICKSIGHT_USER_AUTHOR_ROLES);
     }
 }
