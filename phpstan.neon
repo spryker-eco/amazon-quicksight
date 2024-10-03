@@ -18,3 +18,4 @@ parameters:
         - '#Call to method .+\(\) on an unknown class Generated\\Zed\\Ide\\AutoCompletion#'
         - '#Parameter .+ of anonymous function has invalid typehint type .+Transfer#'
         - '#Parameter \$request of method .+ has invalid typehint type Symfony\\Component\\HttpFoundation\\Request.#'
+        - '#Parameter .+ has invalid type .+Transfer#'
