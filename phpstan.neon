@@ -20,3 +20,4 @@ parameters:
         - '#Parameter \$request of method .+ has invalid typehint type Symfony\\Component\\HttpFoundation\\Request.#'
         - '#Parameter .+ has invalid type .+Transfer#'
         - '#Method .+ has invalid return type .+Transfer#'
+        - '#Method .+ has invalid return type .+Query#'
