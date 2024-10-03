@@ -91,6 +91,10 @@ class QuicksightAssetBundleImportJobSynchronizer implements QuicksightAssetBundl
             return $quicksightAssetBundleImportJobTransfer;
         }
 
+        if ($quicksightAssetBundleImportJobTransfer === null) {
+            return null;
+        }
+
         $quicksightDescribeAssetBundleImportJobResponseTransfer = $this->amazonQuicksightApiClient
             ->describeAssetBundleImportJob($defaultAssetBundleImportJobId);
 
