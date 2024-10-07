@@ -7,19 +7,15 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business\ApiClient;
 
-use Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\QuicksightDeleteUserResponseTransfer;
-use Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightListUsersResponseTransfer;
-use Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUpdateUserResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUserRegisterResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
-use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 
-interface AmazonQuicksightApiClientInterface
+interface UserAmazonQuicksightApiClientInterface
 {
     /**
      * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
@@ -62,31 +58,4 @@ interface AmazonQuicksightApiClientInterface
      * @return \Generated\Shared\Transfer\QuicksightUpdateUserResponseTransfer
      */
     public function updateUser(UserTransfer $userTransfer): QuicksightUpdateUserResponseTransfer;
-
-    /**
-     * @param \Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobResponseTransfer
-     */
-    public function startAssetBundleImportJobByEnableQuicksightAnalyticsRequest(
-        EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
-    ): QuicksightStartAssetBundleImportJobResponseTransfer;
-
-    /**
-     * @param \Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobResponseTransfer
-     */
-    public function startAssetBundleImportJobByResetQuicksightAnalyticsRequest(
-        ResetQuicksightAnalyticsRequestTransfer $resetQuicksightAnalyticsRequestTransfer
-    ): QuicksightStartAssetBundleImportJobResponseTransfer;
-
-    /**
-     * @param string $assetBundleImportJobId
-     *
-     * @return \Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTransfer
-     */
-    public function describeAssetBundleImportJob(
-        string $assetBundleImportJobId
-    ): QuicksightDescribeAssetBundleImportJobResponseTransfer;
 }

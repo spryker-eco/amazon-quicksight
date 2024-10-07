@@ -33,28 +33,28 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
     protected const SERVICE_TWIG = 'twig';
 
     /**
-     * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClient::ERROR_MESSAGE_DESCRIBE_ASSET_BUNDLE_IMPORT_JOB_FAILED
+     * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AssetBundleAmazonQuicksightApiClient::ERROR_MESSAGE_DESCRIBE_ASSET_BUNDLE_IMPORT_JOB_FAILED
      *
      * @var string
      */
     protected const ERROR_MESSAGE_DESCRIBE_ASSET_BUNDLE_IMPORT_JOB_FAILED = 'Failed to sync asset bundle import job list.';
 
     /**
-     * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClient::ERROR_MESSAGE_EMBED_URL_GENERATION_FAILED
+     * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClient::ERROR_MESSAGE_EMBED_URL_GENERATION_FAILED
      *
      * @var string
      */
     protected const ERROR_MESSAGE_EMBED_URL_GENERATION_FAILED = 'Failed to generate embed URL.';
 
     /**
-     * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClient::RESPONSE_KEY_EMBED_URL
+     * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClient::RESPONSE_KEY_EMBED_URL
      *
      * @var string
      */
     protected const RESPONSE_KEY_EMBED_URL = 'EmbedUrl';
 
     /**
-     * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClient::RESPONSE_KEY_JOB_STATUS
+     * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AssetBundleAmazonQuicksightApiClient::RESPONSE_KEY_JOB_STATUS
      *
      * @var string
      */

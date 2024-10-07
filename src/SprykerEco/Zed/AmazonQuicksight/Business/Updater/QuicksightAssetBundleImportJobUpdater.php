@@ -12,15 +12,15 @@ use Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsResponseTransfer;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
-use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AssetBundleAmazonQuicksightApiClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface;
 
 class QuicksightAssetBundleImportJobUpdater implements QuicksightAssetBundleImportJobUpdaterInterface
 {
     /**
-     * @var \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AssetBundleAmazonQuicksightApiClientInterface
      */
-    protected AmazonQuicksightApiClientInterface $amazonQuicksightApiClient;
+    protected AssetBundleAmazonQuicksightApiClientInterface $assetBundleAmazonQuicksightApiClient;
 
     /**
      * @var \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig
@@ -33,16 +33,16 @@ class QuicksightAssetBundleImportJobUpdater implements QuicksightAssetBundleImpo
     protected AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager;
 
     /**
-     * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface $amazonQuicksightApiClient
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AssetBundleAmazonQuicksightApiClientInterface $assetBundleAmazonQuicksightApiClient
      * @param \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig $amazonQuicksightConfig
      * @param \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager
      */
     public function __construct(
-        AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
+        AssetBundleAmazonQuicksightApiClientInterface $assetBundleAmazonQuicksightApiClient,
         AmazonQuicksightConfig $amazonQuicksightConfig,
         AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager
     ) {
-        $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
+        $this->assetBundleAmazonQuicksightApiClient = $assetBundleAmazonQuicksightApiClient;
         $this->amazonQuicksightConfig = $amazonQuicksightConfig;
         $this->amazonQuicksightEntityManager = $amazonQuicksightEntityManager;
     }
@@ -57,7 +57,7 @@ class QuicksightAssetBundleImportJobUpdater implements QuicksightAssetBundleImpo
     ): ResetQuicksightAnalyticsResponseTransfer {
         $resetQuicksightAnalyticsResponseTransfer = new ResetQuicksightAnalyticsResponseTransfer();
 
-        $quicksightStartAssetBundleImportJobResponseTransfer = $this->amazonQuicksightApiClient
+        $quicksightStartAssetBundleImportJobResponseTransfer = $this->assetBundleAmazonQuicksightApiClient
             ->startAssetBundleImportJobByResetQuicksightAnalyticsRequest($resetQuicksightAnalyticsRequestTransfer);
 
         if ($quicksightStartAssetBundleImportJobResponseTransfer->getErrors()->count() !== 0) {

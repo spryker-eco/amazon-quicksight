@@ -30,7 +30,7 @@ use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester;
 class DeleteNotMatchedQuicksightUsersTest extends Unit
 {
     /**
-     * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClient::RESPONSE_KEY_USER_LIST
+     * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClient::RESPONSE_KEY_USER_LIST
      *
      * @var string
      */
@@ -61,7 +61,7 @@ class DeleteNotMatchedQuicksightUsersTest extends Unit
     protected const ERROR_MESSAGE_QUICKSIGHT_API_FAILURE = 'An internal failure occurred.';
 
     /**
-     * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClient::ERROR_MESSAGE_USERS_LIST_RETRIEVE_FAILED
+     * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClient::ERROR_MESSAGE_USERS_LIST_RETRIEVE_FAILED
      *
      * @var string
      */

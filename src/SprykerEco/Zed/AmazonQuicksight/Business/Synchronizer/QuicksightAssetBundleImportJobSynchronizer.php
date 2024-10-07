@@ -9,7 +9,7 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business\Synchronizer;
 
 use Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
-use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AssetBundleAmazonQuicksightApiClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsRequestValidatorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface;
@@ -23,9 +23,9 @@ class QuicksightAssetBundleImportJobSynchronizer implements QuicksightAssetBundl
     protected const ASSET_BUNDLE_IMPORT_JOB_STATUS_SUCCESSFUL = 'SUCCESSFUL';
 
     /**
-     * @var \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AssetBundleAmazonQuicksightApiClientInterface
      */
-    protected AmazonQuicksightApiClientInterface $amazonQuicksightApiClient;
+    protected AssetBundleAmazonQuicksightApiClientInterface $assetBundleAmazonQuicksightApiClient;
 
     /**
      * @var \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig
@@ -53,7 +53,7 @@ class QuicksightAssetBundleImportJobSynchronizer implements QuicksightAssetBundl
     protected AmazonQuicksightMapperInterface $amazonQuicksightMapper;
 
     /**
-     * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface $amazonQuicksightApiClient
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AssetBundleAmazonQuicksightApiClientInterface $assetBundleAmazonQuicksightApiClient
      * @param \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig $amazonQuicksightConfig
      * @param \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager
      * @param \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface $amazonQuicksightRepository
@@ -61,14 +61,14 @@ class QuicksightAssetBundleImportJobSynchronizer implements QuicksightAssetBundl
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Mapper\AmazonQuicksightMapperInterface $amazonQuicksightMapper
      */
     public function __construct(
-        AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
+        AssetBundleAmazonQuicksightApiClientInterface $assetBundleAmazonQuicksightApiClient,
         AmazonQuicksightConfig $amazonQuicksightConfig,
         AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager,
         AmazonQuicksightRepositoryInterface $amazonQuicksightRepository,
         QuicksightAnalyticsRequestValidatorInterface $quicksightAnalyticsRequestValidator,
         AmazonQuicksightMapperInterface $amazonQuicksightMapper
     ) {
-        $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
+        $this->assetBundleAmazonQuicksightApiClient = $assetBundleAmazonQuicksightApiClient;
         $this->amazonQuicksightConfig = $amazonQuicksightConfig;
         $this->amazonQuicksightEntityManager = $amazonQuicksightEntityManager;
         $this->amazonQuicksightRepository = $amazonQuicksightRepository;
@@ -95,7 +95,7 @@ class QuicksightAssetBundleImportJobSynchronizer implements QuicksightAssetBundl
             return null;
         }
 
-        $quicksightDescribeAssetBundleImportJobResponseTransfer = $this->amazonQuicksightApiClient
+        $quicksightDescribeAssetBundleImportJobResponseTransfer = $this->assetBundleAmazonQuicksightApiClient
             ->describeAssetBundleImportJob($defaultAssetBundleImportJobId);
 
         if ($quicksightDescribeAssetBundleImportJobResponseTransfer->getJobStatus() === null) {

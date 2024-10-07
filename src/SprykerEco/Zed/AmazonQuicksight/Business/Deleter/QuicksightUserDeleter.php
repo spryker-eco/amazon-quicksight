@@ -13,7 +13,7 @@ use Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Spryker\Zed\Kernel\Persistence\EntityManager\TransactionTrait;
-use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilterInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Matcher\QuicksightUserMatcherInterface;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface;
@@ -44,9 +44,9 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
     protected AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager;
 
     /**
-     * @var \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClientInterface
      */
-    protected AmazonQuicksightApiClientInterface $amazonQuicksightApiClient;
+    protected UserAmazonQuicksightApiClientInterface $userAmazonQuicksightApiClient;
 
     /**
      * @var \SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface
@@ -57,20 +57,20 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilterInterface $userCollectionFilter
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Matcher\QuicksightUserMatcherInterface $quicksightUserMatcher
      * @param \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager
-     * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface $amazonQuicksightApiClient
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClientInterface $userAmazonQuicksightApiClient
      * @param \SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface $messengerFacade
      */
     public function __construct(
         UserCollectionFilterInterface $userCollectionFilter,
         QuicksightUserMatcherInterface $quicksightUserMatcher,
         AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager,
-        AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
+        UserAmazonQuicksightApiClientInterface $userAmazonQuicksightApiClient,
         AmazonQuicksightToMessengerFacadeInterface $messengerFacade
     ) {
         $this->userCollectionFilter = $userCollectionFilter;
         $this->quicksightUserMatcher = $quicksightUserMatcher;
         $this->amazonQuicksightEntityManager = $amazonQuicksightEntityManager;
-        $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
+        $this->userAmazonQuicksightApiClient = $userAmazonQuicksightApiClient;
         $this->messengerFacade = $messengerFacade;
     }
 
@@ -105,7 +105,7 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
     {
         $quicksightUserCollectionResponseTransfer = new QuicksightUserCollectionResponseTransfer();
 
-        $quicksightListUsersResponseTransfer = $this->amazonQuicksightApiClient->listUsers();
+        $quicksightListUsersResponseTransfer = $this->userAmazonQuicksightApiClient->listUsers();
         if ($quicksightListUsersResponseTransfer->getErrors()->count() !== 0) {
             return $quicksightUserCollectionResponseTransfer->setErrors(
                 $quicksightListUsersResponseTransfer->getErrors(),
@@ -143,7 +143,7 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
     ): UserCollectionResponseTransfer {
         $userIdsToDelete = [];
         foreach ($userTransfers as $entityIdentifier => $userTransfer) {
-            $quicksightDeleteUserResponseTransfer = $this->amazonQuicksightApiClient->deleteUserByUsername($userTransfer);
+            $quicksightDeleteUserResponseTransfer = $this->userAmazonQuicksightApiClient->deleteUserByUsername($userTransfer);
             if ($quicksightDeleteUserResponseTransfer->getErrors()->count() !== 0) {
                 $userCollectionResponseTransfer = $this->addErrorsToUserCollectionResponse(
                     $userCollectionResponseTransfer,
@@ -176,7 +176,7 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
         QuicksightUserTransfer $quicksightUserTransfer,
         QuicksightUserCollectionResponseTransfer $quicksightUserCollectionResponseTransfer
     ): QuicksightUserCollectionResponseTransfer {
-        $quicksightDeleteUserResponseTransfer = $this->amazonQuicksightApiClient->deleteUserByPrincipalId(
+        $quicksightDeleteUserResponseTransfer = $this->userAmazonQuicksightApiClient->deleteUserByPrincipalId(
             $quicksightUserTransfer,
         );
 

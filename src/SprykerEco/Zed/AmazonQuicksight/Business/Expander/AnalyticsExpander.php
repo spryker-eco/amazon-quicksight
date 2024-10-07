@@ -16,7 +16,7 @@ use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
-use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Synchronizer\QuicksightAssetBundleImportJobSynchronizerInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsRequestValidatorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface;
@@ -45,9 +45,9 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
     protected AmazonQuicksightConfig $amazonQuicksightConfig;
 
     /**
-     * @var \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClientInterface
      */
-    protected AmazonQuicksightApiClientInterface $amazonQuicksightApiClient;
+    protected UserAmazonQuicksightApiClientInterface $userAmazonQuicksightApiClient;
 
     /**
      * @var \SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsRequestValidatorInterface
@@ -67,7 +67,7 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
     /**
      * @param \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface $amazonQuicksightRepository
      * @param \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig $amazonQuicksightConfig
-     * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface $amazonQuicksightApiClient
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClientInterface $userAmazonQuicksightApiClient
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsRequestValidatorInterface $quicksightAnalyticsRequestValidator
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Synchronizer\QuicksightAssetBundleImportJobSynchronizerInterface $quicksightAssetBundleImportJobSynchronizer
      * @param \Twig\Environment $twigEnvironment
@@ -75,14 +75,14 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
     public function __construct(
         AmazonQuicksightRepositoryInterface $amazonQuicksightRepository,
         AmazonQuicksightConfig $amazonQuicksightConfig,
-        AmazonQuicksightApiClientInterface $amazonQuicksightApiClient,
+        UserAmazonQuicksightApiClientInterface $userAmazonQuicksightApiClient,
         QuicksightAnalyticsRequestValidatorInterface $quicksightAnalyticsRequestValidator,
         QuicksightAssetBundleImportJobSynchronizerInterface $quicksightAssetBundleImportJobSynchronizer,
         Environment $twigEnvironment
     ) {
         $this->amazonQuicksightRepository = $amazonQuicksightRepository;
         $this->amazonQuicksightConfig = $amazonQuicksightConfig;
-        $this->amazonQuicksightApiClient = $amazonQuicksightApiClient;
+        $this->userAmazonQuicksightApiClient = $userAmazonQuicksightApiClient;
         $this->quicksightAnalyticsRequestValidator = $quicksightAnalyticsRequestValidator;
         $this->quicksightAssetBundleImportJobSynchronizer = $quicksightAssetBundleImportJobSynchronizer;
         $this->twigEnvironment = $twigEnvironment;
@@ -211,6 +211,6 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
             return new QuicksightGenerateEmbedUrlResponseTransfer();
         }
 
-        return $this->amazonQuicksightApiClient->generateEmbedUrlForRegisteredUser($quicksightUserTransfer);
+        return $this->userAmazonQuicksightApiClient->generateEmbedUrlForRegisteredUser($quicksightUserTransfer);
     }
 }

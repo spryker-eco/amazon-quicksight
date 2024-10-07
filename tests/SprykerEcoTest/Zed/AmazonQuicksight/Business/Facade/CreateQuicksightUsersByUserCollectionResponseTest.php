@@ -48,7 +48,7 @@ class CreateQuicksightUsersByUserCollectionResponseTest extends Unit
     protected const ERROR_MESSAGE_QUICKSIGHT_USER_REGISTER_FAILURE = 'An internal failure occurred.';
 
     /**
-     * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClient::ERROR_MESSAGE_USER_REGISTRATION_FAILED
+     * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClient::ERROR_MESSAGE_USER_REGISTRATION_FAILED
      *
      * @var string
      */

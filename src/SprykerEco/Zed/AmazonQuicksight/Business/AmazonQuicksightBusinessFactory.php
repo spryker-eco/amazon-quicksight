@@ -9,8 +9,10 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business;
 
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
-use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClient;
-use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AssetBundleAmazonQuicksightApiClient;
+use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AssetBundleAmazonQuicksightApiClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClient;
+use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightAssetBundleImportJobCreator;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightAssetBundleImportJobCreatorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreator;
@@ -78,7 +80,7 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
             $this->createUserCollectionFilter(),
             $this->createQuicksightUserMatcher(),
             $this->getEntityManager(),
-            $this->createAmazonQuicksightApiClient(),
+            $this->createUserAmazonQuicksightApiClient(),
             $this->getMessengerFacade(),
         );
     }
@@ -88,7 +90,7 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
      */
     public function createQuicksightUserUpdater(): QuicksightUserUpdaterInterface
     {
-        return new QuicksightUserUpdater($this->createAmazonQuicksightApiClient(), $this->getEntityManager());
+        return new QuicksightUserUpdater($this->createUserAmazonQuicksightApiClient(), $this->getEntityManager());
     }
 
     /**
@@ -100,7 +102,7 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
             $this->createUserCollectionFilter(),
             $this->createQuicksightUserMatcher(),
             $this->getEntityManager(),
-            $this->createAmazonQuicksightApiClient(),
+            $this->createUserAmazonQuicksightApiClient(),
             $this->getMessengerFacade(),
         );
     }
@@ -156,11 +158,24 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AmazonQuicksightApiClientInterface
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClientInterface
      */
-    public function createAmazonQuicksightApiClient(): AmazonQuicksightApiClientInterface
+    public function createUserAmazonQuicksightApiClient(): UserAmazonQuicksightApiClientInterface
     {
-        return new AmazonQuicksightApiClient(
+        return new UserAmazonQuicksightApiClient(
+            $this->getConfig(),
+            $this->createAmazonQuicksightMapper(),
+            $this->createAmazonQuicksightRequestDataFormatter(),
+            $this->getAwsQuicksightClient(),
+        );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AssetBundleAmazonQuicksightApiClientInterface
+     */
+    public function createAssetBundleAmazonQuicksightApiClient(): AssetBundleAmazonQuicksightApiClientInterface
+    {
+        return new AssetBundleAmazonQuicksightApiClient(
             $this->getConfig(),
             $this->createAmazonQuicksightMapper(),
             $this->createAmazonQuicksightRequestDataFormatter(),
@@ -192,7 +207,7 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
         return new AnalyticsExpander(
             $this->getRepository(),
             $this->getConfig(),
-            $this->createAmazonQuicksightApiClient(),
+            $this->createUserAmazonQuicksightApiClient(),
             $this->createQuicksightAnalyticsRequestValidator(),
             $this->createQuicksightAssetBundleImportJobSynchronizer(),
             $this->getTwigEnvironment(),
@@ -240,7 +255,7 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     public function createQuicksightAssetBundleImportJobSynchronizer(): QuicksightAssetBundleImportJobSynchronizerInterface
     {
         return new QuicksightAssetBundleImportJobSynchronizer(
-            $this->createAmazonQuicksightApiClient(),
+            $this->createAssetBundleAmazonQuicksightApiClient(),
             $this->getConfig(),
             $this->getEntityManager(),
             $this->getRepository(),
@@ -263,7 +278,7 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     public function createQuicksightAssetBundleImportJobCreator(): QuicksightAssetBundleImportJobCreatorInterface
     {
         return new QuicksightAssetBundleImportJobCreator(
-            $this->createAmazonQuicksightApiClient(),
+            $this->createAssetBundleAmazonQuicksightApiClient(),
             $this->getConfig(),
             $this->getEntityManager(),
             $this->createQuicksightAssetBundleImportJobUpdater(),
@@ -276,7 +291,7 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     public function createQuicksightAssetBundleImportJobUpdater(): QuicksightAssetBundleImportJobUpdaterInterface
     {
         return new QuicksightAssetBundleImportJobUpdater(
-            $this->createAmazonQuicksightApiClient(),
+            $this->createAssetBundleAmazonQuicksightApiClient(),
             $this->getConfig(),
             $this->getEntityManager(),
         );
