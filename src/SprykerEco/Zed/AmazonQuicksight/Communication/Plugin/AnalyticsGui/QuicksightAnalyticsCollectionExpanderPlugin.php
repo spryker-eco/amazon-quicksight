@@ -23,11 +23,11 @@ class QuicksightAnalyticsCollectionExpanderPlugin extends AbstractPlugin impleme
      * {@inheritDoc}
      * - Requires `AnalyticsRequestTransfer.user` to be set.
      * - Requires `AnalyticsRequestTransfer.user.idUser` to be set.
-     * - If Quicksight user with the provided user ID does not exist in DB returns `AnalyticsCollectionTransfer` without any changes.
-     * - Otherwise sends request to AWS API to generate an embed URL for a registered Quicksight user. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_GenerateEmbedUrlForRegisteredUser.html}.
-     * - Renders a Quicksight analytics template with the generated embed URL.
+     * - If the provided user is able to see the Analytics sends request to AWS API to generate an embed URL for a registered Quicksight user. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_GenerateEmbedUrlForRegisteredUser.html}.
+     * - Renders a Quicksight analytics template.
      * - Creates `AnalyticsTransfer` and populates `AnalyticsTransfer.content` with the rendered content.
      * - Adds the newly introduced `AnalyticsTransfer` to `AnalyticsCollectionTransfer.analyticsList`.
+     * - If the provided user is allowed to reset the Analytics expands `AnalyticsCollectionTransfer.analyticsActions` with the reset action.
      *
      * @api
      *

@@ -27,7 +27,7 @@ class QuicksightUserPostCreatePlugin extends AbstractPlugin implements UserPostC
      * - Uses {@link \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::getUserStatusesApplicableForQuicksightUserRegistration()} to get a list of user statuses applicable for registering a Quicksight user.
      * - Sends request to AWS API to register Quicksight users. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_RegisterUser.html}.
      * - Adds errors to `UserCollectionResponseTransfer.errors` if Quicksight user registration failed.
-     * - Persists successfully registered Quicksight users in the database.
+     * - Persists successfully registered Quicksight users to persistence.
      * - Returns `UserCollectionResponseTransfer` with updated `UserTransfers`.
      *
      * @api

@@ -7,12 +7,12 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business\Deleter;
 
-use ArrayObject;
 use Generated\Shared\Transfer\MessageTransfer;
 use Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Spryker\Zed\Kernel\Persistence\EntityManager\TransactionTrait;
+use SprykerEco\Zed\AmazonQuicksight\Business\Adder\ErrorAdderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilterInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Matcher\QuicksightUserMatcherInterface;
@@ -54,24 +54,32 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
     protected AmazonQuicksightToMessengerFacadeInterface $messengerFacade;
 
     /**
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Adder\ErrorAdderInterface
+     */
+    protected ErrorAdderInterface $errorAdder;
+
+    /**
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilterInterface $userCollectionFilter
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Matcher\QuicksightUserMatcherInterface $quicksightUserMatcher
      * @param \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClientInterface $userAmazonQuicksightApiClient
      * @param \SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface $messengerFacade
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Adder\ErrorAdderInterface $errorAdder
      */
     public function __construct(
         UserCollectionFilterInterface $userCollectionFilter,
         QuicksightUserMatcherInterface $quicksightUserMatcher,
         AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager,
         UserAmazonQuicksightApiClientInterface $userAmazonQuicksightApiClient,
-        AmazonQuicksightToMessengerFacadeInterface $messengerFacade
+        AmazonQuicksightToMessengerFacadeInterface $messengerFacade,
+        ErrorAdderInterface $errorAdder
     ) {
         $this->userCollectionFilter = $userCollectionFilter;
         $this->quicksightUserMatcher = $quicksightUserMatcher;
         $this->amazonQuicksightEntityManager = $amazonQuicksightEntityManager;
         $this->userAmazonQuicksightApiClient = $userAmazonQuicksightApiClient;
         $this->messengerFacade = $messengerFacade;
+        $this->errorAdder = $errorAdder;
     }
 
     /**
@@ -145,7 +153,7 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
         foreach ($userTransfers as $entityIdentifier => $userTransfer) {
             $quicksightDeleteUserResponseTransfer = $this->userAmazonQuicksightApiClient->deleteUserByUsername($userTransfer);
             if ($quicksightDeleteUserResponseTransfer->getErrors()->count() !== 0) {
-                $userCollectionResponseTransfer = $this->addErrorsToUserCollectionResponse(
+                $userCollectionResponseTransfer = $this->errorAdder->addErrorsToUserCollectionResponse(
                     $userCollectionResponseTransfer,
                     $quicksightDeleteUserResponseTransfer->getErrors(),
                     (string)$entityIdentifier,
@@ -181,7 +189,7 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
         );
 
         if ($quicksightDeleteUserResponseTransfer->getErrors()->count() !== 0) {
-            return $this->addErrorsToQuicksightUserCollectionResponse(
+            return $this->errorAdder->addErrorsToQuicksightUserCollectionResponse(
                 $quicksightUserCollectionResponseTransfer,
                 $quicksightDeleteUserResponseTransfer->getErrors(),
             );
@@ -190,42 +198,5 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
         $quicksightUserCollectionResponseTransfer->addQuicksightUser($quicksightUserTransfer);
 
         return $quicksightUserCollectionResponseTransfer;
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer $quicksightUserCollectionResponseTransfer
-     * @param \ArrayObject<array-key, \Generated\Shared\Transfer\ErrorTransfer> $errorTransfers
-     *
-     * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
-     */
-    protected function addErrorsToQuicksightUserCollectionResponse(
-        QuicksightUserCollectionResponseTransfer $quicksightUserCollectionResponseTransfer,
-        ArrayObject $errorTransfers
-    ): QuicksightUserCollectionResponseTransfer {
-        foreach ($errorTransfers as $errorTransfer) {
-            $quicksightUserCollectionResponseTransfer->addError($errorTransfer);
-        }
-
-        return $quicksightUserCollectionResponseTransfer;
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\UserCollectionResponseTransfer $userCollectionResponseTransfer
-     * @param \ArrayObject<array-key, \Generated\Shared\Transfer\ErrorTransfer> $errorTransfers
-     * @param string $entityIdentifier
-     *
-     * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
-     */
-    protected function addErrorsToUserCollectionResponse(
-        UserCollectionResponseTransfer $userCollectionResponseTransfer,
-        ArrayObject $errorTransfers,
-        string $entityIdentifier
-    ): UserCollectionResponseTransfer {
-        foreach ($errorTransfers as $errorTransfer) {
-            $errorTransfer->setEntityIdentifier($entityIdentifier);
-            $userCollectionResponseTransfer->addError($errorTransfer);
-        }
-
-        return $userCollectionResponseTransfer;
     }
 }

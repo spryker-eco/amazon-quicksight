@@ -20,9 +20,9 @@ class QuicksightUserExpanderPlugin extends AbstractPlugin implements UserExpande
 {
     /**
      * {@inheritDoc}
+     * - Requires `UserTransfer.idUser` for each user in `UserCollectionTransfer` to be set.
      * - Iterates over `UserCollectionTransfer.users`.
-     * - Requires `UserTransfer.idUser` for each user in collection to be set.
-     * - Finds Quicksight users by `UserTransfer.idUser` in DB.
+     * - Finds Quicksight users by `UserTransfer.idUser` in persistence.
      * - Populates `UserTransfer.quicksightUser` in collection with found Quicksight users.
      *
      * @api

@@ -9,6 +9,8 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business;
 
 use Spryker\Zed\Kernel\Business\AbstractBusinessFactory;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
+use SprykerEco\Zed\AmazonQuicksight\Business\Adder\ErrorAdder;
+use SprykerEco\Zed\AmazonQuicksight\Business\Adder\ErrorAdderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AssetBundleAmazonQuicksightApiClient;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\AssetBundleAmazonQuicksightApiClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClient;
@@ -82,6 +84,7 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
             $this->getEntityManager(),
             $this->createUserAmazonQuicksightApiClient(),
             $this->getMessengerFacade(),
+            $this->createErrorAdder(),
         );
     }
 
@@ -104,6 +107,7 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
             $this->getEntityManager(),
             $this->createUserAmazonQuicksightApiClient(),
             $this->getMessengerFacade(),
+            $this->createErrorAdder(),
         );
     }
 
@@ -295,6 +299,14 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
             $this->getConfig(),
             $this->getEntityManager(),
         );
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Adder\ErrorAdderInterface
+     */
+    public function createErrorAdder(): ErrorAdderInterface
+    {
+        return new ErrorAdder();
     }
 
     /**
