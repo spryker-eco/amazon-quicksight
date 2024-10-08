@@ -29,20 +29,6 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
     protected const ERROR_MESSAGE_RESET_ANALYTICS_FAILED = 'Failed to reset the analytics';
 
     /**
-     * @uses \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::QUICKSIGHT_USER_ROLE_AUTHOR
-     *
-     * @var string
-     */
-    protected const QUICKSIGHT_USER_ROLE_AUTHOR = 'AUTHOR';
-
-    /**
-     * @var list<string>
-     */
-    protected const QUICKSIGHT_USER_AUTHOR_ROLES = [
-        self::QUICKSIGHT_USER_ROLE_AUTHOR,
-    ];
-
-    /**
      * @var \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig
      */
     protected AmazonQuicksightConfig $amazonQuicksightConfig;
@@ -169,6 +155,6 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
      */
     protected function isQuicksightUserAuthor(?QuicksightUserTransfer $quicksightUserTransfer): bool
     {
-        return $quicksightUserTransfer && in_array($quicksightUserTransfer->getRole(), static::QUICKSIGHT_USER_AUTHOR_ROLES);
+        return $quicksightUserTransfer && in_array($quicksightUserTransfer->getRole(), $this->amazonQuicksightConfig->getQuicksightUserAuthorRoles());
     }
 }

@@ -50,6 +50,13 @@ class UserAmazonQuicksightApiClient implements UserAmazonQuicksightApiClientInte
     protected const RESPONSE_KEY_USER_LIST = 'UserList';
 
     /**
+     * @link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ListUsers.html#QS-ListUsers-response-NextToken
+     *
+     * @var string
+     */
+    protected const RESPONSE_KEY_NEXT_TOKEN = 'NextToken';
+
+    /**
      * @link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_GenerateEmbedUrlForRegisteredUser.html#API_GenerateEmbedUrlForRegisteredUser_ResponseSyntax
      *
      * @var string
@@ -258,35 +265,42 @@ class UserAmazonQuicksightApiClient implements UserAmazonQuicksightApiClientInte
      */
     public function listUsers(): QuicksightListUsersResponseTransfer
     {
-        $quicksightListUsersRequestDataTransfer = $this->createQuicksightListUsersRequestDataTransfer();
         $quicksightListUsersResponseTransfer = new QuicksightListUsersResponseTransfer();
+        $quicksightListUsersRequestDataTransfer = $this->createQuicksightListUsersRequestDataTransfer();
+        $nextToken = null;
 
-        $requestData = $this->amazonQuicksightRequestDataFormatter->formatRequestData(
-            $quicksightListUsersRequestDataTransfer->toArray(true, true),
-        );
+        do {
+            $quicksightListUsersRequestDataTransfer->setNextToken($nextToken ?? null);
 
-        try {
-            $result = $this->amazonQuicksightToAwsQuicksightClient->listUsers($requestData);
-        } catch (QuickSightException $quickSightException) {
-            return $quicksightListUsersResponseTransfer->addError(
-                (new ErrorTransfer())->setMessage($quickSightException->getAwsErrorMessage()),
-            );
-        }
-
-        if (!$result->hasKey(static::RESPONSE_KEY_USER_LIST)) {
-            return $quicksightListUsersResponseTransfer->addError(
-                (new ErrorTransfer())->setMessage(static::ERROR_MESSAGE_USERS_LIST_RETRIEVE_FAILED),
-            );
-        }
-
-        foreach ($result->get(static::RESPONSE_KEY_USER_LIST) as $quicksightUserData) {
-            $quicksightUser = $this->amazonQuicksightMapper->mapQuicksightUserDataToQuicksightUserTransfer(
-                $quicksightUserData,
-                new QuicksightUserTransfer(),
+            $requestData = $this->amazonQuicksightRequestDataFormatter->formatRequestData(
+                $quicksightListUsersRequestDataTransfer->toArray(true, true),
             );
 
-            $quicksightListUsersResponseTransfer->addQuicksightUser($quicksightUser);
-        }
+            try {
+                $result = $this->amazonQuicksightToAwsQuicksightClient->listUsers($requestData);
+            } catch (QuickSightException $quickSightException) {
+                return $quicksightListUsersResponseTransfer->addError(
+                    (new ErrorTransfer())->setMessage($quickSightException->getAwsErrorMessage()),
+                );
+            }
+
+            if (!$result->hasKey(static::RESPONSE_KEY_USER_LIST)) {
+                return $quicksightListUsersResponseTransfer->addError(
+                    (new ErrorTransfer())->setMessage(static::ERROR_MESSAGE_USERS_LIST_RETRIEVE_FAILED),
+                );
+            }
+
+            foreach ($result->get(static::RESPONSE_KEY_USER_LIST) as $quicksightUserData) {
+                $quicksightUser = $this->amazonQuicksightMapper->mapQuicksightUserDataToQuicksightUserTransfer(
+                    $quicksightUserData,
+                    new QuicksightUserTransfer(),
+                );
+
+                $quicksightListUsersResponseTransfer->addQuicksightUser($quicksightUser);
+            }
+
+            $nextToken = $result->hasKey(static::RESPONSE_KEY_NEXT_TOKEN) ? $result->get(static::RESPONSE_KEY_NEXT_TOKEN) : null;
+        } while ($nextToken !== null);
 
         return $quicksightListUsersResponseTransfer;
     }

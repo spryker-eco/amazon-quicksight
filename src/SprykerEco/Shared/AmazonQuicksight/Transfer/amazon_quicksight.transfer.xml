@@ -72,6 +72,7 @@
     <transfer name="QuicksightListUsersRequest" strict="true">
         <property name="awsAccountId" type="string"/>
         <property name="namespace" type="string"/>
+        <property name="nextToken" type="string"/>
     </transfer>
 
     <transfer name="QuicksightListUsersResponse" strict="true">

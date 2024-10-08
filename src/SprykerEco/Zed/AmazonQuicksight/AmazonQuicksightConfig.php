@@ -166,6 +166,22 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
 
     /**
      * Specification:
+     * - Returns the list of available Quicksight user Author related roles.
+     * - The list of available roles can be found here: {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_User.html#QS-Type-User-Role}.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getQuicksightUserAuthorRoles(): array
+    {
+        return [
+            static::QUICKSIGHT_USER_ROLE_AUTHOR,
+        ];
+    }
+
+    /**
+     * Specification:
      * - Returns the ID for the AWS account that contains your Amazon QuickSight account.
      *
      * @api
