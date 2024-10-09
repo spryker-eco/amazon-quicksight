@@ -223,9 +223,15 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
             'version' => static::QUICKSIGHT_API_VERSION,
         ];
 
-        $awsCredentialsKey = $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY);
-        $awsCredentialsSecret = $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_SECRET);
-        $awsCredentialsToken = $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_TOKEN);
+        $awsCredentialsKey = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY)
+            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY)
+            : null;
+        $awsCredentialsSecret = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_SECRET)
+            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_SECRET)
+            : null;
+        $awsCredentialsToken = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_TOKEN)
+            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_TOKEN)
+            : null;
 
         if ($awsCredentialsKey && $awsCredentialsSecret && $awsCredentialsToken) {
             $quicksightClientConfiguration['credentials'] = new Credentials(
