@@ -13,6 +13,7 @@ use Codeception\Test\Unit;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
+use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface;
 use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester;
 
 /**
@@ -58,6 +59,19 @@ class CreateQuicksightUsersByUserCollectionResponseTest extends Unit
      * @var \SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester
      */
     protected AmazonQuicksightBusinessTester $tester;
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $messengerFacadeMock = $this
+            ->getMockBuilder(AmazonQuicksightToMessengerFacadeInterface::class)
+            ->getMock();
+        $this->tester->setDependency(AmazonQuicksightDependencyProvider::FACADE_MESSENGER, $messengerFacadeMock);
+    }
 
     /**
      * @return void

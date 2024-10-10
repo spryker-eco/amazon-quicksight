@@ -13,6 +13,7 @@ use Codeception\Test\Unit;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
+use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface;
 use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester;
 
 /**
@@ -92,6 +93,10 @@ class DeleteQuicksightUsersByUserCollectionResponseTest extends Unit
         $userTransfer = $this->tester->haveUser([UserTransfer::STATUS => static::USER_STATUS_DELETED]);
         $this->tester->haveQuicksightUser($userTransfer);
 
+        $messengerFacadeMock = $this
+            ->getMockBuilder(AmazonQuicksightToMessengerFacadeInterface::class)
+            ->getMock();
+        $this->tester->setDependency(AmazonQuicksightDependencyProvider::FACADE_MESSENGER, $messengerFacadeMock);
         $this->tester->setDependency(
             AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
             $this->tester->getAwsQuicksightClientMockWithErrorResponse(

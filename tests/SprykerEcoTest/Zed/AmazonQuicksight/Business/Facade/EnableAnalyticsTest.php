@@ -18,6 +18,7 @@ use Spryker\Shared\Kernel\Transfer\Exception\NullValueException;
 use Spryker\Shared\Kernel\Transfer\Exception\RequiredTransferPropertyException;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
+use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface;
 use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester;
 
 class EnableAnalyticsTest extends Unit
@@ -189,6 +190,10 @@ class EnableAnalyticsTest extends Unit
         $enableQuicksightAnalyticsRequestTransfer = (new EnableQuicksightAnalyticsRequestTransfer())
             ->setUser($userTransfer->setStatus(static::USER_STATUS_ACTIVE))
             ->setAssetBundleImportJobId(static::DEFAULT_ASSET_BUNDLE_IMPORT_JOB_ID);
+        $messengerFacadeMock = $this
+            ->getMockBuilder(AmazonQuicksightToMessengerFacadeInterface::class)
+            ->getMock();
+        $this->tester->setDependency(AmazonQuicksightDependencyProvider::FACADE_MESSENGER, $messengerFacadeMock);
         $this->tester->setDependency(
             AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
             $this->tester->getAwsQuicksightClientMockWithErrorResponse(
