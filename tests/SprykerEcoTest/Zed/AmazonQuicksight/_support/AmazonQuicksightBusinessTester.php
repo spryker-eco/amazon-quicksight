@@ -28,7 +28,6 @@ use SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightBusinessFactory;
 use SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightFacadeInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoader;
 use SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface;
-use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientAdapter;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManager;
 use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepository;
@@ -138,11 +137,11 @@ class AmazonQuicksightBusinessTester extends Actor
     }
 
     /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientAdapter|\PHPUnit\Framework\MockObject\MockObject
+     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface|\PHPUnit\Framework\MockObject\MockObject
      */
-    public function getAwsQuicksightClientMock(): AmazonQuicksightToAwsQuicksightClientAdapter
+    public function getAwsQuicksightClientMock(): AmazonQuicksightToAwsQuicksightClientInterface
     {
-        return Stub::makeEmpty(AmazonQuicksightToAwsQuicksightClientAdapter::class);
+        return Stub::makeEmpty(AmazonQuicksightToAwsQuicksightClientInterface::class);
     }
 
     /**
