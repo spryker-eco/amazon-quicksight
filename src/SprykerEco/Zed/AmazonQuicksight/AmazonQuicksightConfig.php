@@ -219,7 +219,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     public function getQuicksightClientConfiguration(): array
     {
         $quicksightClientConfiguration = [
-            'region' => $this->get(AmazonQuicksightConstants::AWS_REGION, ''),
+            'region' => $this->get(AmazonQuicksightConstants::AWS_REGION),
             'version' => static::QUICKSIGHT_API_VERSION,
         ];
 
