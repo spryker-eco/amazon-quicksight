@@ -150,6 +150,10 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
             new QuicksightGenerateEmbedUrlResponseTransfer(),
         ));
         $analyticsRequestTransfer = $this->tester->haveAnalyticsRequestWithUser();
+        $this->tester->setDependency(
+            AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
+            $this->tester->getAwsQuicksightClientMock(),
+        );
 
         // Act
         $analyticsCollectionTransfer = $this->tester
@@ -173,6 +177,10 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
             new QuicksightGenerateEmbedUrlResponseTransfer(),
         ));
         $analyticsRequestTransfer = $this->tester->haveAnalyticsRequestWithQuicksightUser();
+        $this->tester->setDependency(
+            AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
+            $this->tester->getAwsQuicksightClientMock(),
+        );
 
         // Act
         $analyticsCollectionTransfer = $this->tester
@@ -200,6 +208,10 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
             new QuicksightGenerateEmbedUrlResponseTransfer(),
         ));
         $analyticsRequestTransfer = $this->tester->haveAnalyticsRequestWithQuicksightUser($role);
+        $this->tester->setDependency(
+            AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
+            $this->tester->getAwsQuicksightClientMock(),
+        );
 
         // Act
         $analyticsCollectionTransfer = $this->tester
@@ -408,6 +420,10 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
     ): void {
         // Arrange
         $this->tester->mockFactoryMethod('getRepository', $this->tester->getAmazonQuicksightRepositoryMock());
+        $this->tester->setDependency(
+            AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
+            $this->tester->getAwsQuicksightClientMock(),
+        );
 
         // Assert
         $this->expectException(NullValueException::class);

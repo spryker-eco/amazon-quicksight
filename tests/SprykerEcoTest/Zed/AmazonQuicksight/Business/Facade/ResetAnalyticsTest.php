@@ -102,6 +102,10 @@ class ResetAnalyticsTest extends Unit
     ): void {
         // Assert
         $this->expectException(RequiredTransferPropertyException::class);
+        $this->tester->setDependency(
+            AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
+            $this->tester->getAwsQuicksightClientMock(),
+        );
 
         // Act
         $this->tester->getFacade()->resetAnalytics($resetQuicksightAnalyticsRequestTransfer);
@@ -125,6 +129,10 @@ class ResetAnalyticsTest extends Unit
             $this->tester->haveQuicksightAssetBundleImportJob($quicksightAssetBundleImportJobTransfer->modifiedToArray());
         }
         $resetQuicksightAnalyticsRequestTransfer->setAssetBundleImportJobId(static::DEFAULT_ASSET_BUNDLE_IMPORT_JOB_ID);
+        $this->tester->setDependency(
+            AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
+            $this->tester->getAwsQuicksightClientMock(),
+        );
 
         // Act
         $resetQuicksightAnalyticsResponseTransfer = $this->tester
