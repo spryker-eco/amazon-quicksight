@@ -13,6 +13,7 @@ use Codeception\Test\Unit;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightDependencyProvider;
+use SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToMessengerFacadeInterface;
 use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester;
 
@@ -83,7 +84,7 @@ class CreateQuicksightUsersByUserCollectionResponseTest extends Unit
 
         $this->tester->setDependency(
             AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
-            $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(
+            $this->getAwsQuicksightClientMockWithExpectation(
                 $this->createRegisterUserSuccessfulResponse($userTransfer),
                 'registerUser',
             ),
@@ -289,5 +290,22 @@ class CreateQuicksightUsersByUserCollectionResponseTest extends Unit
         ];
 
         return new Result($responseData);
+    }
+
+    /**
+     * @param \Aws\ResultInterface $result
+     * @param string $methodName
+     *
+     * @return \SprykerEco\Zed\AmazonQuicksight\Dependency\External\AmazonQuicksightToAwsQuicksightClientInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function getAwsQuicksightClientMockWithExpectation(
+        ResultInterface $result,
+        string $methodName
+    ): AmazonQuicksightToAwsQuicksightClientInterface {
+        $awsQuicksightClientMock = $this->getMockBuilder(AmazonQuicksightToAwsQuicksightClientInterface::class)
+            ->getMock();
+        $awsQuicksightClientMock->expects($this->once())->method($methodName)->willReturn($result);
+
+        return $awsQuicksightClientMock;
     }
 }
