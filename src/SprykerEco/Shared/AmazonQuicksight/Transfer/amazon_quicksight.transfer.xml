@@ -97,6 +97,7 @@
         <property name="awsAccountId" type="string"/>
         <property name="userArn" type="string"/>
         <property name="experienceConfiguration" type="QuicksightExperienceConfiguration"/>
+        <property name="allowedDomains" type="string[]" singular="allowedDomain"/>
     </transfer>
 
     <transfer name="QuicksightExperienceConfiguration" strict="true">
