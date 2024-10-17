@@ -223,7 +223,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
         $stsClient = new StsClient([
             'profile' => 'default',
             'region' => $this->get(AmazonQuicksightConstants::AWS_REGION),
-            'version' => static::QUICKSIGHT_API_VERSION,
+            'version' => '2011-06-15',
         ]);
 
         $ARN = getenv('QUICKSIGHT_ASSUMED_ROLE_ARN');
