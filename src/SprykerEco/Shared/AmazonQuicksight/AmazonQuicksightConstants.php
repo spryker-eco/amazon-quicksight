@@ -131,4 +131,14 @@ interface AmazonQuicksightConstants
      * @var string
      */
     public const DEFAULT_DATA_SOURCE_VPC_CONNECTION_ARN = 'AMAZON_QUICKSIGHT:DEFAULT_DATA_SOURCE_VPC_CONNECTION_ARN';
+
+    /**
+     * Specification:
+     * - The list of domains allowed for generating embed URLs.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const GENERATE_EMBED_URL_ALLOWED_DOMAINS = 'AMAZON_QUICKSIGHT:GENERATE_EMBED_URL_ALLOWED_DOMAINS';
 }

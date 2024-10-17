@@ -505,4 +505,17 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     {
         return $this->get(AmazonQuicksightConstants::DEFAULT_DATA_SOURCE_VPC_CONNECTION_ARN);
     }
+
+    /**
+     * Specification:
+     * - Returns list of domains allowed for generating embed URLs.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getGenerateEmbedUrlAllowedDomains(): array
+    {
+        return $this->get(AmazonQuicksightConstants::GENERATE_EMBED_URL_ALLOWED_DOMAINS, []);
+    }
 }

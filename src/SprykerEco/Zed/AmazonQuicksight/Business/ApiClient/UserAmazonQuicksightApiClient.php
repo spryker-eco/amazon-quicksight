@@ -364,7 +364,7 @@ class UserAmazonQuicksightApiClient implements UserAmazonQuicksightApiClientInte
     protected function createQuicksightGenerateEmbedUrlRequestTransfer(): QuicksightGenerateEmbedUrlRequestTransfer
     {
         return (new QuicksightGenerateEmbedUrlRequestTransfer())
-            ->addAllowedDomain('https://backoffice.eu.scos2-suitens.cloud.spryker.toys/')
+            ->setAllowedDomains($this->amazonQuicksightConfig->getGenerateEmbedUrlAllowedDomains())
             ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
             ->setExperienceConfiguration((new QuicksightExperienceConfigurationTransfer())->setQuickSightConsole(
                 (new QuicksightConsoleTransfer())->setInitialPath(
