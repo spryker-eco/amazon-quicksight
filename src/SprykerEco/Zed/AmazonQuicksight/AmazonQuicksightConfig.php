@@ -8,6 +8,7 @@
 namespace SprykerEco\Zed\AmazonQuicksight;
 
 use Aws\Credentials\Credentials;
+use Aws\Sts\StsClient;
 use Spryker\Zed\Kernel\AbstractBundleConfig;
 use SprykerEco\Shared\AmazonQuicksight\AmazonQuicksightConstants;
 use SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFilePathNotDefinedException;
@@ -218,28 +219,49 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
      */
     public function getQuicksightClientConfiguration(): array
     {
+
+        $stsClient = new StsClient([
+            'profile' => 'default',
+            'region' => $this->get(AmazonQuicksightConstants::AWS_REGION),
+            'version' => static::QUICKSIGHT_API_VERSION,
+        ]);
+
+        $ARN = getenv('QUICKSIGHT_ASSUMED_ROLE_ARN');
+        $sessionName = "s3-access-example";
+
+        $result = $stsClient->AssumeRole([
+            'RoleArn' => $ARN,
+            'RoleSessionName' => $sessionName,
+        ]);
+
         $quicksightClientConfiguration = [
             'region' => $this->get(AmazonQuicksightConstants::AWS_REGION),
             'version' => static::QUICKSIGHT_API_VERSION,
         ];
+//
+//        $awsCredentialsKey = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY)
+//            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY)
+//            : null;
+//        $awsCredentialsSecret = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_SECRET)
+//            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_SECRET)
+//            : null;
+//        $awsCredentialsToken = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_TOKEN)
+//            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_TOKEN)
+//            : null;
+//
+//        if ($awsCredentialsKey && $awsCredentialsSecret && $awsCredentialsToken) {
+//            $quicksightClientConfiguration['credentials'] = new Credentials(
+//                $awsCredentialsKey,
+//                $awsCredentialsSecret,
+//                $awsCredentialsToken,
+//            );
+//        }
 
-        $awsCredentialsKey = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY)
-            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY)
-            : null;
-        $awsCredentialsSecret = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_SECRET)
-            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_SECRET)
-            : null;
-        $awsCredentialsToken = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_TOKEN)
-            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_TOKEN)
-            : null;
-
-        if ($awsCredentialsKey && $awsCredentialsSecret && $awsCredentialsToken) {
-            $quicksightClientConfiguration['credentials'] = new Credentials(
-                $awsCredentialsKey,
-                $awsCredentialsSecret,
-                $awsCredentialsToken,
+        $quicksightClientConfiguration['credentials'] = new Credentials(
+            $result['Credentials']['AccessKeyId'],
+            $result['Credentials']['SecretAccessKey'],
+            $result['Credentials']['SessionToken'],
             );
-        }
 
         return $quicksightClientConfiguration;
     }
