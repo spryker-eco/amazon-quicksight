@@ -221,7 +221,6 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     {
 
         $stsClient = new StsClient([
-            'profile' => 'default',
             'region' => $this->get(AmazonQuicksightConstants::AWS_REGION),
             'version' => '2011-06-15',
         ]);
