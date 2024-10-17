@@ -149,6 +149,16 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     protected const DEFAULT_DATA_SOURCE_ID = 'SprykerDefaultDataSource';
 
     /**
+     * @var string
+     */
+    protected const STS_CLIENT_ROLE_SESSION_NAME = 'defaultRoleSessionName';
+
+    /**
+     * @var string
+     */
+    protected const STS_CLIENT_VERSION = '2011-06-15';
+
+    /**
      * Specification:
      * - Returns the list of available Quicksight user roles.
      * - The list of available roles can be found here: {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_User.html#QS-Type-User-Role}.
@@ -219,50 +229,47 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
      */
     public function getQuicksightClientConfiguration(): array
     {
+        return [
+            'region' => $this->get(AmazonQuicksightConstants::AWS_REGION),
+            'version' => static::QUICKSIGHT_API_VERSION,
+            'credentials' => $this->getQuicksightClientCredentials(),
+        ];
+    }
+
+    /**
+     * @return \Aws\Credentials\Credentials
+     */
+    protected function getQuicksightClientCredentials(): Credentials
+    {
+        $awsCredentialsKey = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY)
+            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY)
+            : null;
+        $awsCredentialsSecret = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_SECRET)
+            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_SECRET)
+            : null;
+        $awsCredentialsToken = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_TOKEN)
+            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_TOKEN)
+            : null;
+
+        if ($awsCredentialsKey && $awsCredentialsSecret && $awsCredentialsToken) {
+            return new Credentials($awsCredentialsKey, $awsCredentialsSecret, $awsCredentialsToken);
+        }
 
         $stsClient = new StsClient([
             'region' => $this->get(AmazonQuicksightConstants::AWS_REGION),
-            'version' => '2011-06-15',
+            'version' => static::STS_CLIENT_VERSION,
         ]);
-
-        $ARN = getenv('QUICKSIGHT_ASSUMED_ROLE_ARN');
-        $sessionName = "s3-access-example";
 
         $result = $stsClient->AssumeRole([
-            'RoleArn' => $ARN,
-            'RoleSessionName' => $sessionName,
+            'RoleArn' => $this->get(AmazonQuicksightConstants::QUICKSIGHT_ASSUMED_ROLE_ARN),
+            'RoleSessionName' => static::STS_CLIENT_ROLE_SESSION_NAME,
         ]);
 
-        $quicksightClientConfiguration = [
-            'region' => $this->get(AmazonQuicksightConstants::AWS_REGION),
-            'version' => static::QUICKSIGHT_API_VERSION,
-        ];
-//
-//        $awsCredentialsKey = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY)
-//            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY)
-//            : null;
-//        $awsCredentialsSecret = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_SECRET)
-//            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_SECRET)
-//            : null;
-//        $awsCredentialsToken = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_TOKEN)
-//            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_TOKEN)
-//            : null;
-//
-//        if ($awsCredentialsKey && $awsCredentialsSecret && $awsCredentialsToken) {
-//            $quicksightClientConfiguration['credentials'] = new Credentials(
-//                $awsCredentialsKey,
-//                $awsCredentialsSecret,
-//                $awsCredentialsToken,
-//            );
-//        }
-
-        $quicksightClientConfiguration['credentials'] = new Credentials(
+        return new Credentials(
             $result['Credentials']['AccessKeyId'],
             $result['Credentials']['SecretAccessKey'],
             $result['Credentials']['SessionToken'],
-            );
-
-        return $quicksightClientConfiguration;
+        );
     }
 
     /**

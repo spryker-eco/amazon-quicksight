@@ -141,4 +141,14 @@ interface AmazonQuicksightConstants
      * @var string
      */
     public const GENERATE_EMBED_URL_ALLOWED_DOMAINS = 'AMAZON_QUICKSIGHT:GENERATE_EMBED_URL_ALLOWED_DOMAINS';
+
+    /**
+     * Specification:
+     * - The role ARN used by `Aws\Sts\StsClient` to assume a role.
+     *
+     * @api
+     *
+     * @var string
+     */
+    public const QUICKSIGHT_ASSUMED_ROLE_ARN = 'AMAZON_QUICKSIGHT:QUICKSIGHT_ASSUMED_ROLE_ARN';
 }
