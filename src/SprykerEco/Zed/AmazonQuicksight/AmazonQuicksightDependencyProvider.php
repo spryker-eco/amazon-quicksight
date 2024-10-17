@@ -96,9 +96,7 @@ class AmazonQuicksightDependencyProvider extends AbstractBundleDependencyProvide
     protected function addAwsQuicksightClient(Container $container): Container
     {
         $container->set(static::AWS_QUICKSIGHT_CLIENT, function () {
-            return new AmazonQuicksightToAwsQuicksightClientAdapter(
-                $this->getConfig()->getQuicksightClientConfiguration(),
-            );
+            return new AmazonQuicksightToAwsQuicksightClientAdapter($this->getConfig());
         });
 
         return $container;

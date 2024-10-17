@@ -7,8 +7,6 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight;
 
-use Aws\Credentials\Credentials;
-use Aws\Sts\StsClient;
 use Spryker\Zed\Kernel\AbstractBundleConfig;
 use SprykerEco\Shared\AmazonQuicksight\AmazonQuicksightConstants;
 use SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFilePathNotDefinedException;
@@ -151,7 +149,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     /**
      * @var string
      */
-    protected const STS_CLIENT_ROLE_SESSION_NAME = 'defaultRoleSessionName';
+    protected const STS_CLIENT_ROLE_SESSION_NAME = 'QuicksightInteractionSession';
 
     /**
      * @var string
@@ -206,6 +204,19 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
 
     /**
      * Specification:
+     * - Returns the AWS region that is used for the Amazon QuickSight account.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getAwsRegion(): string
+    {
+        return $this->get(AmazonQuicksightConstants::AWS_REGION);
+    }
+
+    /**
+     * Specification:
      * - Returns the name of the Quicksight namespace.
      *
      * @api
@@ -219,57 +230,50 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
 
     /**
      * Specification:
-     * - Provides configuration for the Quicksight client.
-     *
-     * @link https://docs.aws.amazon.com/aws-sdk-php/v3/api/class-Aws.AwsClient.html#method___construct
+     * - Returns the AWS credentials key if it exists in the configuration.
+     * - Returns `null` otherwise.
      *
      * @api
      *
-     * @return array<string, mixed>
+     * @return string|null
      */
-    public function getQuicksightClientConfiguration(): array
+    public function findAwsCredentialsKey(): ?string
     {
-        return [
-            'region' => $this->get(AmazonQuicksightConstants::AWS_REGION),
-            'version' => static::QUICKSIGHT_API_VERSION,
-            'credentials' => $this->getQuicksightClientCredentials(),
-        ];
+        return $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY)
+            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY)
+            : null;
     }
 
     /**
-     * @return \Aws\Credentials\Credentials
+     * Specification:
+     * - Returns the AWS credentials secret if it exists in the configuration.
+     * - Returns `null` otherwise.
+     *
+     * @api
+     *
+     * @return string|null
      */
-    protected function getQuicksightClientCredentials(): Credentials
+    public function findAwsCredentialsSecret(): ?string
     {
-        $awsCredentialsKey = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY)
-            ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_KEY)
-            : null;
-        $awsCredentialsSecret = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_SECRET)
+        return $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_SECRET)
             ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_SECRET)
             : null;
-        $awsCredentialsToken = $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_TOKEN)
+    }
+
+    /**
+     * Specification:
+     * - Returns the AWS credentials token if it exists in the configuration.
+     * - Returns `null` otherwise.
+     *
+     * @api
+     *
+     * @return string|null
+     */
+    public function findAwsCredentialsToken(): ?string
+    {
+        return $this->getConfig()->hasKey(AmazonQuicksightConstants::AWS_CREDENTIALS_TOKEN)
             ? $this->get(AmazonQuicksightConstants::AWS_CREDENTIALS_TOKEN)
             : null;
-
-        if ($awsCredentialsKey && $awsCredentialsSecret && $awsCredentialsToken) {
-            return new Credentials($awsCredentialsKey, $awsCredentialsSecret, $awsCredentialsToken);
-        }
-
-        $stsClient = new StsClient([
-            'region' => $this->get(AmazonQuicksightConstants::AWS_REGION),
-            'version' => static::STS_CLIENT_VERSION,
-        ]);
-
-        $result = $stsClient->AssumeRole([
-            'RoleArn' => $this->get(AmazonQuicksightConstants::QUICKSIGHT_ASSUMED_ROLE_ARN),
-            'RoleSessionName' => static::STS_CLIENT_ROLE_SESSION_NAME,
-        ]);
-
-        return new Credentials(
-            $result['Credentials']['AccessKeyId'],
-            $result['Credentials']['SecretAccessKey'],
-            $result['Credentials']['SessionToken'],
-        );
     }
 
     /**
@@ -545,5 +549,57 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     public function getGenerateEmbedUrlAllowedDomains(): array
     {
         return $this->get(AmazonQuicksightConstants::GENERATE_EMBED_URL_ALLOWED_DOMAINS, []);
+    }
+
+    /**
+     * Specification:
+     * - Returns the role ARN used by `Aws\Sts\StsClient` to assume a role.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getQuicksightAssumedRoleArn(): string
+    {
+        return $this->get(AmazonQuicksightConstants::QUICKSIGHT_ASSUMED_ROLE_ARN);
+    }
+
+    /**
+     * Specification:
+     * - Returns the Quicksight API version.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getQuicksightApiVersion(): string
+    {
+        return static::QUICKSIGHT_API_VERSION;
+    }
+
+    /**
+     * Specification:
+     * - Returns the STS client API version.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getStsClientVersion(): string
+    {
+        return static::STS_CLIENT_VERSION;
+    }
+
+    /**
+     * Specification:
+     * - Returns the STS client role session name.
+     *
+     * @api
+     *
+     * @return string
+     */
+    public function getStsClientRoleSessionName(): string
+    {
+        return static::STS_CLIENT_ROLE_SESSION_NAME;
     }
 }

@@ -7,8 +7,11 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Dependency\External;
 
+use Aws\Credentials\Credentials;
 use Aws\QuickSight\QuickSightClient;
 use Aws\ResultInterface;
+use Aws\Sts\StsClient;
+use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
 
 class AmazonQuicksightToAwsQuicksightClientAdapter implements AmazonQuicksightToAwsQuicksightClientInterface
 {
@@ -18,11 +21,11 @@ class AmazonQuicksightToAwsQuicksightClientAdapter implements AmazonQuicksightTo
     protected $quicksightClient;
 
     /**
-     * @param array<string, mixed> $args
+     * @param \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig $config
      */
-    public function __construct(array $args)
+    public function __construct(AmazonQuicksightConfig $config)
     {
-        $this->quicksightClient = new QuickSightClient($args);
+        $this->quicksightClient = new QuickSightClient($this->getQuicksightClientConfiguration($config));
     }
 
     /**
@@ -103,5 +106,66 @@ class AmazonQuicksightToAwsQuicksightClientAdapter implements AmazonQuicksightTo
     public function describeAssetBundleImportJob(array $describeAssetBundleImportJobRequestData): ResultInterface
     {
         return $this->quicksightClient->describeAssetBundleImportJob($describeAssetBundleImportJobRequestData);
+    }
+
+    /**
+     * @link https://docs.aws.amazon.com/aws-sdk-php/v3/api/class-Aws.AwsClient.html#method___construct
+     *
+     * @param \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig $config
+     *
+     * @return array<string, mixed>
+     */
+    protected function getQuicksightClientConfiguration(AmazonQuicksightConfig $config): array
+    {
+        return [
+            'region' => $config->getAwsRegion(),
+            'version' => $config->getQuicksightApiVersion(),
+            'credentials' => $this->getQuicksightClientCredentials($config),
+        ];
+    }
+
+    /**
+     * @param \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig $config
+     *
+     * @return \Aws\Credentials\Credentials
+     */
+    protected function getQuicksightClientCredentials(AmazonQuicksightConfig $config): Credentials
+    {
+        $awsCredentialsKey = $config->findAwsCredentialsKey();
+        $awsCredentialsSecret = $config->findAwsCredentialsSecret();
+        $awsCredentialsToken = $config->findAwsCredentialsToken();
+
+        if ($awsCredentialsKey && $awsCredentialsSecret && $awsCredentialsToken) {
+            return new Credentials($awsCredentialsKey, $awsCredentialsSecret, $awsCredentialsToken);
+        }
+
+        return $this->getStsClientCredentials($config);
+    }
+
+    /**
+     * @param \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig $config
+     *
+     * @return \Aws\Credentials\Credentials
+     */
+    protected function getStsClientCredentials(AmazonQuicksightConfig $config): Credentials
+    {
+        $stsClient = new StsClient([
+            'region' => $config->getAwsRegion(),
+            'version' => $config->getStsClientVersion(),
+        ]);
+
+        /**
+         * @method \Aws\Result assumeRole(array $args = [])
+         */
+        $result = $stsClient->AssumeRole([
+            'RoleArn' => $config->getQuicksightAssumedRoleArn(),
+            'RoleSessionName' => $config->getStsClientRoleSessionName(),
+        ]);
+
+        return new Credentials(
+            $result['Credentials']['AccessKeyId'],
+            $result['Credentials']['SecretAccessKey'],
+            $result['Credentials']['SessionToken'],
+        );
     }
 }
