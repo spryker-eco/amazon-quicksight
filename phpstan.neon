@@ -16,3 +16,4 @@ parameters:
         - '#Parameter .+ of method .+ has invalid type Orm\\.+#'
         - '#Method .+ has invalid return type .+Transfer#'
         - '#Method .+ has invalid return type Orm\\.+#'
+        - '#Call to an undefined method Aws\\Sts\\StsClient\:\:AssumeRole\(\).#'

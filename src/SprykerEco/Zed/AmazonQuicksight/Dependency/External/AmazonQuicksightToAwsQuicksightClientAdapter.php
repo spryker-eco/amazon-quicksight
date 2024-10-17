@@ -154,9 +154,6 @@ class AmazonQuicksightToAwsQuicksightClientAdapter implements AmazonQuicksightTo
             'version' => $config->getStsClientVersion(),
         ]);
 
-        /**
-         * @method \Aws\Result assumeRole(array $args = [])
-         */
         $result = $stsClient->AssumeRole([
             'RoleArn' => $config->getQuicksightAssumedRoleArn(),
             'RoleSessionName' => $config->getStsClientRoleSessionName(),
