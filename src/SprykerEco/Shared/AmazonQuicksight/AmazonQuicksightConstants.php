@@ -144,7 +144,7 @@ interface AmazonQuicksightConstants
 
     /**
      * Specification:
-     * - The role ARN used by `Aws\Sts\StsClient` to assume a role.
+     * - The role ARN used by `Aws\Sts\StsClient` to assume a role used to all API calls to Quicksight.
      *
      * @api
      *

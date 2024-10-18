@@ -139,7 +139,7 @@ class AmazonQuicksightToAwsQuicksightClientAdapter implements AmazonQuicksightTo
         $quicksightAssumedRoleArn = $config->getQuicksightAssumedRoleArn();
 
         if ($quicksightAssumedRoleArn) {
-            $quicksightClientConfiguration['credentials'] = $this->getStsClientCredentials($config);
+            $quicksightClientConfiguration['credentials'] = $this->getStsClientCredentials($config, $quicksightAssumedRoleArn);
         }
 
         return $quicksightClientConfiguration;
@@ -147,18 +147,21 @@ class AmazonQuicksightToAwsQuicksightClientAdapter implements AmazonQuicksightTo
 
     /**
      * @param \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig $config
+     * @param string $quicksightAssumedRoleArn
      *
      * @return \Aws\Credentials\Credentials
      */
-    protected function getStsClientCredentials(AmazonQuicksightConfig $config): Credentials
-    {
+    protected function getStsClientCredentials(
+        AmazonQuicksightConfig $config,
+        string $quicksightAssumedRoleArn
+    ): Credentials {
         $stsClient = new StsClient([
             'region' => $config->getAwsRegion(),
             'version' => $config->getStsClientVersion(),
         ]);
 
         $result = $stsClient->AssumeRole([
-            'RoleArn' => $config->getQuicksightAssumedRoleArn(),
+            'RoleArn' => $quicksightAssumedRoleArn,
             'RoleSessionName' => $config->getStsClientRoleSessionName(),
         ]);
 
