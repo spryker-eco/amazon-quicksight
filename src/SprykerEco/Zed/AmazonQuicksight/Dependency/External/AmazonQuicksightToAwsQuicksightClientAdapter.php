@@ -117,29 +117,32 @@ class AmazonQuicksightToAwsQuicksightClientAdapter implements AmazonQuicksightTo
      */
     protected function getQuicksightClientConfiguration(AmazonQuicksightConfig $config): array
     {
-        return [
+        $quicksightClientConfiguration = [
             'region' => $config->getAwsRegion(),
             'version' => $config->getQuicksightApiVersion(),
-            'credentials' => $this->getQuicksightClientCredentials($config),
         ];
-    }
 
-    /**
-     * @param \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig $config
-     *
-     * @return \Aws\Credentials\Credentials
-     */
-    protected function getQuicksightClientCredentials(AmazonQuicksightConfig $config): Credentials
-    {
         $awsCredentialsKey = $config->findAwsCredentialsKey();
         $awsCredentialsSecret = $config->findAwsCredentialsSecret();
         $awsCredentialsToken = $config->findAwsCredentialsToken();
 
         if ($awsCredentialsKey && $awsCredentialsSecret && $awsCredentialsToken) {
-            return new Credentials($awsCredentialsKey, $awsCredentialsSecret, $awsCredentialsToken);
+            $quicksightClientConfiguration['credentials'] = new Credentials(
+                $awsCredentialsKey,
+                $awsCredentialsSecret,
+                $awsCredentialsToken,
+            );
+
+            return $quicksightClientConfiguration;
         }
 
-        return $this->getStsClientCredentials($config);
+        $quicksightAssumedRoleArn = $config->getQuicksightAssumedRoleArn();
+
+        if ($quicksightAssumedRoleArn) {
+            $quicksightClientConfiguration['credentials'] = $this->getStsClientCredentials($config);
+        }
+
+        return $quicksightClientConfiguration;
     }
 
     /**
