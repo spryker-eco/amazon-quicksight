@@ -142,6 +142,11 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     ];
 
     /**
+     * @var list<string>
+     */
+    protected const ASSET_BUNDLE_IMPORT_DELETE_DATA_SET_IDS = [];
+
+    /**
      * @var string
      */
     protected const DEFAULT_DATA_SOURCE_ID = 'SprykerDefaultDataSource';
@@ -458,6 +463,19 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     public function getDefaultDataSourceId(): string
     {
         return static::DEFAULT_DATA_SOURCE_ID;
+    }
+
+    /**
+     * Specification:
+     * - Returns the list of data set IDs to be deleted before the asset bundle import.
+     *
+     * @api
+     *
+     * @return list<string>
+     */
+    public function getAssetBundleImportDeleteDataSetIds(): array
+    {
+        return static::ASSET_BUNDLE_IMPORT_DELETE_DATA_SET_IDS;
     }
 
     /**

@@ -66,4 +66,11 @@ interface AmazonQuicksightToAwsQuicksightClientInterface
      * @return \Aws\ResultInterface<string, mixed>
      */
     public function describeAssetBundleImportJob(array $describeAssetBundleImportJobRequestData): ResultInterface;
+
+    /**
+     * @param array<string, mixed> $deleteDataSetRequestData
+     *
+     * @return \Aws\ResultInterface<string, mixed>
+     */
+    public function deleteDataSet(array $deleteDataSetRequestData): ResultInterface;
 }

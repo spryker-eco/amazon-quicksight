@@ -11,6 +11,8 @@ use Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\ErrorTransfer;
 use Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer;
 use Generated\Shared\Transfer\QuicksightAssetBundleImportSourceTransfer;
+use Generated\Shared\Transfer\QuicksightDeleteAssetBundleDataSetsResponseTransfer;
+use Generated\Shared\Transfer\QuicksightDeleteDataSetResponseTransfer;
 use Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer;
 use Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTransfer;
 use Generated\Shared\Transfer\QuicksightEmbedUrlTransfer;
@@ -280,5 +282,22 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
             ->setEmail($userTransfer->getUsernameOrFail())
             ->setUserName($userTransfer->getUsernameOrFail())
             ->setRole(strtoupper($userTransfer->getQuicksightUserOrFail()->getRoleOrFail()));
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightDeleteDataSetResponseTransfer $quicksightDeleteDataSetResponseTransfer
+     * @param \Generated\Shared\Transfer\QuicksightDeleteAssetBundleDataSetsResponseTransfer $quicksightDeleteAssetBundleDataSetsResponseTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightDeleteAssetBundleDataSetsResponseTransfer
+     */
+    public function mapQuicksightDeleteDataSetResponseTransferToQuicksightDeleteAssetBundleDataSetsResponseTransfer(
+        QuicksightDeleteDataSetResponseTransfer $quicksightDeleteDataSetResponseTransfer,
+        QuicksightDeleteAssetBundleDataSetsResponseTransfer $quicksightDeleteAssetBundleDataSetsResponseTransfer
+    ): QuicksightDeleteAssetBundleDataSetsResponseTransfer {
+        foreach ($quicksightDeleteDataSetResponseTransfer->getErrors() as $errorTransfer) {
+            $quicksightDeleteAssetBundleDataSetsResponseTransfer->addError($errorTransfer);
+        }
+
+        return $quicksightDeleteAssetBundleDataSetsResponseTransfer;
     }
 }

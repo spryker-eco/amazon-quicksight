@@ -19,6 +19,8 @@ use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightAssetBundleImport
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightAssetBundleImportJobCreatorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreator;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreatorInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Deleter\DataSetDeleter;
+use SprykerEco\Zed\AmazonQuicksight\Business\Deleter\DataSetDeleterInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Deleter\QuicksightUserDeleter;
 use SprykerEco\Zed\AmazonQuicksight\Business\Deleter\QuicksightUserDeleterInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Enabler\AssetBundleEnabler;
@@ -238,6 +240,7 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
             $this->createQuicksightAnalyticsRequestValidator(),
             $this->createAssetBundleQuicksightUserProcessor(),
             $this->createAssetBundleImportFileContentLoader(),
+            $this->createDataSetDeleter(),
         );
     }
 
@@ -307,6 +310,18 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     public function createErrorAdder(): ErrorAdderInterface
     {
         return new ErrorAdder();
+    }
+
+    /**
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Deleter\DataSetDeleterInterface
+     */
+    public function createDataSetDeleter(): DataSetDeleterInterface
+    {
+        return new DataSetDeleter(
+            $this->getConfig(),
+            $this->createAssetBundleAmazonQuicksightApiClient(),
+            $this->createAmazonQuicksightMapper(),
+        );
     }
 
     /**

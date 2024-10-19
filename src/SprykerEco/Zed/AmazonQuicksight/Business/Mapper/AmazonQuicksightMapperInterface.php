@@ -9,6 +9,8 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business\Mapper;
 
 use Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer;
+use Generated\Shared\Transfer\QuicksightDeleteAssetBundleDataSetsResponseTransfer;
+use Generated\Shared\Transfer\QuicksightDeleteDataSetResponseTransfer;
 use Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer;
 use Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
@@ -142,4 +144,15 @@ interface AmazonQuicksightMapperInterface
         UserTransfer $userTransfer,
         QuicksightUpdateUserRequestTransfer $quicksightUpdateUserRequestTransfer
     ): QuicksightUpdateUserRequestTransfer;
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightDeleteDataSetResponseTransfer $quicksightDeleteDataSetResponseTransfer
+     * @param \Generated\Shared\Transfer\QuicksightDeleteAssetBundleDataSetsResponseTransfer $quicksightDeleteAssetBundleDataSetsResponseTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightDeleteAssetBundleDataSetsResponseTransfer
+     */
+    public function mapQuicksightDeleteDataSetResponseTransferToQuicksightDeleteAssetBundleDataSetsResponseTransfer(
+        QuicksightDeleteDataSetResponseTransfer $quicksightDeleteDataSetResponseTransfer,
+        QuicksightDeleteAssetBundleDataSetsResponseTransfer $quicksightDeleteAssetBundleDataSetsResponseTransfer
+    ): QuicksightDeleteAssetBundleDataSetsResponseTransfer;
 }

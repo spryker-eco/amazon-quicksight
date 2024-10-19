@@ -279,4 +279,17 @@
         <property name="userName" type="string"/>
     </transfer>
 
+    <transfer name="QuicksightDeleteDataSetRequest" strict="true">
+        <property name="awsAccountId" type="string"/>
+        <property name="dataSetId" type="string"/>
+    </transfer>
+
+    <transfer name="QuicksightDeleteDataSetResponse" strict="true">
+        <property name="errors" type="Error[]" singular="error"/>
+    </transfer>
+
+    <transfer name="QuicksightDeleteAssetBundleDataSetsResponse" strict="true">
+        <property name="errors" type="Error[]" singular="error"/>
+    </transfer>
+
 </transfers>

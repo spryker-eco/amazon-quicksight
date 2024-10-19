@@ -109,6 +109,16 @@ class AmazonQuicksightToAwsQuicksightClientAdapter implements AmazonQuicksightTo
     }
 
     /**
+     * @param array<string, mixed> $deleteDataSetRequestData
+     *
+     * @return \Aws\ResultInterface<string, mixed>
+     */
+    public function deleteDataSet(array $deleteDataSetRequestData): ResultInterface
+    {
+        return $this->quicksightClient->deleteDataSet($deleteDataSetRequestData);
+    }
+
+    /**
      * @link https://docs.aws.amazon.com/aws-sdk-php/v3/api/class-Aws.AwsClient.html#method___construct
      *
      * @param \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig $config

@@ -266,10 +266,13 @@ class AmazonQuicksightBusinessTester extends Actor
      */
     protected function createAmazonQuicksightBusinessFactoryMock(): AmazonQuicksightBusinessFactory
     {
+        $amazonQuicksightConfigMock = Stub::make(AmazonQuicksightConfig::class, [
+            'getAssetBundleImportDeleteDataSetIds' => ['testDataSetId'],
+        ]);
         $amazonQuicksightBusinessFactoryStub = Stub::make(AmazonQuicksightBusinessFactory::class, [
             'createAssetBundleImportFileContentLoader' => $this->createAssetBundleImportFileContentLoaderMock(),
             'resolveDependencyProvider' => new AmazonQuicksightDependencyProvider(),
-            'config' => new AmazonQuicksightConfig(),
+            'config' => $amazonQuicksightConfigMock,
             'repository' => new AmazonQuicksightRepository(),
             'entityManager' => new AmazonQuicksightEntityManager(),
         ]);

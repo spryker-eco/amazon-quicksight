@@ -246,6 +246,36 @@ class EnableAnalyticsTest extends Unit
     /**
      * @return void
      */
+    public function testReturnsResponseWithErrorWhenDataSetsDeleteFails(): void
+    {
+        // Arrange
+        $enableQuicksightAnalyticsRequestTransfer = $this->createEnableQuicksightAnalyticsRequestTransferWithUser();
+        $awsQuicksightClientMock = $this->tester->getAwsQuicksightClientMockWithErrorResponse(
+            $this->tester->getQuicksightExceptionMock(static::ERROR_MESSAGE_TEST),
+            'deleteDataSet',
+        );
+        $awsQuicksightClientMock->expects($this->never())->method('startAssetBundleImportJob');
+        $this->tester->setDependency(
+            AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
+            $awsQuicksightClientMock,
+        );
+
+        // Act
+        $enableQuicksightAnalyticsResponseTransfer = $this->tester
+            ->getFacadeWithMocks()
+            ->enableAnalytics($enableQuicksightAnalyticsRequestTransfer);
+
+        // Assert
+        $this->assertCount(1, $enableQuicksightAnalyticsResponseTransfer->getErrors());
+        $this->assertSame(
+            static::ERROR_MESSAGE_TEST,
+            $enableQuicksightAnalyticsResponseTransfer->getErrors()->getIterator()->current()->getMessage(),
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testReturnsResponseWithErrorWhenStartAssetBundleImportJobFails(): void
     {
         // Arrange

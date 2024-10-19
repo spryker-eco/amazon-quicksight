@@ -12,6 +12,7 @@ use Generated\Shared\Transfer\EnableQuicksightAnalyticsResponseTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsResponseTransfer;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightAssetBundleImportJobCreatorInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Deleter\DataSetDeleterInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Processor\AssetBundleQuicksightUserProcessorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Updater\QuicksightAssetBundleImportJobUpdaterInterface;
@@ -51,12 +52,18 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
     protected AssetBundleImportFileContentLoaderInterface $assetBundleImportFileContentLoader;
 
     /**
+     * @var \SprykerEco\Zed\AmazonQuicksight\Business\Deleter\DataSetDeleterInterface
+     */
+    protected DataSetDeleterInterface $dataSetDeleter;
+
+    /**
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightAssetBundleImportJobCreatorInterface $quicksightAssetBundleImportJobCreator
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Updater\QuicksightAssetBundleImportJobUpdaterInterface $quicksightAssetBundleImportJobUpdater
      * @param \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface $amazonQuicksightRepository
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Validator\QuicksightAnalyticsRequestValidatorInterface $quicksightAnalyticsRequestValidator
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\Processor\AssetBundleQuicksightUserProcessorInterface $assetBundleQuicksightUserProcessor
      * @param \SprykerEco\Zed\AmazonQuicksight\Business\FileContentLoader\AssetBundleImportFileContentLoaderInterface $assetBundleImportFileContentLoader
+     * @param \SprykerEco\Zed\AmazonQuicksight\Business\Deleter\DataSetDeleterInterface $dataSetDeleter
      */
     public function __construct(
         QuicksightAssetBundleImportJobCreatorInterface $quicksightAssetBundleImportJobCreator,
@@ -64,7 +71,8 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
         AmazonQuicksightRepositoryInterface $amazonQuicksightRepository,
         QuicksightAnalyticsRequestValidatorInterface $quicksightAnalyticsRequestValidator,
         AssetBundleQuicksightUserProcessorInterface $assetBundleQuicksightUserProcessor,
-        AssetBundleImportFileContentLoaderInterface $assetBundleImportFileContentLoader
+        AssetBundleImportFileContentLoaderInterface $assetBundleImportFileContentLoader,
+        DataSetDeleterInterface $dataSetDeleter
     ) {
         $this->quicksightAssetBundleImportJobCreator = $quicksightAssetBundleImportJobCreator;
         $this->quicksightAssetBundleImportJobUpdater = $quicksightAssetBundleImportJobUpdater;
@@ -72,6 +80,7 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
         $this->quicksightAnalyticsRequestValidator = $quicksightAnalyticsRequestValidator;
         $this->assetBundleQuicksightUserProcessor = $assetBundleQuicksightUserProcessor;
         $this->assetBundleImportFileContentLoader = $assetBundleImportFileContentLoader;
+        $this->dataSetDeleter = $dataSetDeleter;
     }
 
     /**
@@ -106,6 +115,14 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
             return $enableQuicksightAnalyticsResponseTransfer->setErrors($userCollectionResponseTransfer->getErrors());
         }
 
+        $quicksightDeleteAssetBundleDataSetsResponseTransfer = $this->dataSetDeleter->deleteAssetBundleDataSets();
+
+        if ($quicksightDeleteAssetBundleDataSetsResponseTransfer->getErrors()->count() !== 0) {
+            return $enableQuicksightAnalyticsResponseTransfer->setErrors(
+                $quicksightDeleteAssetBundleDataSetsResponseTransfer->getErrors(),
+            );
+        }
+
         $enableQuicksightAnalyticsRequestTransfer->setAssetBundleImportSourceBody(
             $this->assetBundleImportFileContentLoader->getAssetBundleImportFileContent(),
         );
@@ -137,6 +154,14 @@ class AssetBundleEnabler implements AssetBundleEnablerInterface
 
         if ($resetQuicksightAnalyticsResponseTransfer->getErrors()->count() !== 0) {
             return $resetQuicksightAnalyticsResponseTransfer;
+        }
+
+        $quicksightDeleteAssetBundleDataSetsResponseTransfer = $this->dataSetDeleter->deleteAssetBundleDataSets();
+
+        if ($quicksightDeleteAssetBundleDataSetsResponseTransfer->getErrors()->count() !== 0) {
+            return $resetQuicksightAnalyticsResponseTransfer->setErrors(
+                $quicksightDeleteAssetBundleDataSetsResponseTransfer->getErrors(),
+            );
         }
 
         $resetQuicksightAnalyticsRequestTransfer->setAssetBundleImportSourceBody(

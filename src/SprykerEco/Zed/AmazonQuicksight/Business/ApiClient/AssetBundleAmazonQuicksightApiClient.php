@@ -10,6 +10,8 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business\ApiClient;
 use Aws\QuickSight\Exception\QuickSightException;
 use Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\ErrorTransfer;
+use Generated\Shared\Transfer\QuicksightDeleteDataSetRequestTransfer;
+use Generated\Shared\Transfer\QuicksightDeleteDataSetResponseTransfer;
 use Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobRequestTransfer;
 use Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTransfer;
 use Generated\Shared\Transfer\QuicksightOverrideParametersDataSourceCredentialPairTransfer;
@@ -163,6 +165,33 @@ class AssetBundleAmazonQuicksightApiClient implements AssetBundleAmazonQuicksigh
     }
 
     /**
+     * @param string $idDataSet
+     * @param list<string> $errorCodesToIgnore
+     *
+     * @return \Generated\Shared\Transfer\QuicksightDeleteDataSetResponseTransfer
+     */
+    public function deleteDataSet(string $idDataSet, array $errorCodesToIgnore = []): QuicksightDeleteDataSetResponseTransfer
+    {
+        $quicksightDeleteDataSetRequestTransfer = $this->createQuicksightDeleteDataSetRequestTransfer($idDataSet);
+        $requestData = $this->amazonQuicksightRequestDataFormatter->formatRequestData(
+            $quicksightDeleteDataSetRequestTransfer->toArray(true, true),
+        );
+        $quicksightDeleteDataSetResponseTransfer = new QuicksightDeleteDataSetResponseTransfer();
+
+        try {
+            $this->amazonQuicksightToAwsQuicksightClient->deleteDataSet($requestData);
+        } catch (QuickSightException $quickSightException) {
+            if (!in_array($quickSightException->getAwsErrorCode(), $errorCodesToIgnore, true)) {
+                return $quicksightDeleteDataSetResponseTransfer->addError(
+                    (new ErrorTransfer())->setMessage($quickSightException->getAwsErrorMessage()),
+                );
+            }
+        }
+
+        return $quicksightDeleteDataSetResponseTransfer;
+    }
+
+    /**
      * @param \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer $quicksightStartAssetBundleImportJobRequestTransfer
      *
      * @return \Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobResponseTransfer
@@ -261,5 +290,18 @@ class AssetBundleAmazonQuicksightApiClient implements AssetBundleAmazonQuicksigh
         return (new QuicksightDescribeAssetBundleImportJobRequestTransfer())
             ->setAssetBundleImportJobId($assetBundleImportJobId)
             ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId());
+    }
+
+    /**
+     * @param string $idDataSet
+     *
+     * @return \Generated\Shared\Transfer\QuicksightDeleteDataSetRequestTransfer
+     */
+    protected function createQuicksightDeleteDataSetRequestTransfer(
+        string $idDataSet
+    ): QuicksightDeleteDataSetRequestTransfer {
+        return (new QuicksightDeleteDataSetRequestTransfer())
+            ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
+            ->setDataSetId($idDataSet);
     }
 }

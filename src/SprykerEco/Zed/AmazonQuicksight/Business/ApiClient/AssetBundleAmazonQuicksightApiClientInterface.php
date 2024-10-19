@@ -8,6 +8,7 @@
 namespace SprykerEco\Zed\AmazonQuicksight\Business\ApiClient;
 
 use Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer;
+use Generated\Shared\Transfer\QuicksightDeleteDataSetResponseTransfer;
 use Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTransfer;
 use Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobResponseTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
@@ -40,4 +41,12 @@ interface AssetBundleAmazonQuicksightApiClientInterface
     public function describeAssetBundleImportJob(
         string $assetBundleImportJobId
     ): QuicksightDescribeAssetBundleImportJobResponseTransfer;
+
+    /**
+     * @param string $idDataSet
+     * @param list<string> $errorCodesToIgnore
+     *
+     * @return \Generated\Shared\Transfer\QuicksightDeleteDataSetResponseTransfer
+     */
+    public function deleteDataSet(string $idDataSet, array $errorCodesToIgnore = []): QuicksightDeleteDataSetResponseTransfer;
 }
