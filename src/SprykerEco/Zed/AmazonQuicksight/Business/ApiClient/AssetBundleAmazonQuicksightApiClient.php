@@ -174,7 +174,7 @@ class AssetBundleAmazonQuicksightApiClient implements AssetBundleAmazonQuicksigh
     {
         $quicksightDeleteDataSetRequestTransfer = (new QuicksightDeleteDataSetRequestTransfer())
             ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
-            ->setDataSetId($idDataSet);;
+            ->setDataSetId($idDataSet);
         $requestData = $this->amazonQuicksightRequestDataFormatter->formatRequestData(
             $quicksightDeleteDataSetRequestTransfer->toArray(true, true),
         );
