@@ -172,7 +172,9 @@ class AssetBundleAmazonQuicksightApiClient implements AssetBundleAmazonQuicksigh
      */
     public function deleteDataSet(string $idDataSet, array $errorCodesToIgnore = []): QuicksightDeleteDataSetResponseTransfer
     {
-        $quicksightDeleteDataSetRequestTransfer = $this->createQuicksightDeleteDataSetRequestTransfer($idDataSet);
+        $quicksightDeleteDataSetRequestTransfer = (new QuicksightDeleteDataSetRequestTransfer())
+            ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
+            ->setDataSetId($idDataSet);;
         $requestData = $this->amazonQuicksightRequestDataFormatter->formatRequestData(
             $quicksightDeleteDataSetRequestTransfer->toArray(true, true),
         );
@@ -290,18 +292,5 @@ class AssetBundleAmazonQuicksightApiClient implements AssetBundleAmazonQuicksigh
         return (new QuicksightDescribeAssetBundleImportJobRequestTransfer())
             ->setAssetBundleImportJobId($assetBundleImportJobId)
             ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId());
-    }
-
-    /**
-     * @param string $idDataSet
-     *
-     * @return \Generated\Shared\Transfer\QuicksightDeleteDataSetRequestTransfer
-     */
-    protected function createQuicksightDeleteDataSetRequestTransfer(
-        string $idDataSet
-    ): QuicksightDeleteDataSetRequestTransfer {
-        return (new QuicksightDeleteDataSetRequestTransfer())
-            ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
-            ->setDataSetId($idDataSet);
     }
 }
