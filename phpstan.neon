@@ -1,0 +1,19 @@
+parameters:
+    level: 8
+    paths:
+        - src/
+    excludePaths:
+        - src/SprykerEco/Zed/AmazonQuicksight/Persistence/Propel/Abstract*.php
+    ignoreErrors:
+        - '#Call to method .+ on an unknown class .+Transfer#'
+        - '#Instantiated class .+Transfer not found#'
+        - '#Instantiated class Orm\\Zed\\AmazonQuicksight\\Persistence\\.+ not found.+#'
+        - '#Call to method .+\(\) on an unknown class Orm\\.+#'
+        - '#Call to static method create\(\) on an unknown class .+Query.#'
+        - '#Access to constant .+ on an unknown class .+Transfer#'
+        - '#Call to method .+\(\) on an unknown class Generated\\Zed\\Ide\\AutoCompletion#'
+        - '#Parameter .+ has invalid type .+Transfer#'
+        - '#Parameter .+ of method .+ has invalid type Orm\\.+#'
+        - '#Method .+ has invalid return type .+Transfer#'
+        - '#Method .+ has invalid return type Orm\\.+#'
+        - '#Call to an undefined method Aws\\Sts\\StsClient\:\:AssumeRole\(\).#'
