@@ -53,16 +53,6 @@ class AmazonQuicksightToAwsQuicksightClientAdapter implements AmazonQuicksightTo
      *
      * @return \Aws\ResultInterface<string, mixed>
      */
-    public function deleteUserByPrincipalId(array $deleteUserRequestData): ResultInterface
-    {
-        return $this->quicksightClient->deleteUserByPrincipalId($deleteUserRequestData);
-    }
-
-    /**
-     * @param array<string, mixed> $deleteUserRequestData
-     *
-     * @return \Aws\ResultInterface<string, mixed>
-     */
     public function deleteUser(array $deleteUserRequestData): ResultInterface
     {
         return $this->quicksightClient->deleteUser($deleteUserRequestData);

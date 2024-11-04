@@ -196,35 +196,6 @@ class UserAmazonQuicksightApiClient implements UserAmazonQuicksightApiClientInte
     }
 
     /**
-     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightDeleteUserResponseTransfer
-     */
-    public function deleteUserByPrincipalId(QuicksightUserTransfer $quicksightUserTransfer): QuicksightDeleteUserResponseTransfer
-    {
-        $quicksightUserDeleteRequestTransfer = $this->createQuicksightUserDeleteRequestTransfer();
-        $quicksightUserDeleteRequestTransfer = $this->amazonQuicksightMapper->mapQuicksightUserTransferToQuicksightDeleteUserRequestTransfer(
-            $quicksightUserTransfer,
-            $quicksightUserDeleteRequestTransfer,
-        );
-
-        $requestData = $this->amazonQuicksightRequestDataFormatter->formatRequestData(
-            $quicksightUserDeleteRequestTransfer->toArray(true, true),
-        );
-
-        $quicksightDeleteUserResponseTransfer = new QuicksightDeleteUserResponseTransfer();
-        try {
-            $this->amazonQuicksightToAwsQuicksightClient->deleteUserByPrincipalId($requestData);
-        } catch (QuickSightException $quickSightException) {
-            return $quicksightDeleteUserResponseTransfer->addError(
-                (new ErrorTransfer())->setMessage($quickSightException->getAwsErrorMessage()),
-            );
-        }
-
-        return $quicksightDeleteUserResponseTransfer;
-    }
-
-    /**
      * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
      *
      * @return \Generated\Shared\Transfer\QuicksightDeleteUserResponseTransfer

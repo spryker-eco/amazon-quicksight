@@ -33,13 +33,6 @@ interface UserAmazonQuicksightApiClientInterface
     ): QuicksightGenerateEmbedUrlResponseTransfer;
 
     /**
-     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightDeleteUserResponseTransfer
-     */
-    public function deleteUserByPrincipalId(QuicksightUserTransfer $quicksightUserTransfer): QuicksightDeleteUserResponseTransfer;
-
-    /**
      * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
      *
      * @return \Generated\Shared\Transfer\QuicksightDeleteUserResponseTransfer

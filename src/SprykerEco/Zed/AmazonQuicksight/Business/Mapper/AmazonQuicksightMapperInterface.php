@@ -68,17 +68,6 @@ interface AmazonQuicksightMapperInterface
     ): QuicksightGenerateEmbedUrlResponseTransfer;
 
     /**
-     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
-     * @param \Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer
-     */
-    public function mapQuicksightUserTransferToQuicksightDeleteUserRequestTransfer(
-        QuicksightUserTransfer $quicksightUserTransfer,
-        QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
-    ): QuicksightDeleteUserRequestTransfer;
-
-    /**
      * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
      * @param \Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
      *

@@ -112,20 +112,6 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
      *
      * @api
      *
-     * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
-     */
-    public function deleteNotMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer
-    {
-        return $this->getFactory()
-            ->createQuicksightUserDeleter()
-            ->deleteNotMatchedQuicksightUsers();
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @api
-     *
      * @param \Generated\Shared\Transfer\EnableQuicksightAnalyticsRequestTransfer $enableQuicksightAnalyticsRequestTransfer
      *
      * @return \Generated\Shared\Transfer\EnableQuicksightAnalyticsResponseTransfer

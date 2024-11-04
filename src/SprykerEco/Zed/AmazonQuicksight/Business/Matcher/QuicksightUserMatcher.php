@@ -79,37 +79,6 @@ class QuicksightUserMatcher implements QuicksightUserMatcherInterface
     }
 
     /**
-     * @param \ArrayObject<array-key, \Generated\Shared\Transfer\QuicksightUserTransfer> $quicksightUserTransfers
-     *
-     * @return list<\Generated\Shared\Transfer\QuicksightUserTransfer>
-     */
-    public function getQuicksightUsersNotMatchedWithExistingUsers(ArrayObject $quicksightUserTransfers): array
-    {
-        $filteredQuicksightUserTransfers = $this->quicksightUserCollectionFilter->filterOutQuicksightUsersWithUnsupportedQuicksightUserRoles(
-            $quicksightUserTransfers,
-        );
-        if ($filteredQuicksightUserTransfers === []) {
-            return [];
-        }
-
-        $userCollectionTransfer = $this->userReader->getUsersApplicableForQuicksightUserRegistration();
-        $userTransfersIndexedByUsername = $this->getUserTransfersIndexedByUsername(
-            $userCollectionTransfer->getUsers()->getArrayCopy(),
-        );
-
-        $notMatchedQuicksightUserTransfers = [];
-        foreach ($filteredQuicksightUserTransfers as $quicksightUserTransfer) {
-            if (isset($userTransfersIndexedByUsername[$quicksightUserTransfer->getUserNameOrFail()])) {
-                continue;
-            }
-
-            $notMatchedQuicksightUserTransfers[] = $quicksightUserTransfer;
-        }
-
-        return $notMatchedQuicksightUserTransfers;
-    }
-
-    /**
      * @param array<int|string, \Generated\Shared\Transfer\UserTransfer> $userTransfers
      *
      * @return array<string, \Generated\Shared\Transfer\UserTransfer>

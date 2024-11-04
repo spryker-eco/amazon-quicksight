@@ -119,22 +119,6 @@ interface AmazonQuicksightFacadeInterface
 
     /**
      * Specification:
-     * - Sends request to AWS API to get list of registered Quicksight users. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ListUsers.html}.
-     * - Filters out Quicksight users with unsupported roles using {@link \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::getQuicksightUserRoles()}.
-     * - Fetches user transfers from persistence.
-     * - Finds registered on Quicksight side Quicksight users not matched with users from persistence.
-     * - Sends request to AWS API to delete Quicksight users. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_DeleteUserByPrincipalId.html}.
-     * - Adds errors to `QuicksightUserCollectionResponseTransfer.errors` if any occurs.
-     * - Returns `QuicksightUserCollectionResponseTransfer` with deleted Quicksight users and errors if any occurs.
-     *
-     * @api
-     *
-     * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
-     */
-    public function deleteNotMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer;
-
-    /**
-     * Specification:
      * - Requires `EnableQuicksightAnalyticsRequestTransfer.assetBundleImportJobId` to be set.
      * - Requires `EnableQuicksightAnalyticsRequestTransfer.user` to be set.
      * - Validates whether Analytics can be enabled and populates `EnableQuicksightAnalyticsResponseTransfer.errors` with errors encountered during the validation.
