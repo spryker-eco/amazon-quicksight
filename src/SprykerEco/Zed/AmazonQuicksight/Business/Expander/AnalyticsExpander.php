@@ -32,7 +32,22 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
     /**
      * @var string
      */
-    protected const TEMPLATE_PATH_QUICKSIGHT_ANALYTICS_ACTIONS = '@AmazonQuicksight/_partials/quicksight-analytics-actions.twig';
+    protected const TEMPLATE_PATH_QUICKSIGHT_ANALYTICS_RESET_ACTION = '@AmazonQuicksight/_partials/quicksight-analytics-reset-action.twig';
+
+    /**
+     * @var string
+     */
+    protected const TEMPLATE_PATH_SYNCHRONIZE_QUICKSIGHT_USERS_ACTION = '@AmazonQuicksight/_partials/synchronize-quicksight-users-action.twig';
+
+    /**
+     * @var string
+     */
+    protected const FORM_NAME_SYNCHRONIZE_QUICKSIGHT_USERS = 'synchronizeQuicksightUsersForm';
+
+    /**
+     * @var string
+     */
+    protected const FIELD_NAME_TOKEN = '_token';
 
     /**
      * @var \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface
@@ -169,12 +184,20 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
         ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
         ?QuicksightUserTransfer $quicksightUserTransfer
     ): AnalyticsCollectionTransfer {
+        $analyticsCollectionTransfer->addAnalyticsAction((new AnalyticsActionTransfer())->setContent(
+            $this->twigEnvironment->render(static::TEMPLATE_PATH_SYNCHRONIZE_QUICKSIGHT_USERS_ACTION, [
+                'formName' => static::FORM_NAME_SYNCHRONIZE_QUICKSIGHT_USERS,
+                'tokenFieldName' => static::FIELD_NAME_TOKEN,
+            ]),
+        ));
+
         if (!$this->quicksightAnalyticsRequestValidator->isResetAnalyticsEnabled($quicksightAssetBundleImportJobTransfer, $quicksightUserTransfer)) {
             return $analyticsCollectionTransfer;
         }
 
-        $content = $this->twigEnvironment->render(static::TEMPLATE_PATH_QUICKSIGHT_ANALYTICS_ACTIONS);
-        $analyticsCollectionTransfer->addAnalyticsAction((new AnalyticsActionTransfer())->setContent($content));
+        $analyticsCollectionTransfer->addAnalyticsAction((new AnalyticsActionTransfer())->setContent(
+            $this->twigEnvironment->render(static::TEMPLATE_PATH_QUICKSIGHT_ANALYTICS_RESET_ACTION),
+        ));
 
         return $analyticsCollectionTransfer;
     }

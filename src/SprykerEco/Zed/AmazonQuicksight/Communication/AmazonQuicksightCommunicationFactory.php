@@ -19,6 +19,7 @@ use SprykerEco\Zed\AmazonQuicksight\Communication\Transformer\QuicksightUserRole
 use SprykerEco\Zed\AmazonQuicksight\Dependency\Facade\AmazonQuicksightToUserFacadeInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
  * @method \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig getConfig()
@@ -78,5 +79,13 @@ class AmazonQuicksightCommunicationFactory extends AbstractCommunicationFactory
     public function getUserFacade(): AmazonQuicksightToUserFacadeInterface
     {
         return $this->getProvidedDependency(AmazonQuicksightDependencyProvider::FACADE_USER);
+    }
+
+    /**
+     * @return \Symfony\Component\Security\Csrf\CsrfTokenManagerInterface
+     */
+    public function getCsrfTokenManager(): CsrfTokenManagerInterface
+    {
+        return $this->getProvidedDependency(AmazonQuicksightDependencyProvider::SERVICE_FORM_CSRF_PROVIDER);
     }
 }

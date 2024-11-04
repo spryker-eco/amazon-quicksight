@@ -12,3 +12,6 @@ Analytics,Analytics
 "Enable Analytics","Analytics einschalten"
 "Reset Analytics","Analytics zurücksetzen"
 "Spryker Analytics is being activated. Please wait 4-5 minutes and reload the page.","Spryker Analytics wird aktiviert. Bitte warten Sie 4-5 Minuten und laden Sie die Seite neu."
+"Analytics users have been successfully synchronized.","Analytics-Benutzer wurden erfolgreich synchronisiert."
+"Synchronize Users","Benutzer synchronisieren"
+"CSRF token is not valid.","CSRF-Token ist ungültig."
