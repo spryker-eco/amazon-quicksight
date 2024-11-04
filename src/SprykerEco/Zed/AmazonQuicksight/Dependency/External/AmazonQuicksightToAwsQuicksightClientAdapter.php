@@ -79,16 +79,6 @@ class AmazonQuicksightToAwsQuicksightClientAdapter implements AmazonQuicksightTo
     }
 
     /**
-     * @param array<string, mixed> $updateUserRequestData
-     *
-     * @return \Aws\ResultInterface<string, mixed>
-     */
-    public function updateUser(array $updateUserRequestData): ResultInterface
-    {
-        return $this->quicksightClient->updateUser($updateUserRequestData);
-    }
-
-    /**
      * @param array<string, mixed> $startAssetBundleImportJobRequestData
      *
      * @return \Aws\ResultInterface<string, mixed>

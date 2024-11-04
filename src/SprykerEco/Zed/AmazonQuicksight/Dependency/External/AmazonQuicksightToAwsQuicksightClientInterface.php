@@ -47,13 +47,6 @@ interface AmazonQuicksightToAwsQuicksightClientInterface
     public function listUsers(array $listUsersRequestData): ResultInterface;
 
     /**
-     * @param array<string, mixed> $updateUserRequestData
-     *
-     * @return \Aws\ResultInterface<string, mixed>
-     */
-    public function updateUser(array $updateUserRequestData): ResultInterface;
-
-    /**
      * @param array<string, mixed> $startAssetBundleImportJobRequestData
      *
      * @return \Aws\ResultInterface<string, mixed>

@@ -16,7 +16,6 @@ use Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTran
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer;
-use Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
@@ -133,17 +132,6 @@ interface AmazonQuicksightMapperInterface
         QuicksightDescribeAssetBundleImportJobResponseTransfer $quicksightDescribeAssetBundleImportJobResponseTransfer,
         QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
     ): QuicksightAssetBundleImportJobTransfer;
-
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     * @param \Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer $quicksightUpdateUserRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer
-     */
-    public function mapUserTransferToQuicksightUpdateUserRequestTransfer(
-        UserTransfer $userTransfer,
-        QuicksightUpdateUserRequestTransfer $quicksightUpdateUserRequestTransfer
-    ): QuicksightUpdateUserRequestTransfer;
 
     /**
      * @param \Generated\Shared\Transfer\QuicksightDeleteDataSetResponseTransfer $quicksightDeleteDataSetResponseTransfer

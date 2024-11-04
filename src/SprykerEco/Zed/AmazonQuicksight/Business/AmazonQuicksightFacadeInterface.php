@@ -139,8 +139,6 @@ interface AmazonQuicksightFacadeInterface
      * - Requires `EnableQuicksightAnalyticsRequestTransfer.user` to be set.
      * - Validates whether Analytics can be enabled and populates `EnableQuicksightAnalyticsResponseTransfer.errors` with errors encountered during the validation.
      * - If validation fails, Analytics will not be enabled and `EnableQuicksightAnalyticsResponseTransfer` will be returned.
-     * - If current user is not a Quicksight user, creates a new Quicksight user with AUTHOR role.
-     * - If current user is a Quicksight user with READER role, upgrades the user to AUTHOR.
      * - Starts the asset bundle import job for a file located at the path specified by {@link \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::getAssetBundleImportFilePath()} to Quicksight.
      * - Throws {@link \SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFilePathNotDefinedException} if the path is not specified.
      * - Saves asset bundle import job to persistence and populates `EnableQuicksightAnalyticsResponseTransfer.quicksightAssetBundleImportJob` if the import job started successfully.

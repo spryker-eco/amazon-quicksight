@@ -51,11 +51,24 @@ interface QuicksightAnalyticsRequestValidatorInterface
 
     /**
      * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer|null $quicksightAssetBundleImportJobTransfer
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer|null $quicksightUserTransfer
      *
      * @return bool
      */
     public function isEnableAnalyticsEnabled(
-        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
+        ?QuicksightUserTransfer $quicksightUserTransfer
+    ): bool;
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer|null $quicksightAssetBundleImportJobTransfer
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer|null $quicksightUserTransfer
+     *
+     * @return bool
+     */
+    public function isDisplayAnalyticsEnabled(
+        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
+        ?QuicksightUserTransfer $quicksightUserTransfer
     ): bool;
 
     /**

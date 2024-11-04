@@ -10,7 +10,6 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business\ApiClient;
 use Generated\Shared\Transfer\QuicksightDeleteUserResponseTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightListUsersResponseTransfer;
-use Generated\Shared\Transfer\QuicksightUpdateUserResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUserRegisterResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserTransfer;
@@ -51,11 +50,4 @@ interface UserAmazonQuicksightApiClientInterface
      * @return \Generated\Shared\Transfer\QuicksightListUsersResponseTransfer
      */
     public function listUsers(): QuicksightListUsersResponseTransfer;
-
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightUpdateUserResponseTransfer
-     */
-    public function updateUser(UserTransfer $userTransfer): QuicksightUpdateUserResponseTransfer;
 }

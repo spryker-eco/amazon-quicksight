@@ -266,19 +266,6 @@
         <property name="errors" type="Error[]" singular="error"/>
     </transfer>
 
-    <transfer name="QuicksightUpdateUserResponse" strict="true">
-        <property name="quicksightUser" type="QuicksightUser"/>
-        <property name="errors" type="Error[]" singular="error"/>
-    </transfer>
-
-    <transfer name="QuicksightUpdateUserRequest" strict="true">
-        <property name="awsAccountId" type="string"/>
-        <property name="email" type="string" />
-        <property name="namespace" type="string"/>
-        <property name="role" type="string" />
-        <property name="userName" type="string"/>
-    </transfer>
-
     <transfer name="QuicksightDeleteDataSetRequest" strict="true">
         <property name="awsAccountId" type="string"/>
         <property name="dataSetId" type="string"/>

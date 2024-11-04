@@ -52,8 +52,9 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
         EnableQuicksightAnalyticsResponseTransfer $enableQuicksightAnalyticsResponseTransfer
     ): EnableQuicksightAnalyticsResponseTransfer {
         $quicksightAssetBundleImportJobTransfer = $enableQuicksightAnalyticsRequestTransfer->getQuicksightAssetBundleImportJob();
+        $quicksightUserTransfer = $enableQuicksightAnalyticsRequestTransfer->getUserOrFail()->getQuicksightUser();
 
-        if (!$this->isEnableAnalyticsEnabled($quicksightAssetBundleImportJobTransfer)) {
+        if (!$this->isEnableAnalyticsEnabled($quicksightAssetBundleImportJobTransfer, $quicksightUserTransfer)) {
             $enableQuicksightAnalyticsResponseTransfer->addError(
                 (new ErrorTransfer())->setMessage(static::ERROR_MESSAGE_ENABLE_ANALYTICS_FAILED),
             );
@@ -101,14 +102,32 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
 
     /**
      * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer|null $quicksightAssetBundleImportJobTransfer
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer|null $quicksightUserTransfer
      *
      * @return bool
      */
     public function isEnableAnalyticsEnabled(
-        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
+        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
+        ?QuicksightUserTransfer $quicksightUserTransfer
     ): bool {
         return !$this->isAssetBundleSuccessfullyInitialized($quicksightAssetBundleImportJobTransfer)
-            && !$this->isAssetBundleInitializationInProgress($quicksightAssetBundleImportJobTransfer);
+            && !$this->isAssetBundleInitializationInProgress($quicksightAssetBundleImportJobTransfer)
+            && $this->isQuicksightUserAuthor($quicksightUserTransfer);
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer|null $quicksightAssetBundleImportJobTransfer
+     * @param \Generated\Shared\Transfer\QuicksightUserTransfer|null $quicksightUserTransfer
+     *
+     * @return bool
+     */
+    public function isDisplayAnalyticsEnabled(
+        ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
+        ?QuicksightUserTransfer $quicksightUserTransfer
+    ): bool {
+        return $this->isAssetBundleSuccessfullyInitialized($quicksightAssetBundleImportJobTransfer)
+            && !$this->isAssetBundleInitializationInProgress($quicksightAssetBundleImportJobTransfer)
+            && $this->isQuicksightUserRoleAvailable($quicksightUserTransfer);
     }
 
     /**

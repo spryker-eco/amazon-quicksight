@@ -129,25 +129,26 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
         ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
         ?QuicksightUserTransfer $quicksightUserTransfer
     ): AnalyticsCollectionTransfer {
-        $isAssetBundleSuccessfullyInitialized = $this->quicksightAnalyticsRequestValidator
-            ->isAssetBundleSuccessfullyInitialized($quicksightAssetBundleImportJobTransfer);
-        $isAssetBundleInitializationInProgress = $this->quicksightAnalyticsRequestValidator
-            ->isAssetBundleInitializationInProgress($quicksightAssetBundleImportJobTransfer);
-        $isQuicksightUserRoleAvailable = $this->quicksightAnalyticsRequestValidator
-            ->isQuicksightUserRoleAvailable($quicksightUserTransfer);
-
         $content = $this->twigEnvironment->render(
             static::TEMPLATE_PATH_QUICKSIGHT_ANALYTICS,
             [
                 'quicksightGenerateEmbedUrlResponse' => $this->getQuicksightGenerateEmbedUrlResponseTransfer(
-                    $isAssetBundleSuccessfullyInitialized,
-                    $isQuicksightUserRoleAvailable,
+                    $this->quicksightAnalyticsRequestValidator
+                        ->isAssetBundleSuccessfullyInitialized($quicksightAssetBundleImportJobTransfer),
+                    $this->quicksightAnalyticsRequestValidator->isQuicksightUserRoleAvailable($quicksightUserTransfer),
                     $quicksightUserTransfer,
                 ),
                 'quicksightAssetBundleImportJob' => $quicksightAssetBundleImportJobTransfer,
-                'isAssetBundleSuccessfullyInitialized' => $isAssetBundleSuccessfullyInitialized,
-                'isAssetBundleInitializationInProgress' => $isAssetBundleInitializationInProgress,
-                'isQuicksightUserRoleAvailable' => $isQuicksightUserRoleAvailable,
+                'isAssetBundleInitializationInProgress' => $this->quicksightAnalyticsRequestValidator
+                    ->isAssetBundleInitializationInProgress($quicksightAssetBundleImportJobTransfer),
+                'isEnableAnalyticsEnabled' => $this->quicksightAnalyticsRequestValidator->isEnableAnalyticsEnabled(
+                    $quicksightAssetBundleImportJobTransfer,
+                    $quicksightUserTransfer,
+                ),
+                'isDisplayAnalyticsEnabled' => $this->quicksightAnalyticsRequestValidator->isDisplayAnalyticsEnabled(
+                    $quicksightAssetBundleImportJobTransfer,
+                    $quicksightUserTransfer,
+                ),
             ],
         );
 
