@@ -8,9 +8,7 @@
 namespace SprykerEco\Zed\AmazonQuicksight\Business\Creator;
 
 use ArrayObject;
-use Generated\Shared\Transfer\MessageTransfer;
 use Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer;
-use Generated\Shared\Transfer\UserCollectionResponseTransfer;
 use Spryker\Zed\Kernel\Persistence\EntityManager\TransactionTrait;
 use SprykerEco\Zed\AmazonQuicksight\Business\Adder\ErrorAdderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClientInterface;
@@ -22,11 +20,6 @@ use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInt
 class QuicksightUserCreator implements QuicksightUserCreatorInterface
 {
     use TransactionTrait;
-
-    /**
-     * @var string
-     */
-    protected const ERROR_MESSAGE_QUICKSIGHT_USER_REGISTRATION_FAILED = 'The user role for Analytics could not be set. Please try again later.';
 
     /**
      * @var \SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilterInterface
@@ -83,30 +76,6 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
     }
 
     /**
-     * @param \Generated\Shared\Transfer\UserCollectionResponseTransfer $userCollectionResponseTransfer
-     *
-     * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
-     */
-    public function createQuicksightUsersByUserCollectionResponse(
-        UserCollectionResponseTransfer $userCollectionResponseTransfer
-    ): UserCollectionResponseTransfer {
-        $filteredUserTransfers = $this->userCollectionFilter->filterOutUserTransfersNotApplicableForQuicksightUserRegistration(
-            $userCollectionResponseTransfer->getUsers()->getArrayCopy(),
-        );
-
-        if ($filteredUserTransfers === []) {
-            return $userCollectionResponseTransfer;
-        }
-
-        return $this->getTransactionHandler()->handleTransaction(function () use ($userCollectionResponseTransfer, $filteredUserTransfers) {
-            return $this->executeCreateQuicksightUsersForUserCollectionResponseTransaction(
-                $userCollectionResponseTransfer,
-                $filteredUserTransfers,
-            );
-        });
-    }
-
-    /**
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
      */
     public function createMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer
@@ -137,42 +106,6 @@ class QuicksightUserCreator implements QuicksightUserCreatorInterface
         });
 
         return $quicksightUserCollectionResponseTransfer->setQuicksightUsers(new ArrayObject($persistedQuicksightUserTransfers));
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\UserCollectionResponseTransfer $userCollectionResponseTransfer
-     * @param array<int|string, \Generated\Shared\Transfer\UserTransfer> $userTransfers
-     *
-     * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
-     */
-    protected function executeCreateQuicksightUsersForUserCollectionResponseTransaction(
-        UserCollectionResponseTransfer $userCollectionResponseTransfer,
-        array $userTransfers
-    ): UserCollectionResponseTransfer {
-        foreach ($userTransfers as $entityIdentifier => $userTransfer) {
-            $quicksightUserRegisterResponseTransfer = $this->userAmazonQuicksightApiClient->registerUser($userTransfer);
-            if ($quicksightUserRegisterResponseTransfer->getErrors()->count() !== 0) {
-                $userCollectionResponseTransfer = $this->errorAdder->addErrorsToUserCollectionResponse(
-                    $userCollectionResponseTransfer,
-                    $quicksightUserRegisterResponseTransfer->getErrors(),
-                    (string)$entityIdentifier,
-                );
-
-                $this->messengerFacade->addErrorMessage(
-                    (new MessageTransfer())->setValue(static::ERROR_MESSAGE_QUICKSIGHT_USER_REGISTRATION_FAILED),
-                );
-
-                continue;
-            }
-
-            $quicksightUserTransfer = $quicksightUserRegisterResponseTransfer->getQuicksightUserOrFail();
-            $quicksightUserTransfer->setFkUser($userTransfer->getIdUserOrFail());
-
-            $quicksightUserTransfer = $this->amazonQuicksightEntityManager->createQuicksightUser($quicksightUserTransfer);
-            $userTransfer->setQuicksightUser($quicksightUserTransfer);
-        }
-
-        return $userCollectionResponseTransfer;
     }
 
     /**

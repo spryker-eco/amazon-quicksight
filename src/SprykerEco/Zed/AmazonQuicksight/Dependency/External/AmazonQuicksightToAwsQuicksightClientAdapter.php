@@ -29,16 +29,6 @@ class AmazonQuicksightToAwsQuicksightClientAdapter implements AmazonQuicksightTo
     }
 
     /**
-     * @param array<string, mixed> $registerUserRequestData
-     *
-     * @return \Aws\ResultInterface<string, mixed>
-     */
-    public function registerUser(array $registerUserRequestData): ResultInterface
-    {
-        return $this->quicksightClient->registerUser($registerUserRequestData);
-    }
-
-    /**
      * @param array<string, mixed> $generateEmbedUrlRequestData
      *
      * @return \Aws\ResultInterface<string, mixed>

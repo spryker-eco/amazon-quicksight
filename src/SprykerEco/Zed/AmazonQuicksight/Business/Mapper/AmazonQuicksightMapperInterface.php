@@ -16,24 +16,12 @@ use Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTran
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer;
-use Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 
 interface AmazonQuicksightMapperInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     * @param \Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer $quicksightUserRegisterRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer
-     */
-    public function mapUserTransferToQuicksightUserRegisterRequestTransfer(
-        UserTransfer $userTransfer,
-        QuicksightUserRegisterRequestTransfer $quicksightUserRegisterRequestTransfer
-    ): QuicksightUserRegisterRequestTransfer;
-
     /**
      * @param array<string, mixed> $quicksightUserData
      * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer

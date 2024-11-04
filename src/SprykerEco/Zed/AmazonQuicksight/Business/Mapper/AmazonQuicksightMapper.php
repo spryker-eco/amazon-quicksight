@@ -19,7 +19,6 @@ use Generated\Shared\Transfer\QuicksightEmbedUrlTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer;
-use Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\UserTransfer;
@@ -46,22 +45,6 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
      * @var string
      */
     protected const RESPONSE_KEY_ERRORS_MESSAGE = 'Message';
-
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     * @param \Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer $quicksightUserRegisterRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer
-     */
-    public function mapUserTransferToQuicksightUserRegisterRequestTransfer(
-        UserTransfer $userTransfer,
-        QuicksightUserRegisterRequestTransfer $quicksightUserRegisterRequestTransfer
-    ): QuicksightUserRegisterRequestTransfer {
-        return $quicksightUserRegisterRequestTransfer
-            ->setEmail($userTransfer->getUsernameOrFail())
-            ->setUserName($userTransfer->getUsernameOrFail())
-            ->setUserRole(strtoupper($userTransfer->getQuicksightUserOrFail()->getRoleOrFail()));
-    }
 
     /**
      * @param array<string, mixed> $quicksightUserData

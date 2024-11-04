@@ -43,23 +43,9 @@
         <property name="status" type="string"/>
     </transfer>
 
-    <transfer name="QuicksightUserRegisterResponse" strict="true">
-        <property name="errors" type="Error[]" singular="error"/>
-        <property name="quicksightUser" type="QuicksightUser"/>
-    </transfer>
-
     <transfer name="QuicksightDeleteUserResponse" strict="true">
         <property name="errors" type="Error[]" singular="error"/>
         <property name="quicksightUser" type="QuicksightUser"/>
-    </transfer>
-
-    <transfer name="QuicksightUserRegisterRequest" strict="true">
-        <property name="awsAccountId" type="string"/>
-        <property name="email" type="string" />
-        <property name="identityType" type="string" />
-        <property name="namespace" type="string"/>
-        <property name="userRole" type="string" />
-        <property name="userName" type="string"/>
     </transfer>
 
     <transfer name="QuicksightDeleteUserRequest" strict="true">

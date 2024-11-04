@@ -45,23 +45,6 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
      *
      * @api
      *
-     * @param \Generated\Shared\Transfer\UserCollectionResponseTransfer $userCollectionResponseTransfer
-     *
-     * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
-     */
-    public function createQuicksightUsersByUserCollectionResponse(
-        UserCollectionResponseTransfer $userCollectionResponseTransfer
-    ): UserCollectionResponseTransfer {
-        return $this->getFactory()
-            ->createQuicksightUserCreator()
-            ->createQuicksightUsersByUserCollectionResponse($userCollectionResponseTransfer);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @api
-     *
      * @param \Generated\Shared\Transfer\AnalyticsRequestTransfer $analyticsRequestTransfer
      * @param \Generated\Shared\Transfer\AnalyticsCollectionTransfer $analyticsCollectionTransfer
      *
