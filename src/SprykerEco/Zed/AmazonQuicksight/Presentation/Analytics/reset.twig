@@ -12,7 +12,7 @@
 {% block content %}
     {% embed '@Gui/Partials/widget.twig' %}
         {% block widget_content %}
-            <h4 class="spacing-bottom-big">{{ 'Please be aware that all Analytics dashboards and configurations, including your changes, will be reset and replaced with the default data. Also, all users will be detached from assets upon reset process. Owner of default assets will be replaced with the user who initiated the reset process by clicking this button.' | trans }}</h4>
+            <h4 class="spacing-bottom-big">{{ 'Please be aware that all default dashboards and analyses, including your changes, will be reset and replaced with the default data. Also, all users will be detached from assets upon the reset process. The owner of default assets will be replaced with the user who initiated the reset process.' | trans }}</h4>
             <div>
                 {{ form_start(resetAnalyticsForm) }}
                     {{ viewActionButton(app.request.headers.get('referer'), 'Cancel' | trans) }}

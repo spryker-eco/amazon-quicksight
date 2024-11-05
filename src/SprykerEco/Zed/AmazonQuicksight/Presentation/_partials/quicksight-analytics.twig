@@ -18,8 +18,8 @@
         <div class="analytics__icon"><i class="fa fa-chart-bar"></i></div>
 
         <div class="analytics__content">
-            <h3 class="analytics__heading">{{ 'Spryker Analytics is not enabled yet' | trans }}</h3>
-            <p>{{ 'You can enable Spryker Analytics to view and modify default dashboards with the ability to share them with other users. ' | trans }}</p>
+            <h3 class="analytics__heading">{{ 'Analytics is not enabled yet' | trans }}</h3>
+            <p>{{ 'You can enable Analytics to view and modify dashboards with the ability to share them with other users. ' | trans }}</p>
         </div>
 
         <div class="analytics__button">
@@ -38,7 +38,7 @@
         <script src="{{ assetsPath('js/spryker-zed-quicksight-analytics-gui-main.js') }}"></script>
     {% endif %}
 {% elseif isAssetBundleInitializationInProgress %}
-    <div class="alert alert-info" role="alert">{{ 'Spryker Analytics is being activated. Please wait 4-5 minutes and reload the page.' | trans }}</div>
+    <div class="alert alert-info" role="alert">{{ 'Analytics is being activated. Please wait 3-5 minutes and reload the page.' | trans }}</div>
 {% else %}
     <div class="alert alert-info">
         {{ 'No Analytics permission has been granted to the current user.' | trans }}
