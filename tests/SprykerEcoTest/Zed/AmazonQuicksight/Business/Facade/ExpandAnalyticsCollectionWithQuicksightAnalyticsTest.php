@@ -571,18 +571,18 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
     }
 
     /**
-     * @param bool $isAssetBundleSuccessfullyInitialized
+     * @param bool $isEnableAnalyticsEnabled
      * @param bool $isAssetBundleInitializationInProgress
-     * @param bool $isQuicksightUserRoleAvailable
+     * @param bool $isDisplayAnalyticsEnabled
      * @param \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer
      * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer|null $quicksightAssetBundleImportJobTransfer
      *
      * @return \PHPUnit\Framework\MockObject\MockObject|\Twig\Environment
      */
     protected function getTwigMock(
-        bool $isAssetBundleSuccessfullyInitialized,
+        bool $isEnableAnalyticsEnabled,
         bool $isAssetBundleInitializationInProgress,
-        bool $isQuicksightUserRoleAvailable,
+        bool $isDisplayAnalyticsEnabled,
         QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer,
         ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer = null
     ): Environment {
@@ -595,9 +595,9 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
                 [
                     $this->equalTo(static::TEMPLATE_PATH_QUICKSIGHT_ANALYTICS),
                     $this->equalTo([
-                        'isAssetBundleSuccessfullyInitialized' => $isAssetBundleSuccessfullyInitialized,
+                        'isEnableAnalyticsEnabled' => $isEnableAnalyticsEnabled,
                         'isAssetBundleInitializationInProgress' => $isAssetBundleInitializationInProgress,
-                        'isQuicksightUserRoleAvailable' => $isQuicksightUserRoleAvailable,
+                        'isDisplayAnalyticsEnabled' => $isDisplayAnalyticsEnabled,
                         'quicksightGenerateEmbedUrlResponse' => $quicksightGenerateEmbedUrlResponseTransfer,
                         'quicksightAssetBundleImportJob' => $quicksightAssetBundleImportJobTransfer,
                     ]),
