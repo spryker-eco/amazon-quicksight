@@ -33,7 +33,7 @@
         {% endfor %}
     {% endif %}
     {% if quicksightGenerateEmbedUrlResponse.embedUrl is not null and quicksightGenerateEmbedUrlResponse.embedUrl.url is not null %}
-        <div id="experience-container" style="height: calc(100vh - 260px)" data-embed-url="{{ quicksightGenerateEmbedUrlResponse.embedUrl.url | raw }}"></div>
+        <div id="experience-container" style="height: calc(100vh - 55px)" data-embed-url="{{ quicksightGenerateEmbedUrlResponse.embedUrl.url | raw }}"></div>
 
         <script src="{{ assetsPath('js/spryker-zed-quicksight-analytics-gui-main.js') }}"></script>
     {% endif %}
