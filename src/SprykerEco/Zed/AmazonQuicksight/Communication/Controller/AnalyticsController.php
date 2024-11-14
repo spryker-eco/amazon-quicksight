@@ -24,11 +24,9 @@ use Symfony\Component\HttpFoundation\Request;
 class AnalyticsController extends AbstractController
 {
     /**
-     * @uses \Spryker\Zed\AnalyticsGui\Communication\Controller\AnalyticsController::indexAction()
-     *
      * @var string
      */
-    protected const URL_ANALYTICS = '/analytics-gui/analytics';
+    protected const PARAM_REFERER = 'referer';
 
     /**
      * @var string
@@ -65,7 +63,7 @@ class AnalyticsController extends AbstractController
             $this->addErrorMessage($errorTransfer->getMessageOrFail());
         }
 
-        return $this->redirectResponse(static::URL_ANALYTICS);
+        return $this->getRedirectResponseReferer($request);
     }
 
     /**
@@ -98,7 +96,7 @@ class AnalyticsController extends AbstractController
             $this->addErrorMessage($errorTransfer->getMessageOrFail());
         }
 
-        return $this->redirectResponse(static::URL_ANALYTICS);
+        return $this->getRedirectResponseReferer($request);
     }
 
     /**
@@ -115,5 +113,15 @@ class AnalyticsController extends AbstractController
         );
 
         return $userCollectionTransfer->getUsers()->getIterator()->current();
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    protected function getRedirectResponseReferer(Request $request): RedirectResponse
+    {
+        return $this->redirectResponse($request->headers->get(static::PARAM_REFERER));
     }
 }

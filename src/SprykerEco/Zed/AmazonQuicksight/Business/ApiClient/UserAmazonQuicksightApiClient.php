@@ -32,13 +32,6 @@ class UserAmazonQuicksightApiClient implements UserAmazonQuicksightApiClientInte
     protected const QUICKSIGHT_USER_IDENTITY_TYPE = 'QUICKSIGHT';
 
     /**
-     * @link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_RegisterUser.html#API_RegisterUser_ResponseSyntax
-     *
-     * @var string
-     */
-    protected const RESPONSE_KEY_USER = 'User';
-
-    /**
      * @link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ListUsers.html#QS-ListUsers-response-UserList
      *
      * @var string

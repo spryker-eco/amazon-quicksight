@@ -47,7 +47,7 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
     /**
      * @var string
      */
-    protected const FIELD_NAME_TOKEN = '_token';
+    protected const FIELD_NAME_SYNCHRONIZE_QUICKSIGHT_USERS_FORM_TOKEN = '_token';
 
     /**
      * @var \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface
@@ -187,7 +187,7 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
         $analyticsCollectionTransfer->addAnalyticsAction((new AnalyticsActionTransfer())->setContent(
             $this->twigEnvironment->render(static::TEMPLATE_PATH_SYNCHRONIZE_QUICKSIGHT_USERS_ACTION, [
                 'formName' => static::FORM_NAME_SYNCHRONIZE_QUICKSIGHT_USERS,
-                'tokenFieldName' => static::FIELD_NAME_TOKEN,
+                'tokenFieldName' => static::FIELD_NAME_SYNCHRONIZE_QUICKSIGHT_USERS_FORM_TOKEN,
             ]),
         ));
 

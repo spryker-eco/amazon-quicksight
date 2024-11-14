@@ -20,11 +20,9 @@ use Symfony\Component\Security\Csrf\CsrfToken;
 class UserController extends AbstractController
 {
     /**
-     * @uses \Spryker\Zed\AnalyticsGui\Communication\Controller\AnalyticsController::indexAction()
-     *
      * @var string
      */
-    protected const URL_ANALYTICS = '/analytics-gui/analytics';
+    protected const PARAM_REFERER = 'referer';
 
     /**
      * @var string
@@ -62,7 +60,7 @@ class UserController extends AbstractController
         if (!$this->validateCsrfToken(static::FORM_NAME_SYNCHRONIZE_QUICKSIGHT_USERS, $tokenValue)) {
             $this->addErrorMessage(static::ERROR_MESSAGE_CSRF_TOKEN_INVALID);
 
-            return $this->redirectResponse(static::URL_ANALYTICS);
+            return $this->getRedirectResponseReferer($request);
         }
 
         $quicksightUserCollectionResponseTransfer = $this->getFacade()->createMatchedQuicksightUsers();
@@ -70,14 +68,14 @@ class UserController extends AbstractController
         if ($quicksightUserCollectionResponseTransfer->getErrors()->count() === 0) {
             $this->addSuccessMessage(static::SUCCESS_MESSAGE_USERS_SYNCHRONIZED);
 
-            return $this->redirectResponse(static::URL_ANALYTICS);
+            return $this->getRedirectResponseReferer($request);
         }
 
         foreach ($quicksightUserCollectionResponseTransfer->getErrors() as $errorTransfer) {
             $this->addErrorMessage($errorTransfer->getMessageOrFail());
         }
 
-        return $this->redirectResponse(static::URL_ANALYTICS);
+        return $this->getRedirectResponseReferer($request);
     }
 
     /**
@@ -91,5 +89,15 @@ class UserController extends AbstractController
         $csrfToken = new CsrfToken($tokenId, $value);
 
         return $this->getFactory()->getCsrfTokenManager()->isTokenValid($csrfToken);
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    protected function getRedirectResponseReferer(Request $request): RedirectResponse
+    {
+        return $this->redirectResponse($request->headers->get(static::PARAM_REFERER));
     }
 }

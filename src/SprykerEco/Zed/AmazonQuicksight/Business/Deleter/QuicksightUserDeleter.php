@@ -9,7 +9,6 @@ namespace SprykerEco\Zed\AmazonQuicksight\Business\Deleter;
 
 use Generated\Shared\Transfer\MessageTransfer;
 use Generated\Shared\Transfer\UserCollectionResponseTransfer;
-use Spryker\Zed\Kernel\Persistence\EntityManager\TransactionTrait;
 use SprykerEco\Zed\AmazonQuicksight\Business\Adder\ErrorAdderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Filter\UserCollectionFilterInterface;
@@ -19,8 +18,6 @@ use SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightEntityManagerInt
 
 class QuicksightUserDeleter implements QuicksightUserDeleterInterface
 {
-    use TransactionTrait;
-
     /**
      * @var string
      */
@@ -96,12 +93,7 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
             return $userCollectionResponseTransfer;
         }
 
-        return $this->getTransactionHandler()->handleTransaction(function () use ($userCollectionResponseTransfer, $filteredUserTransfers) {
-            return $this->executeDeleteQuicksightUsersByUserCollectionResponseTransaction(
-                $userCollectionResponseTransfer,
-                $filteredUserTransfers,
-            );
-        });
+        return $this->deleteQuicksightUsers($userCollectionResponseTransfer, $filteredUserTransfers);
     }
 
     /**
@@ -110,7 +102,7 @@ class QuicksightUserDeleter implements QuicksightUserDeleterInterface
      *
      * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
      */
-    protected function executeDeleteQuicksightUsersByUserCollectionResponseTransaction(
+    protected function deleteQuicksightUsers(
         UserCollectionResponseTransfer $userCollectionResponseTransfer,
         array $userTransfers
     ): UserCollectionResponseTransfer {
