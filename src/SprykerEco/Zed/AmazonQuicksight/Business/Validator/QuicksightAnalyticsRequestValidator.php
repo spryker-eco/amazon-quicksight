@@ -54,7 +54,7 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
         $quicksightAssetBundleImportJobTransfer = $enableQuicksightAnalyticsRequestTransfer->getQuicksightAssetBundleImportJob();
         $quicksightUserTransfer = $enableQuicksightAnalyticsRequestTransfer->getUserOrFail()->getQuicksightUser();
 
-        if (!$this->isEnableAnalyticsEnabled($quicksightAssetBundleImportJobTransfer, $quicksightUserTransfer)) {
+        if (!$this->isEnableAnalyticsAllowed($quicksightAssetBundleImportJobTransfer, $quicksightUserTransfer)) {
             $enableQuicksightAnalyticsResponseTransfer->addError(
                 (new ErrorTransfer())->setMessage(static::ERROR_MESSAGE_ENABLE_ANALYTICS_FAILED),
             );
@@ -76,7 +76,7 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
         $quicksightAssetBundleImportJobTransfer = $resetQuicksightAnalyticsRequestTransfer->getQuicksightAssetBundleImportJob();
         $quicksightUserTransfer = $resetQuicksightAnalyticsRequestTransfer->getUserOrFail()->getQuicksightUser();
 
-        if (!$this->isResetAnalyticsEnabled($quicksightAssetBundleImportJobTransfer, $quicksightUserTransfer)) {
+        if (!$this->isResetAnalyticsAllowed($quicksightAssetBundleImportJobTransfer, $quicksightUserTransfer)) {
             $resetQuicksightAnalyticsResponseTransfer->addError(
                 (new ErrorTransfer())->setMessage(static::ERROR_MESSAGE_RESET_ANALYTICS_FAILED),
             );
@@ -91,7 +91,7 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
      *
      * @return bool
      */
-    public function isResetAnalyticsEnabled(
+    public function isResetAnalyticsAllowed(
         ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
         ?QuicksightUserTransfer $quicksightUserTransfer
     ): bool {
@@ -106,7 +106,7 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
      *
      * @return bool
      */
-    public function isEnableAnalyticsEnabled(
+    public function isEnableAnalyticsAllowed(
         ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
         ?QuicksightUserTransfer $quicksightUserTransfer
     ): bool {
@@ -121,7 +121,7 @@ class QuicksightAnalyticsRequestValidator implements QuicksightAnalyticsRequestV
      *
      * @return bool
      */
-    public function isDisplayAnalyticsEnabled(
+    public function isDisplayAnalyticsAllowed(
         ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
         ?QuicksightUserTransfer $quicksightUserTransfer
     ): bool {

@@ -13,7 +13,7 @@
     {% endfor %}
 {% endif %}
 
-{% if isEnableAnalyticsEnabled %}
+{% if isEnableAnalyticsAllowed %}
     <div class="analytics">
         <div class="analytics__icon"><i class="fa fa-chart-bar"></i></div>
 
@@ -26,7 +26,7 @@
             {{ viewActionButton(url('/amazon-quicksight/analytics/enable'), 'Enable Analytics' | trans) }}
         </div>
     </div>
-{% elseif isDisplayAnalyticsEnabled %}
+{% elseif isDisplayAnalyticsAllowed %}
     {% if quicksightGenerateEmbedUrlResponse.errors | length %}
         {% for error in quicksightGenerateEmbedUrlResponse.errors %}
             <div class="alert alert-danger" role="alert">{{ error.message }}</div>

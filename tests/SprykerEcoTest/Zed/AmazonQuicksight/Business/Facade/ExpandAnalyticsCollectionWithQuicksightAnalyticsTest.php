@@ -216,15 +216,15 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
      * @dataProvider expandsCollectionWhenQuicksightUserExistsWithRoleDataProvider
      *
      * @param string $role
-     * @param bool $isEnableAnalyticsEnabled
+     * @param bool $isEnableAnalyticsAllowed
      *
      * @return void
      */
-    public function testExpandsCollectionWhenQuicksightUserExistsWithRole(string $role, bool $isEnableAnalyticsEnabled): void
+    public function testExpandsCollectionWhenQuicksightUserExistsWithRole(string $role, bool $isEnableAnalyticsAllowed): void
     {
         // Arrange
         $this->tester->getContainer()->set(static::SERVICE_TWIG, $this->getTwigMock(
-            $isEnableAnalyticsEnabled,
+            $isEnableAnalyticsAllowed,
             false,
             false,
             new QuicksightGenerateEmbedUrlResponseTransfer(),
@@ -250,8 +250,8 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
      * @param bool $isInitializedInitially
      * @param bool $isInitializedAfterSync
      * @param bool $isInitializationInProgress
-     * @param bool $isEnableAnalyticsEnabled
-     * @param bool $isDisplayAnalyticsEnabled
+     * @param bool $isEnableAnalyticsAllowed
+     * @param bool $isDisplayAnalyticsAllowed
      * @param string $jobStatusAfterSync
      * @param \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer
      *
@@ -261,16 +261,16 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
         bool $isInitializedInitially,
         bool $isInitializedAfterSync,
         bool $isInitializationInProgress,
-        bool $isEnableAnalyticsEnabled,
-        bool $isDisplayAnalyticsEnabled,
+        bool $isEnableAnalyticsAllowed,
+        bool $isDisplayAnalyticsAllowed,
         string $jobStatusAfterSync,
         QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer
     ): void {
         // Arrange
         $this->tester->getContainer()->set(static::SERVICE_TWIG, $this->getTwigMock(
-            $isEnableAnalyticsEnabled,
+            $isEnableAnalyticsAllowed,
             $isInitializationInProgress,
-            $isDisplayAnalyticsEnabled,
+            $isDisplayAnalyticsAllowed,
             $quicksightGenerateEmbedUrlResponseTransfer,
             (new QuicksightAssetBundleImportJobTransfer())
                 ->setIsInitialized($isInitializedAfterSync)
@@ -395,8 +395,8 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
      * @dataProvider expandsCollectionWhenQuicksightAssetBundleImportJobFinishedDataProvider
      *
      * @param bool $isInitializedInitially
-     * @param bool $isEnableAnalyticsEnabled
-     * @param bool $isDisplayAnalyticsEnabled
+     * @param bool $isEnableAnalyticsAllowed
+     * @param bool $isDisplayAnalyticsAllowed
      * @param string $initialJobStatus
      * @param \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer
      * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
@@ -406,8 +406,8 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
      */
     public function testExpandsCollectionWhenQuicksightAssetBundleImportJobFinished(
         bool $isInitializedInitially,
-        bool $isEnableAnalyticsEnabled,
-        bool $isDisplayAnalyticsEnabled,
+        bool $isEnableAnalyticsAllowed,
+        bool $isDisplayAnalyticsAllowed,
         string $initialJobStatus,
         QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer,
         QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
@@ -415,9 +415,9 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
     ): void {
         // Arrange
         $this->tester->getContainer()->set(static::SERVICE_TWIG, $this->getTwigMock(
-            $isEnableAnalyticsEnabled,
+            $isEnableAnalyticsAllowed,
             false,
-            $isDisplayAnalyticsEnabled,
+            $isDisplayAnalyticsAllowed,
             $quicksightGenerateEmbedUrlResponseTransfer,
             $quicksightAssetBundleImportJobTransfer,
         ));
@@ -615,18 +615,18 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
     }
 
     /**
-     * @param bool $isEnableAnalyticsEnabled
+     * @param bool $isEnableAnalyticsAllowed
      * @param bool $isAssetBundleInitializationInProgress
-     * @param bool $isDisplayAnalyticsEnabled
+     * @param bool $isDisplayAnalyticsAllowed
      * @param \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer
      * @param \Generated\Shared\Transfer\QuicksightAssetBundleImportJobTransfer|null $quicksightAssetBundleImportJobTransfer
      *
      * @return \PHPUnit\Framework\MockObject\MockObject|\Twig\Environment
      */
     protected function getTwigMock(
-        bool $isEnableAnalyticsEnabled,
+        bool $isEnableAnalyticsAllowed,
         bool $isAssetBundleInitializationInProgress,
-        bool $isDisplayAnalyticsEnabled,
+        bool $isDisplayAnalyticsAllowed,
         QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer,
         ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer = null
     ): Environment {
@@ -639,9 +639,9 @@ class ExpandAnalyticsCollectionWithQuicksightAnalyticsTest extends Unit
                 [
                     $this->equalTo(static::TEMPLATE_PATH_QUICKSIGHT_ANALYTICS),
                     $this->equalTo([
-                        'isEnableAnalyticsEnabled' => $isEnableAnalyticsEnabled,
+                        'isEnableAnalyticsAllowed' => $isEnableAnalyticsAllowed,
                         'isAssetBundleInitializationInProgress' => $isAssetBundleInitializationInProgress,
-                        'isDisplayAnalyticsEnabled' => $isDisplayAnalyticsEnabled,
+                        'isDisplayAnalyticsAllowed' => $isDisplayAnalyticsAllowed,
                         'quicksightGenerateEmbedUrlResponse' => $quicksightGenerateEmbedUrlResponseTransfer,
                         'quicksightAssetBundleImportJob' => $quicksightAssetBundleImportJobTransfer,
                     ]),

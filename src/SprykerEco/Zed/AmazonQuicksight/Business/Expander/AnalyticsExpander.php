@@ -156,11 +156,11 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
                 'quicksightAssetBundleImportJob' => $quicksightAssetBundleImportJobTransfer,
                 'isAssetBundleInitializationInProgress' => $this->quicksightAnalyticsRequestValidator
                     ->isAssetBundleInitializationInProgress($quicksightAssetBundleImportJobTransfer),
-                'isEnableAnalyticsEnabled' => $this->quicksightAnalyticsRequestValidator->isEnableAnalyticsEnabled(
+                'isEnableAnalyticsAllowed' => $this->quicksightAnalyticsRequestValidator->isEnableAnalyticsAllowed(
                     $quicksightAssetBundleImportJobTransfer,
                     $quicksightUserTransfer,
                 ),
-                'isDisplayAnalyticsEnabled' => $this->quicksightAnalyticsRequestValidator->isDisplayAnalyticsEnabled(
+                'isDisplayAnalyticsAllowed' => $this->quicksightAnalyticsRequestValidator->isDisplayAnalyticsAllowed(
                     $quicksightAssetBundleImportJobTransfer,
                     $quicksightUserTransfer,
                 ),
@@ -191,7 +191,7 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
             ]),
         ));
 
-        if (!$this->quicksightAnalyticsRequestValidator->isResetAnalyticsEnabled($quicksightAssetBundleImportJobTransfer, $quicksightUserTransfer)) {
+        if (!$this->quicksightAnalyticsRequestValidator->isResetAnalyticsAllowed($quicksightAssetBundleImportJobTransfer, $quicksightUserTransfer)) {
             return $analyticsCollectionTransfer;
         }
 
