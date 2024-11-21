@@ -37,19 +37,6 @@ class AmazonQuicksightEntityManager extends AbstractEntityManager implements Ama
     }
 
     /**
-     * @param list<int> $quicksightUserIds
-     *
-     * @return void
-     */
-    public function deleteQuicksightUsers(array $quicksightUserIds): void
-    {
-        $this->getFactory()
-            ->getQuicksightUserQuery()
-            ->filterByIdQuicksightUser_In($quicksightUserIds)
-            ->delete();
-    }
-
-    /**
      * @param list<int> $userIds
      *
      * @return void

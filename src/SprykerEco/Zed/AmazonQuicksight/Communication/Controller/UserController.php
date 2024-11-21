@@ -35,11 +35,11 @@ class UserController extends AbstractController
     protected const SUCCESS_MESSAGE_USERS_SYNCHRONIZED = 'Analytics users have been successfully synchronized.';
 
     /**
-     * @uses \SprykerEco\Zed\AmazonQuicksight\Business\Expander\AnalyticsExpander::FIELD_NAME_TOKEN
+     * @uses \SprykerEco\Zed\AmazonQuicksight\Business\Expander\AnalyticsExpander::FIELD_NAME_SYNCHRONIZE_QUICKSIGHT_USERS_FORM_TOKEN
      *
      * @var string
      */
-    protected const FIELD_NAME_TOKEN = '_token';
+    protected const FIELD_NAME_SYNCHRONIZE_QUICKSIGHT_USERS_FORM_TOKEN = '_token';
 
     /**
      * @uses \SprykerEco\Zed\AmazonQuicksight\Business\Expander\AnalyticsExpander::FORM_NAME_SYNCHRONIZE_QUICKSIGHT_USERS
@@ -55,7 +55,7 @@ class UserController extends AbstractController
      */
     public function synchronizeQuicksightUsersAction(Request $request): RedirectResponse|array
     {
-        $tokenValue = (string)$request->get(static::FIELD_NAME_TOKEN);
+        $tokenValue = (string)$request->get(static::FIELD_NAME_SYNCHRONIZE_QUICKSIGHT_USERS_FORM_TOKEN);
 
         if (!$this->validateCsrfToken(static::FORM_NAME_SYNCHRONIZE_QUICKSIGHT_USERS, $tokenValue)) {
             $this->addErrorMessage(static::ERROR_MESSAGE_CSRF_TOKEN_INVALID);
