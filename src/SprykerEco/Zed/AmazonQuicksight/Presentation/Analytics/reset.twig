@@ -12,7 +12,15 @@
 {% block content %}
     {% embed '@Gui/Partials/widget.twig' %}
         {% block widget_content %}
-            <h4 class="spacing-bottom-big">{{ 'Please be aware that all default dashboards and analyses, including your changes, will be reset and replaced with the default data. Also, all users will be detached from assets upon the reset process. The owner of default assets will be replaced with the user who initiated the reset process.' | trans }}</h4>
+            <p>
+                {{ 'If you want to start fresh with a new setup in Analytics, keep these critical points in mind:' | trans }}
+            </p>
+            <ul>
+                <li>{{ 'Resetting Analytics restores all default assets (dashboards, analyses, datasets) to their original state, erasing any modifications you\'ve made.' | trans }}</li>
+                <li>{{ 'The user performing the reset becomes the owner of the default assets, and all other users lose access to them.' | trans }}</li>
+                <li>{{ 'Custom assets created by other users remain under their ownership.' | trans }}</li>
+                <li>{{ '<b>IMPORTANT:</b> If you or other authors use default datasets in custom analyses, such analyses won\'t be able to access data for all visuals. To avoid this, duplicate the relevant default datasets and associate them with the custom analyses before proceeding.' | trans | raw }}</li>
+            </ul>
             <div>
                 {{ form_start(resetAnalyticsForm) }}
                     {{ viewActionButton(app.request.headers.get('referer'), 'Cancel' | trans) }}
