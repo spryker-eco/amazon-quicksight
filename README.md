@@ -6,6 +6,8 @@
 
 AmazonQuicksight module allows the Spryker project to connect to the Amazon QuickSight service.
 
+**DEPRECATED - Invalid Release. Please skip this version. Use the latest version instead.**
+
 ## Installation
 
 ```
