@@ -1,0 +1,5 @@
+<form action="{{ url('/amazon-quicksight/user/synchronize-quicksight-users') }}" method="POST" class="form-inline">
+    <input type="hidden" name="{{ tokenFieldName }}" value="{{ csrf_token(formName) }}">
+    <button class="btn safe-submit btn-outline btn-view">{{ 'Synchronize Users' | trans }}</button>
+</form>
+

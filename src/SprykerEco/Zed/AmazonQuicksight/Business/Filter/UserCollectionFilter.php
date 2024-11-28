@@ -39,23 +39,6 @@ class UserCollectionFilter implements UserCollectionFilterInterface
      *
      * @return array<int|string, \Generated\Shared\Transfer\UserTransfer>
      */
-    public function filterOutUserTransfersNotApplicableForQuicksightUserRegistration(array $userTransfers): array
-    {
-        $filteredUserTransfers = $this->filterOutUsersWithNotApplicableStatus(
-            $userTransfers,
-            $this->amazonQuicksightConfig->getUserStatusesApplicableForQuicksightUserRegistration(),
-        );
-        $filteredUserTransfers = $this->filterOutUserTransfersWithoutQuicksightUserRole($filteredUserTransfers);
-        $filteredUserTransfers = $this->filterOutUserTransfersWithPersistedQuicksightUser($filteredUserTransfers);
-
-        return $filteredUserTransfers;
-    }
-
-    /**
-     * @param array<int|string, \Generated\Shared\Transfer\UserTransfer> $userTransfers
-     *
-     * @return array<int|string, \Generated\Shared\Transfer\UserTransfer>
-     */
     public function filterOutUserTransfersNotApplicableForQuicksightUserDeletion(array $userTransfers): array
     {
         $filteredUserTransfers = $this->filterOutUsersWithNotApplicableStatus(
@@ -89,18 +72,6 @@ class UserCollectionFilter implements UserCollectionFilterInterface
 
         return array_filter($userTransfers, function (UserTransfer $userTransfer) use ($applicableUserStatuses) {
             return isset($applicableUserStatuses[$userTransfer->getStatusOrFail()]);
-        });
-    }
-
-    /**
-     * @param array<int|string, \Generated\Shared\Transfer\UserTransfer> $userTransfers
-     *
-     * @return array<int|string, \Generated\Shared\Transfer\UserTransfer>
-     */
-    protected function filterOutUserTransfersWithoutQuicksightUserRole(array $userTransfers): array
-    {
-        return array_filter($userTransfers, function (UserTransfer $userTransfer) {
-            return $userTransfer->getQuicksightUser() && $userTransfer->getQuicksightUserOrFail()->getRole();
         });
     }
 

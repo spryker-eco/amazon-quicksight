@@ -17,10 +17,6 @@ use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightListUsersRequestTransfer;
 use Generated\Shared\Transfer\QuicksightListUsersResponseTransfer;
-use Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer;
-use Generated\Shared\Transfer\QuicksightUpdateUserResponseTransfer;
-use Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer;
-use Generated\Shared\Transfer\QuicksightUserRegisterResponseTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 use SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig;
@@ -34,13 +30,6 @@ class UserAmazonQuicksightApiClient implements UserAmazonQuicksightApiClientInte
      * @var string
      */
     protected const QUICKSIGHT_USER_IDENTITY_TYPE = 'QUICKSIGHT';
-
-    /**
-     * @link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_RegisterUser.html#API_RegisterUser_ResponseSyntax
-     *
-     * @var string
-     */
-    protected const RESPONSE_KEY_USER = 'User';
 
     /**
      * @link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ListUsers.html#QS-ListUsers-response-UserList
@@ -66,22 +55,12 @@ class UserAmazonQuicksightApiClient implements UserAmazonQuicksightApiClientInte
     /**
      * @var string
      */
-    protected const ERROR_MESSAGE_USER_REGISTRATION_FAILED = 'Failed to register Quicksight user.';
-
-    /**
-     * @var string
-     */
     protected const ERROR_MESSAGE_EMBED_URL_GENERATION_FAILED = 'Failed to generate embed URL.';
 
     /**
      * @var string
      */
     protected const ERROR_MESSAGE_USERS_LIST_RETRIEVE_FAILED = 'Failed to retrieve users list.';
-
-    /**
-     * @var string
-     */
-    protected const ERROR_MESSAGE_USER_UPDATING_FAILED = 'Failed to update Quicksight user.';
 
     /**
      * @var \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig
@@ -119,46 +98,6 @@ class UserAmazonQuicksightApiClient implements UserAmazonQuicksightApiClientInte
         $this->amazonQuicksightMapper = $amazonQuicksightMapper;
         $this->amazonQuicksightRequestDataFormatter = $amazonQuicksightRequestDataFormatter;
         $this->amazonQuicksightToAwsQuicksightClient = $amazonQuicksightToAwsQuicksightClient;
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightUserRegisterResponseTransfer
-     */
-    public function registerUser(UserTransfer $userTransfer): QuicksightUserRegisterResponseTransfer
-    {
-        $quicksightUserRegisterRequestTransfer = $this->createQuicksightUserRegisterRequestTransfer();
-        $quicksightUserRegisterRequestTransfer = $this->amazonQuicksightMapper->mapUserTransferToQuicksightUserRegisterRequestTransfer(
-            $userTransfer,
-            $quicksightUserRegisterRequestTransfer,
-        );
-
-        $requestData = $this->amazonQuicksightRequestDataFormatter->formatRequestData(
-            $quicksightUserRegisterRequestTransfer->toArray(true, true),
-        );
-
-        $quicksightUserRegisterResponseTransfer = new QuicksightUserRegisterResponseTransfer();
-        try {
-            $response = $this->amazonQuicksightToAwsQuicksightClient->registerUser($requestData);
-        } catch (QuickSightException $quickSightException) {
-            return $quicksightUserRegisterResponseTransfer->addError(
-                (new ErrorTransfer())->setMessage($quickSightException->getAwsErrorMessage()),
-            );
-        }
-
-        if (!$response->hasKey(static::RESPONSE_KEY_USER)) {
-            return $quicksightUserRegisterResponseTransfer->addError(
-                (new ErrorTransfer())->setMessage(static::ERROR_MESSAGE_USER_REGISTRATION_FAILED),
-            );
-        }
-
-        $quicksightUserTransfer = $this->amazonQuicksightMapper->mapQuicksightUserDataToQuicksightUserTransfer(
-            $response->get(static::RESPONSE_KEY_USER),
-            $userTransfer->getQuicksightUserOrFail(),
-        );
-
-        return $quicksightUserRegisterResponseTransfer->setQuicksightUser($quicksightUserTransfer);
     }
 
     /**
@@ -200,35 +139,6 @@ class UserAmazonQuicksightApiClient implements UserAmazonQuicksightApiClientInte
                 $response->toArray(),
                 $quicksightGenerateEmbedUrlResponseTransfer,
             );
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightDeleteUserResponseTransfer
-     */
-    public function deleteUserByPrincipalId(QuicksightUserTransfer $quicksightUserTransfer): QuicksightDeleteUserResponseTransfer
-    {
-        $quicksightUserDeleteRequestTransfer = $this->createQuicksightUserDeleteRequestTransfer();
-        $quicksightUserDeleteRequestTransfer = $this->amazonQuicksightMapper->mapQuicksightUserTransferToQuicksightDeleteUserRequestTransfer(
-            $quicksightUserTransfer,
-            $quicksightUserDeleteRequestTransfer,
-        );
-
-        $requestData = $this->amazonQuicksightRequestDataFormatter->formatRequestData(
-            $quicksightUserDeleteRequestTransfer->toArray(true, true),
-        );
-
-        $quicksightDeleteUserResponseTransfer = new QuicksightDeleteUserResponseTransfer();
-        try {
-            $this->amazonQuicksightToAwsQuicksightClient->deleteUserByPrincipalId($requestData);
-        } catch (QuickSightException $quickSightException) {
-            return $quicksightDeleteUserResponseTransfer->addError(
-                (new ErrorTransfer())->setMessage($quickSightException->getAwsErrorMessage()),
-            );
-        }
-
-        return $quicksightDeleteUserResponseTransfer;
     }
 
     /**
@@ -306,59 +216,6 @@ class UserAmazonQuicksightApiClient implements UserAmazonQuicksightApiClientInte
     }
 
     /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightUpdateUserResponseTransfer
-     */
-    public function updateUser(UserTransfer $userTransfer): QuicksightUpdateUserResponseTransfer
-    {
-        $quicksightUpdateUserRequestTransfer = $this->createQuicksightUpdateUserRequestTransfer();
-        $quicksightUpdateUserRequestTransfer = $this->amazonQuicksightMapper
-            ->mapUserTransferToQuicksightUpdateUserRequestTransfer(
-                $userTransfer,
-                $quicksightUpdateUserRequestTransfer,
-            );
-
-        $requestData = $this->amazonQuicksightRequestDataFormatter->formatRequestData(
-            $quicksightUpdateUserRequestTransfer->toArray(true, true),
-        );
-
-        $quicksightUpdateUserResponseTransfer = new QuicksightUpdateUserResponseTransfer();
-
-        try {
-            $response = $this->amazonQuicksightToAwsQuicksightClient->updateUser($requestData);
-        } catch (QuickSightException $quickSightException) {
-            return $quicksightUpdateUserResponseTransfer->addError(
-                (new ErrorTransfer())->setMessage($quickSightException->getAwsErrorMessage()),
-            );
-        }
-
-        if (!$response->hasKey(static::RESPONSE_KEY_USER)) {
-            return $quicksightUpdateUserResponseTransfer->addError(
-                (new ErrorTransfer())->setMessage(static::ERROR_MESSAGE_USER_UPDATING_FAILED),
-            );
-        }
-
-        $quicksightUserTransfer = $this->amazonQuicksightMapper->mapQuicksightUserDataToQuicksightUserTransfer(
-            $response->get(static::RESPONSE_KEY_USER),
-            $userTransfer->getQuicksightUserOrFail(),
-        );
-
-        return $quicksightUpdateUserResponseTransfer->setQuicksightUser($quicksightUserTransfer);
-    }
-
-    /**
-     * @return \Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer
-     */
-    protected function createQuicksightUserRegisterRequestTransfer(): QuicksightUserRegisterRequestTransfer
-    {
-        return (new QuicksightUserRegisterRequestTransfer())
-            ->setIdentityType(static::QUICKSIGHT_USER_IDENTITY_TYPE)
-            ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
-            ->setNamespace($this->amazonQuicksightConfig->getAwsQuicksightNamespace());
-    }
-
-    /**
      * @return \Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer
      */
     protected function createQuicksightGenerateEmbedUrlRequestTransfer(): QuicksightGenerateEmbedUrlRequestTransfer
@@ -389,16 +246,6 @@ class UserAmazonQuicksightApiClient implements UserAmazonQuicksightApiClientInte
     protected function createQuicksightListUsersRequestDataTransfer(): QuicksightListUsersRequestTransfer
     {
         return (new QuicksightListUsersRequestTransfer())
-            ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
-            ->setNamespace($this->amazonQuicksightConfig->getAwsQuicksightNamespace());
-    }
-
-    /**
-     * @return \Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer
-     */
-    protected function createQuicksightUpdateUserRequestTransfer(): QuicksightUpdateUserRequestTransfer
-    {
-        return (new QuicksightUpdateUserRequestTransfer())
             ->setAwsAccountId($this->amazonQuicksightConfig->getAwsAccountId())
             ->setNamespace($this->amazonQuicksightConfig->getAwsQuicksightNamespace());
     }

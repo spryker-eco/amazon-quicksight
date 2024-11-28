@@ -38,28 +38,6 @@ interface AmazonQuicksightFacadeInterface
 
     /**
      * Specification:
-     * - Expects `UserCollectionResponseTransfer.users.quicksightUser.role` to be set.
-     * - Filters out users if `UserTransfer.quicksightUser.role` is not set.
-     * - Filters out users with already persisted Quicksight user.
-     * - Filters out users with statuses not applicable for registering a Quicksight user.
-     * - Uses {@link \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::getUserStatusesApplicableForQuicksightUserRegistration()} to get a list of user statuses applicable for registering a Quicksight user.
-     * - Sends request to AWS API to register Quicksight users. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_RegisterUser.html}.
-     * - Adds errors to `UserCollectionResponseTransfer.errors` if Quicksight user registration failed.
-     * - Persists successfully registered Quicksight users to persistence.
-     * - Returns `UserCollectionResponseTransfer` with updated `UserTransfers`.
-     *
-     * @api
-     *
-     * @param \Generated\Shared\Transfer\UserCollectionResponseTransfer $userCollectionResponseTransfer
-     *
-     * @return \Generated\Shared\Transfer\UserCollectionResponseTransfer
-     */
-    public function createQuicksightUsersByUserCollectionResponse(
-        UserCollectionResponseTransfer $userCollectionResponseTransfer
-    ): UserCollectionResponseTransfer;
-
-    /**
-     * Specification:
      * - Filters out users with statuses not applicable for deleting a Quicksight user.
      * - Uses {@link \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::getUserStatusesApplicableForQuicksightUserDeletion()} to get a list of user statuses applicable for deleting a Quicksight user.
      * - Filters out users without persisted Quicksight user.
@@ -86,6 +64,7 @@ interface AmazonQuicksightFacadeInterface
      * - Renders a Quicksight analytics template.
      * - Creates `AnalyticsTransfer` and populates `AnalyticsTransfer.content` with the rendered content.
      * - Adds the newly introduced `AnalyticsTransfer` to `AnalyticsCollectionTransfer.analyticsList`.
+     * - Expands `AnalyticsCollectionTransfer.analyticsActions` with the synchronize Quicksight users action.
      * - If the provided user is allowed to reset the Analytics expands `AnalyticsCollectionTransfer.analyticsActions` with the reset action.
      *
      * @api
@@ -119,28 +98,10 @@ interface AmazonQuicksightFacadeInterface
 
     /**
      * Specification:
-     * - Sends request to AWS API to get list of registered Quicksight users. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ListUsers.html}.
-     * - Filters out Quicksight users with unsupported roles using {@link \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::getQuicksightUserRoles()}.
-     * - Fetches user transfers from persistence.
-     * - Finds registered on Quicksight side Quicksight users not matched with users from persistence.
-     * - Sends request to AWS API to delete Quicksight users. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_DeleteUserByPrincipalId.html}.
-     * - Adds errors to `QuicksightUserCollectionResponseTransfer.errors` if any occurs.
-     * - Returns `QuicksightUserCollectionResponseTransfer` with deleted Quicksight users and errors if any occurs.
-     *
-     * @api
-     *
-     * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
-     */
-    public function deleteNotMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer;
-
-    /**
-     * Specification:
      * - Requires `EnableQuicksightAnalyticsRequestTransfer.assetBundleImportJobId` to be set.
      * - Requires `EnableQuicksightAnalyticsRequestTransfer.user` to be set.
      * - Validates whether Analytics can be enabled and populates `EnableQuicksightAnalyticsResponseTransfer.errors` with errors encountered during the validation.
      * - If validation fails, Analytics will not be enabled and `EnableQuicksightAnalyticsResponseTransfer` will be returned.
-     * - If current user is not a Quicksight user, creates a new Quicksight user with AUTHOR role.
-     * - If current user is a Quicksight user with READER role, upgrades the user to AUTHOR.
      * - Starts the asset bundle import job for a file located at the path specified by {@link \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::getAssetBundleImportFilePath()} to Quicksight.
      * - Throws {@link \SprykerEco\Zed\AmazonQuicksight\Business\Exception\AssetBundleImportFilePathNotDefinedException} if the path is not specified.
      * - Saves asset bundle import job to persistence and populates `EnableQuicksightAnalyticsResponseTransfer.quicksightAssetBundleImportJob` if the import job started successfully.

@@ -16,13 +16,6 @@ interface UserCollectionFilterInterface
      *
      * @return array<int|string, \Generated\Shared\Transfer\UserTransfer>
      */
-    public function filterOutUserTransfersNotApplicableForQuicksightUserRegistration(array $userTransfers): array;
-
-    /**
-     * @param array<int|string, \Generated\Shared\Transfer\UserTransfer> $userTransfers
-     *
-     * @return array<int|string, \Generated\Shared\Transfer\UserTransfer>
-     */
     public function filterOutUserTransfersNotApplicableForQuicksightUserDeletion(array $userTransfers): array;
 
     /**

@@ -22,7 +22,6 @@ $(document).ready(function () {
         const frameOptions = {
             url: embedUrl,
             container: embedElement,
-            height: '700px',
             width: '100%',
             onChange: (changeEvent, metadata) => {
                 switch (changeEvent.eventName) {

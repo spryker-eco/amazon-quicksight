@@ -19,8 +19,6 @@ use Generated\Shared\Transfer\QuicksightEmbedUrlTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer;
-use Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer;
-use Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\UserTransfer;
@@ -47,22 +45,6 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
      * @var string
      */
     protected const RESPONSE_KEY_ERRORS_MESSAGE = 'Message';
-
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     * @param \Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer $quicksightUserRegisterRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer
-     */
-    public function mapUserTransferToQuicksightUserRegisterRequestTransfer(
-        UserTransfer $userTransfer,
-        QuicksightUserRegisterRequestTransfer $quicksightUserRegisterRequestTransfer
-    ): QuicksightUserRegisterRequestTransfer {
-        return $quicksightUserRegisterRequestTransfer
-            ->setEmail($userTransfer->getUsernameOrFail())
-            ->setUserName($userTransfer->getUsernameOrFail())
-            ->setUserRole(strtoupper($userTransfer->getQuicksightUserOrFail()->getRoleOrFail()));
-    }
 
     /**
      * @param array<string, mixed> $quicksightUserData
@@ -103,19 +85,6 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
         return $quicksightGenerateEmbedUrlResponseTransfer->setEmbedUrl(
             (new QuicksightEmbedUrlTransfer())->setUrl($generateEmbedUrlResponseData[static::RESPONSE_KEY_EMBED_URL]),
         );
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
-     * @param \Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer
-     */
-    public function mapQuicksightUserTransferToQuicksightDeleteUserRequestTransfer(
-        QuicksightUserTransfer $quicksightUserTransfer,
-        QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
-    ): QuicksightDeleteUserRequestTransfer {
-        return $quicksightDeleteUserRequestTransfer->fromArray($quicksightUserTransfer->toArray(), true);
     }
 
     /**
@@ -266,22 +235,6 @@ class AmazonQuicksightMapper implements AmazonQuicksightMapperInterface
         );
 
         return $quicksightAssetBundleImportJobTransfer->fromArray($quicksightDescribeAssetBundleImportJobResponseTransfer->toArray(), true);
-    }
-
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     * @param \Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer $quicksightUpdateUserRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer
-     */
-    public function mapUserTransferToQuicksightUpdateUserRequestTransfer(
-        UserTransfer $userTransfer,
-        QuicksightUpdateUserRequestTransfer $quicksightUpdateUserRequestTransfer
-    ): QuicksightUpdateUserRequestTransfer {
-        return $quicksightUpdateUserRequestTransfer
-            ->setEmail($userTransfer->getUsernameOrFail())
-            ->setUserName($userTransfer->getUsernameOrFail())
-            ->setRole(strtoupper($userTransfer->getQuicksightUserOrFail()->getRoleOrFail()));
     }
 
     /**

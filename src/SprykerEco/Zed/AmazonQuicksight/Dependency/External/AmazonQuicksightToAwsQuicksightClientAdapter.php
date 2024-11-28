@@ -29,16 +29,6 @@ class AmazonQuicksightToAwsQuicksightClientAdapter implements AmazonQuicksightTo
     }
 
     /**
-     * @param array<string, mixed> $registerUserRequestData
-     *
-     * @return \Aws\ResultInterface<string, mixed>
-     */
-    public function registerUser(array $registerUserRequestData): ResultInterface
-    {
-        return $this->quicksightClient->registerUser($registerUserRequestData);
-    }
-
-    /**
      * @param array<string, mixed> $generateEmbedUrlRequestData
      *
      * @return \Aws\ResultInterface<string, mixed>
@@ -46,16 +36,6 @@ class AmazonQuicksightToAwsQuicksightClientAdapter implements AmazonQuicksightTo
     public function generateEmbedUrlForRegisteredUser(array $generateEmbedUrlRequestData): ResultInterface
     {
         return $this->quicksightClient->generateEmbedUrlForRegisteredUser($generateEmbedUrlRequestData);
-    }
-
-    /**
-     * @param array<string, mixed> $deleteUserRequestData
-     *
-     * @return \Aws\ResultInterface<string, mixed>
-     */
-    public function deleteUserByPrincipalId(array $deleteUserRequestData): ResultInterface
-    {
-        return $this->quicksightClient->deleteUserByPrincipalId($deleteUserRequestData);
     }
 
     /**
@@ -76,16 +56,6 @@ class AmazonQuicksightToAwsQuicksightClientAdapter implements AmazonQuicksightTo
     public function listUsers(array $listUsersRequestData): ResultInterface
     {
         return $this->quicksightClient->listUsers($listUsersRequestData);
-    }
-
-    /**
-     * @param array<string, mixed> $updateUserRequestData
-     *
-     * @return \Aws\ResultInterface<string, mixed>
-     */
-    public function updateUser(array $updateUserRequestData): ResultInterface
-    {
-        return $this->quicksightClient->updateUser($updateUserRequestData);
     }
 
     /**

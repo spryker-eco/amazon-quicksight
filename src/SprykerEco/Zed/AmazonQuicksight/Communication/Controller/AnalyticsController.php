@@ -33,7 +33,7 @@ class AnalyticsController extends AbstractController
     /**
      * @var string
      */
-    protected const ERROR_MESSAGE_CSRF_TOKEN_INVALID = 'CSRF token is not valid';
+    protected const ERROR_MESSAGE_CSRF_TOKEN_INVALID = 'CSRF token is not valid.';
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request

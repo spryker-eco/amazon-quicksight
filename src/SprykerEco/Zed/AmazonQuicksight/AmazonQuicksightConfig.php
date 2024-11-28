@@ -283,19 +283,6 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
 
     /**
      * Specification:
-     * - Defines if updating quicksight user role via user form is enabled.
-     *
-     * @api
-     *
-     * @return bool
-     */
-    public function isQuicksightUserRoleUpdateEnabled(): bool
-    {
-        return false;
-    }
-
-    /**
-     * Specification:
      * - Provides the starting path for the QuickSight console.
      *
      * @api

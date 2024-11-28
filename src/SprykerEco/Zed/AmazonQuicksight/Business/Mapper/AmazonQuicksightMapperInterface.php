@@ -16,25 +16,12 @@ use Generated\Shared\Transfer\QuicksightDescribeAssetBundleImportJobResponseTran
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlRequestTransfer;
 use Generated\Shared\Transfer\QuicksightGenerateEmbedUrlResponseTransfer;
 use Generated\Shared\Transfer\QuicksightStartAssetBundleImportJobRequestTransfer;
-use Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer;
-use Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer;
 use Generated\Shared\Transfer\QuicksightUserTransfer;
 use Generated\Shared\Transfer\ResetQuicksightAnalyticsRequestTransfer;
 use Generated\Shared\Transfer\UserTransfer;
 
 interface AmazonQuicksightMapperInterface
 {
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     * @param \Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer $quicksightUserRegisterRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightUserRegisterRequestTransfer
-     */
-    public function mapUserTransferToQuicksightUserRegisterRequestTransfer(
-        UserTransfer $userTransfer,
-        QuicksightUserRegisterRequestTransfer $quicksightUserRegisterRequestTransfer
-    ): QuicksightUserRegisterRequestTransfer;
-
     /**
      * @param array<string, mixed> $quicksightUserData
      * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
@@ -67,17 +54,6 @@ interface AmazonQuicksightMapperInterface
         array $generateEmbedUrlResponseData,
         QuicksightGenerateEmbedUrlResponseTransfer $quicksightGenerateEmbedUrlResponseTransfer
     ): QuicksightGenerateEmbedUrlResponseTransfer;
-
-    /**
-     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
-     * @param \Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer
-     */
-    public function mapQuicksightUserTransferToQuicksightDeleteUserRequestTransfer(
-        QuicksightUserTransfer $quicksightUserTransfer,
-        QuicksightDeleteUserRequestTransfer $quicksightDeleteUserRequestTransfer
-    ): QuicksightDeleteUserRequestTransfer;
 
     /**
      * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
@@ -133,17 +109,6 @@ interface AmazonQuicksightMapperInterface
         QuicksightDescribeAssetBundleImportJobResponseTransfer $quicksightDescribeAssetBundleImportJobResponseTransfer,
         QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer
     ): QuicksightAssetBundleImportJobTransfer;
-
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     * @param \Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer $quicksightUpdateUserRequestTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightUpdateUserRequestTransfer
-     */
-    public function mapUserTransferToQuicksightUpdateUserRequestTransfer(
-        UserTransfer $userTransfer,
-        QuicksightUpdateUserRequestTransfer $quicksightUpdateUserRequestTransfer
-    ): QuicksightUpdateUserRequestTransfer;
 
     /**
      * @param \Generated\Shared\Transfer\QuicksightDeleteDataSetResponseTransfer $quicksightDeleteDataSetResponseTransfer

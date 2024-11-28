@@ -47,6 +47,13 @@ class AmazonQuicksightDependencyProvider extends AbstractBundleDependencyProvide
     public const SERVICE_TWIG = 'twig';
 
     /**
+     * @uses \Spryker\Yves\Form\Plugin\Application\FormApplicationPlugin::SERVICE_FORM_CSRF_PROVIDER
+     *
+     * @var string
+     */
+    public const SERVICE_FORM_CSRF_PROVIDER = 'form.csrf_provider';
+
+    /**
      * @param \Spryker\Zed\Kernel\Container $container
      *
      * @return \Spryker\Zed\Kernel\Container
@@ -71,6 +78,7 @@ class AmazonQuicksightDependencyProvider extends AbstractBundleDependencyProvide
     {
         $container = parent::provideCommunicationLayerDependencies($container);
         $container = $this->addUserFacade($container);
+        $container = $this->addFormCsrfProviderService($container);
 
         return $container;
     }
@@ -157,6 +165,20 @@ class AmazonQuicksightDependencyProvider extends AbstractBundleDependencyProvide
     {
         $container->set(static::SERVICE_UTIL_ENCODING, function (Container $container) {
             return new AmazonQuicksightToUtilEncodingServiceBridge($container->getLocator()->utilEncoding()->service());
+        });
+
+        return $container;
+    }
+
+    /**
+     * @param \Spryker\Zed\Kernel\Container $container
+     *
+     * @return \Spryker\Zed\Kernel\Container
+     */
+    protected function addFormCsrfProviderService(Container $container): Container
+    {
+        $container->set(static::SERVICE_FORM_CSRF_PROVIDER, function (Container $container) {
+            return $container->getApplicationService(static::SERVICE_FORM_CSRF_PROVIDER);
         });
 
         return $container;

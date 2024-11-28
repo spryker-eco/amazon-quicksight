@@ -37,46 +37,6 @@ class AmazonQuicksightEntityManager extends AbstractEntityManager implements Ama
     }
 
     /**
-     * @param \Generated\Shared\Transfer\QuicksightUserTransfer $quicksightUserTransfer
-     *
-     * @return \Generated\Shared\Transfer\QuicksightUserTransfer
-     */
-    public function updateQuicksightUser(QuicksightUserTransfer $quicksightUserTransfer): QuicksightUserTransfer
-    {
-        $quicksightUserQuery = $this->getFactory()->getQuicksightUserQuery();
-        $quicksightUserQuery->filterByIdQuicksightUser($quicksightUserTransfer->getIdQuicksightUserOrFail());
-
-        $quicksightUserEntity = $quicksightUserQuery->findOne();
-
-        if ($quicksightUserEntity === null) {
-            return $quicksightUserTransfer;
-        }
-
-        $quicksightUserEntity = $this->getFactory()
-            ->createQuicksightUserMapper()
-            ->mapQuicksightUserTransferToQuicksightUserEntity($quicksightUserTransfer, $quicksightUserEntity);
-
-        $quicksightUserEntity->save();
-
-        return $this->getFactory()
-            ->createQuicksightUserMapper()
-            ->mapQuicksightUserEntityToQuicksightUserTransfer($quicksightUserEntity, $quicksightUserTransfer);
-    }
-
-    /**
-     * @param list<int> $quicksightUserIds
-     *
-     * @return void
-     */
-    public function deleteQuicksightUsers(array $quicksightUserIds): void
-    {
-        $this->getFactory()
-            ->getQuicksightUserQuery()
-            ->filterByIdQuicksightUser_In($quicksightUserIds)
-            ->delete();
-    }
-
-    /**
      * @param list<int> $userIds
      *
      * @return void

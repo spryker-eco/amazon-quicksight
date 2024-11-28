@@ -32,7 +32,22 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
     /**
      * @var string
      */
-    protected const TEMPLATE_PATH_QUICKSIGHT_ANALYTICS_ACTIONS = '@AmazonQuicksight/_partials/quicksight-analytics-actions.twig';
+    protected const TEMPLATE_PATH_QUICKSIGHT_ANALYTICS_RESET_ACTION = '@AmazonQuicksight/_partials/quicksight-analytics-reset-action.twig';
+
+    /**
+     * @var string
+     */
+    protected const TEMPLATE_PATH_SYNCHRONIZE_QUICKSIGHT_USERS_ACTION = '@AmazonQuicksight/_partials/synchronize-quicksight-users-action.twig';
+
+    /**
+     * @var string
+     */
+    protected const FORM_NAME_SYNCHRONIZE_QUICKSIGHT_USERS = 'synchronizeQuicksightUsersForm';
+
+    /**
+     * @var string
+     */
+    protected const FIELD_NAME_SYNCHRONIZE_QUICKSIGHT_USERS_FORM_TOKEN = '_token';
 
     /**
      * @var \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface
@@ -129,25 +144,26 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
         ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
         ?QuicksightUserTransfer $quicksightUserTransfer
     ): AnalyticsCollectionTransfer {
-        $isAssetBundleSuccessfullyInitialized = $this->quicksightAnalyticsRequestValidator
-            ->isAssetBundleSuccessfullyInitialized($quicksightAssetBundleImportJobTransfer);
-        $isAssetBundleInitializationInProgress = $this->quicksightAnalyticsRequestValidator
-            ->isAssetBundleInitializationInProgress($quicksightAssetBundleImportJobTransfer);
-        $isQuicksightUserRoleAvailable = $this->quicksightAnalyticsRequestValidator
-            ->isQuicksightUserRoleAvailable($quicksightUserTransfer);
-
         $content = $this->twigEnvironment->render(
             static::TEMPLATE_PATH_QUICKSIGHT_ANALYTICS,
             [
                 'quicksightGenerateEmbedUrlResponse' => $this->getQuicksightGenerateEmbedUrlResponseTransfer(
-                    $isAssetBundleSuccessfullyInitialized,
-                    $isQuicksightUserRoleAvailable,
+                    $this->quicksightAnalyticsRequestValidator
+                        ->isAssetBundleSuccessfullyInitialized($quicksightAssetBundleImportJobTransfer),
+                    $this->quicksightAnalyticsRequestValidator->isQuicksightUserRoleAvailable($quicksightUserTransfer),
                     $quicksightUserTransfer,
                 ),
                 'quicksightAssetBundleImportJob' => $quicksightAssetBundleImportJobTransfer,
-                'isAssetBundleSuccessfullyInitialized' => $isAssetBundleSuccessfullyInitialized,
-                'isAssetBundleInitializationInProgress' => $isAssetBundleInitializationInProgress,
-                'isQuicksightUserRoleAvailable' => $isQuicksightUserRoleAvailable,
+                'isAssetBundleInitializationInProgress' => $this->quicksightAnalyticsRequestValidator
+                    ->isAssetBundleInitializationInProgress($quicksightAssetBundleImportJobTransfer),
+                'isEnableAnalyticsAllowed' => $this->quicksightAnalyticsRequestValidator->isEnableAnalyticsAllowed(
+                    $quicksightAssetBundleImportJobTransfer,
+                    $quicksightUserTransfer,
+                ),
+                'isDisplayAnalyticsAllowed' => $this->quicksightAnalyticsRequestValidator->isDisplayAnalyticsAllowed(
+                    $quicksightAssetBundleImportJobTransfer,
+                    $quicksightUserTransfer,
+                ),
             ],
         );
 
@@ -168,12 +184,20 @@ class AnalyticsExpander implements AnalyticsExpanderInterface
         ?QuicksightAssetBundleImportJobTransfer $quicksightAssetBundleImportJobTransfer,
         ?QuicksightUserTransfer $quicksightUserTransfer
     ): AnalyticsCollectionTransfer {
-        if (!$this->quicksightAnalyticsRequestValidator->isResetAnalyticsEnabled($quicksightAssetBundleImportJobTransfer, $quicksightUserTransfer)) {
+        $analyticsCollectionTransfer->addAnalyticsAction((new AnalyticsActionTransfer())->setContent(
+            $this->twigEnvironment->render(static::TEMPLATE_PATH_SYNCHRONIZE_QUICKSIGHT_USERS_ACTION, [
+                'formName' => static::FORM_NAME_SYNCHRONIZE_QUICKSIGHT_USERS,
+                'tokenFieldName' => static::FIELD_NAME_SYNCHRONIZE_QUICKSIGHT_USERS_FORM_TOKEN,
+            ]),
+        ));
+
+        if (!$this->quicksightAnalyticsRequestValidator->isResetAnalyticsAllowed($quicksightAssetBundleImportJobTransfer, $quicksightUserTransfer)) {
             return $analyticsCollectionTransfer;
         }
 
-        $content = $this->twigEnvironment->render(static::TEMPLATE_PATH_QUICKSIGHT_ANALYTICS_ACTIONS);
-        $analyticsCollectionTransfer->addAnalyticsAction((new AnalyticsActionTransfer())->setContent($content));
+        $analyticsCollectionTransfer->addAnalyticsAction((new AnalyticsActionTransfer())->setContent(
+            $this->twigEnvironment->render(static::TEMPLATE_PATH_QUICKSIGHT_ANALYTICS_RESET_ACTION),
+        ));
 
         return $analyticsCollectionTransfer;
     }
