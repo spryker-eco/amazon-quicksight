@@ -203,6 +203,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     {
         return [
             static::QUICKSIGHT_USER_ROLE_AUTHOR,
+            static::QUICKSIGHT_USER_ROLE_AUTHOR_PRO,
         ];
     }
 
