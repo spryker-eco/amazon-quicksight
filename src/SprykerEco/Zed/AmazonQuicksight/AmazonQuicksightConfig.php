@@ -21,7 +21,17 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     /**
      * @var string
      */
+    protected const QUICKSIGHT_USER_ROLE_READER_PRO = 'READER_PRO';
+
+    /**
+     * @var string
+     */
     protected const QUICKSIGHT_USER_ROLE_AUTHOR = 'AUTHOR';
+
+    /**
+     * @var string
+     */
+    protected const QUICKSIGHT_USER_ROLE_AUTHOR_PRO = 'AUTHOR_PRO';
 
     /**
      * @uses \Orm\Zed\User\Persistence\Map\SpyUserTableMap::COL_STATUS_ACTIVE
@@ -174,7 +184,9 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     {
         return [
             static::QUICKSIGHT_USER_ROLE_READER,
+            static::QUICKSIGHT_USER_ROLE_READER_PRO,
             static::QUICKSIGHT_USER_ROLE_AUTHOR,
+            static::QUICKSIGHT_USER_ROLE_AUTHOR_PRO,
         ];
     }
 
