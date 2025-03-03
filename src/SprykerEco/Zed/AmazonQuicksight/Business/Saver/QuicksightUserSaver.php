@@ -29,7 +29,7 @@ class QuicksightUserSaver implements QuicksightUserSaverInterface
         protected QuicksightUserMatcherInterface $quicksightUserMatcher,
         protected AmazonQuicksightEntityManagerInterface $amazonQuicksightEntityManager,
         protected UserAmazonQuicksightApiClientInterface $userAmazonQuicksightApiClient,
-        protected QuicksightUserReaderInterface $quicksightUserReader,
+        protected QuicksightUserReaderInterface $quicksightUserReader
     ) {
     }
 

@@ -60,7 +60,7 @@ class QuicksightUserReader implements QuicksightUserReaderInterface
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionTransfer
      */
     protected function getQuicksightUserCollectionByCondition(
-        QuicksightUserConditionsTransfer $quicksightUserConditionsTransfer,
+        QuicksightUserConditionsTransfer $quicksightUserConditionsTransfer
     ): QuicksightUserCollectionTransfer {
         $quicksightUserCriteriaTransfer = (new QuicksightUserCriteriaTransfer())
             ->setQuicksightUserConditions($quicksightUserConditionsTransfer);
