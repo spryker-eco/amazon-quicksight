@@ -63,7 +63,7 @@ class QuicksightUserSaver implements QuicksightUserSaverInterface
             return $quicksightUserCollectionResponseTransfer;
         }
 
-        return $this->saveMatcherQuicksightUsers($skipExistingQuicksightUsers, $matchedQuicksightUserTransfers);
+        return $this->executeMatcherQuicksightSave($skipExistingQuicksightUsers, $matchedQuicksightUserTransfers);
     }
 
     /**
@@ -72,7 +72,7 @@ class QuicksightUserSaver implements QuicksightUserSaverInterface
      *
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
      */
-    protected function saveMatcherQuicksightUsers(
+    protected function executeMatcherQuicksightSave(
         bool $skipExistingQuicksightUsers,
         array $matchedQuicksightUserTransfers
     ): QuicksightUserCollectionResponseTransfer {
@@ -90,7 +90,7 @@ class QuicksightUserSaver implements QuicksightUserSaverInterface
         );
 
         $this->getTransactionHandler()->handleTransaction(function () use ($quicksightUserTransfersToUpdate, $quicksightUserTransfersToCreate): void {
-            $this->executesaveMatchedQuicksightUsersTransaction($quicksightUserTransfersToUpdate, $quicksightUserTransfersToCreate);
+            $this->executeSaveMatchedQuicksightUsersTransaction($quicksightUserTransfersToUpdate, $quicksightUserTransfersToCreate);
         });
 
         return (new QuicksightUserCollectionResponseTransfer())->setQuicksightUsers(new ArrayObject($matchedQuicksightUserTransfers));
@@ -102,7 +102,7 @@ class QuicksightUserSaver implements QuicksightUserSaverInterface
      *
      * @return void
      */
-    protected function executesaveMatchedQuicksightUsersTransaction(
+    protected function executeSaveMatchedQuicksightUsersTransaction(
         array $quicksightUserTransfersToUpdate,
         array $quicksightUserTransfersToCreate
     ): void {
