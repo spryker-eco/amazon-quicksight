@@ -63,7 +63,7 @@ class QuicksightUserSaver implements QuicksightUserSaverInterface
             return $quicksightUserCollectionResponseTransfer;
         }
 
-        return $this->executeMatcherQuicksightSave($skipExistingQuicksightUsers, $matchedQuicksightUserTransfers);
+        return $this->executeMatchedQuicksightUsersSave($skipExistingQuicksightUsers, $matchedQuicksightUserTransfers);
     }
 
     /**
@@ -72,7 +72,7 @@ class QuicksightUserSaver implements QuicksightUserSaverInterface
      *
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
      */
-    protected function executeMatcherQuicksightSave(
+    protected function executeMatchedQuicksightUsersSave(
         bool $skipExistingQuicksightUsers,
         array $matchedQuicksightUserTransfers
     ): QuicksightUserCollectionResponseTransfer {
