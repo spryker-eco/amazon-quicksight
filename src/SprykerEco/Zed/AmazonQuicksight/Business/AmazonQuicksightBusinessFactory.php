@@ -17,8 +17,6 @@ use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiCl
 use SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClientInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightAssetBundleImportJobCreator;
 use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightAssetBundleImportJobCreatorInterface;
-use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreator;
-use SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreatorInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Deleter\DataSetDeleter;
 use SprykerEco\Zed\AmazonQuicksight\Business\Deleter\DataSetDeleterInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Deleter\QuicksightUserDeleter;
@@ -45,6 +43,8 @@ use SprykerEco\Zed\AmazonQuicksight\Business\Reader\QuicksightUserReader;
 use SprykerEco\Zed\AmazonQuicksight\Business\Reader\QuicksightUserReaderInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Reader\UserReader;
 use SprykerEco\Zed\AmazonQuicksight\Business\Reader\UserReaderInterface;
+use SprykerEco\Zed\AmazonQuicksight\Business\Saver\QuicksightUserSaver;
+use SprykerEco\Zed\AmazonQuicksight\Business\Saver\QuicksightUserSaverInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Synchronizer\QuicksightAssetBundleImportJobSynchronizer;
 use SprykerEco\Zed\AmazonQuicksight\Business\Synchronizer\QuicksightAssetBundleImportJobSynchronizerInterface;
 use SprykerEco\Zed\AmazonQuicksight\Business\Updater\QuicksightAssetBundleImportJobUpdater;
@@ -72,17 +72,15 @@ class AmazonQuicksightBusinessFactory extends AbstractBusinessFactory
     }
 
     /**
-     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Creator\QuicksightUserCreatorInterface
+     * @return \SprykerEco\Zed\AmazonQuicksight\Business\Saver\QuicksightUserSaverInterface
      */
-    public function createQuicksightUserCreator(): QuicksightUserCreatorInterface
+    public function createQuicksightUserSaver(): QuicksightUserSaverInterface
     {
-        return new QuicksightUserCreator(
-            $this->createUserCollectionFilter(),
+        return new QuicksightUserSaver(
             $this->createQuicksightUserMatcher(),
             $this->getEntityManager(),
             $this->createUserAmazonQuicksightApiClient(),
-            $this->getMessengerFacade(),
-            $this->createErrorAdder(),
+            $this->createQuicksightUserReader(),
         );
     }
 

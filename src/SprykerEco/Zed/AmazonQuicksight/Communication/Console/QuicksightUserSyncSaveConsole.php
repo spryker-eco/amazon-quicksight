@@ -12,23 +12,21 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @deprecated Use {@link \SprykerEco\Zed\AmazonQuicksight\Communication\Console\QuicksightUserSyncSaveConsole} instead.
- *
  * @method \SprykerEco\Zed\AmazonQuicksight\Persistence\AmazonQuicksightRepositoryInterface getRepository()
  * @method \SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightFacadeInterface getFacade()
  * @method \SprykerEco\Zed\AmazonQuicksight\Communication\AmazonQuicksightCommunicationFactory getFactory()
  */
-class QuicksightUserSyncCreateConsole extends Console
+class QuicksightUserSyncSaveConsole extends Console
 {
     /**
      * @var string
      */
-    protected const COMMAND_NAME = 'quicksight-user:sync:create';
+    protected const COMMAND_NAME = 'quicksight-user:sync:save';
 
     /**
      * @var string
      */
-    protected const COMMAND_DESCRIPTION = 'Creates Quicksight users in persistence for users registered on the Quicksight side that can be matched with existing Backoffice users.';
+    protected const COMMAND_DESCRIPTION = 'Creates new and updates existing Quicksight users in persistence for users registered on the Quicksight side that can be matched with existing Backoffice users.';
 
     /**
      * @return void
@@ -50,7 +48,7 @@ class QuicksightUserSyncCreateConsole extends Console
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $quicksightUserCollectionResponseTransfer = $this->getFacade()
-            ->createMatchedQuicksightUsers();
+            ->saveMatchedQuicksightUsers();
 
         if ($quicksightUserCollectionResponseTransfer->getErrors()->count() === 0) {
             return static::CODE_SUCCESS;

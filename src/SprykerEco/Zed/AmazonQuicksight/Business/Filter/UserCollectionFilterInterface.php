@@ -7,8 +7,6 @@
 
 namespace SprykerEco\Zed\AmazonQuicksight\Business\Filter;
 
-use ArrayObject;
-
 interface UserCollectionFilterInterface
 {
     /**
@@ -19,9 +17,9 @@ interface UserCollectionFilterInterface
     public function filterOutUserTransfersNotApplicableForQuicksightUserDeletion(array $userTransfers): array;
 
     /**
-     * @param \ArrayObject<array-key, \Generated\Shared\Transfer\UserTransfer> $userTransfers
+     * @param list<\Generated\Shared\Transfer\UserTransfer> $userTransfers
      *
      * @return list<\Generated\Shared\Transfer\UserTransfer>
      */
-    public function filterOutUserTransfersWithExistingQuicksightUser(ArrayObject $userTransfers): array;
+    public function filterOutUserTransfersWithExistingQuicksightUser(array $userTransfers): array;
 }

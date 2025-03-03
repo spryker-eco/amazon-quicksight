@@ -51,13 +51,13 @@ class UserCollectionFilter implements UserCollectionFilterInterface
     }
 
     /**
-     * @param \ArrayObject<array-key, \Generated\Shared\Transfer\UserTransfer> $userTransfers
+     * @param list<\Generated\Shared\Transfer\UserTransfer> $userTransfers
      *
      * @return array<int|string, \Generated\Shared\Transfer\UserTransfer>
      */
-    public function filterOutUserTransfersWithExistingQuicksightUser(ArrayObject $userTransfers): array
+    public function filterOutUserTransfersWithExistingQuicksightUser(array $userTransfers): array
     {
-        return $this->filterOutUserTransfersWithPersistedQuicksightUser($userTransfers->getArrayCopy());
+        return $this->filterOutUserTransfersWithPersistedQuicksightUser($userTransfers);
     }
 
     /**

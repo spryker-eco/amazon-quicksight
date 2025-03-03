@@ -5,14 +5,16 @@
  * Use of this software requires acceptance of the Evaluation License Agreement. See LICENSE file.
  */
 
-namespace SprykerEco\Zed\AmazonQuicksight\Business\Creator;
+namespace SprykerEco\Zed\AmazonQuicksight\Business\Saver;
 
 use Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer;
 
-interface QuicksightUserCreatorInterface
+interface QuicksightUserSaverInterface
 {
     /**
+     * @param bool $skipExistingQuicksightUsers
+     *
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
      */
-    public function createMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer;
+    public function saveMatchedQuicksightUsers(bool $skipExistingQuicksightUsers = false): QuicksightUserCollectionResponseTransfer;
 }

@@ -13,8 +13,12 @@ interface QuicksightUserMatcherInterface
 {
     /**
      * @param \ArrayObject<array-key, \Generated\Shared\Transfer\QuicksightUserTransfer> $quicksightUserTransfers
+     * @param bool $filterOutExistingQuicksightUsers
      *
      * @return list<\Generated\Shared\Transfer\QuicksightUserTransfer>
      */
-    public function getQuicksightUsersMatchedWithExistingUsers(ArrayObject $quicksightUserTransfers): array;
+    public function getQuicksightUsersMatchedWithExistingUsers(
+        ArrayObject $quicksightUserTransfers,
+        bool $filterOutExistingQuicksightUsers = false
+    ): array;
 }

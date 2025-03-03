@@ -37,7 +37,7 @@ class QuicksightUserMatcher implements QuicksightUserMatcherInterface
     public function __construct(
         UserReaderInterface $userReader,
         UserCollectionFilterInterface $userCollectionFilter,
-        QuicksightUserCollectionFilterInterface $quicksightUserCollectionFilter
+        QuicksightUserCollectionFilterInterface $quicksightUserCollectionFilter,
     ) {
         $this->userReader = $userReader;
         $this->userCollectionFilter = $userCollectionFilter;
@@ -46,11 +46,14 @@ class QuicksightUserMatcher implements QuicksightUserMatcherInterface
 
     /**
      * @param \ArrayObject<array-key, \Generated\Shared\Transfer\QuicksightUserTransfer> $quicksightUserTransfers
+     * @param bool $filterOutExistingQuicksightUsers
      *
      * @return list<\Generated\Shared\Transfer\QuicksightUserTransfer>
      */
-    public function getQuicksightUsersMatchedWithExistingUsers(ArrayObject $quicksightUserTransfers): array
-    {
+    public function getQuicksightUsersMatchedWithExistingUsers(
+        ArrayObject $quicksightUserTransfers,
+        bool $filterOutExistingQuicksightUsers = false
+    ): array {
         $filteredQuicksightUserTransfers = $this->quicksightUserCollectionFilter->filterOutQuicksightUsersWithUnsupportedQuicksightUserRoles(
             $quicksightUserTransfers,
         );
@@ -58,11 +61,15 @@ class QuicksightUserMatcher implements QuicksightUserMatcherInterface
             return [];
         }
 
-        $userCollectionTransfer = $this->userReader->getUsersApplicableForQuicksightUserRegistration();
-        $filteredUserTransfers = $this->userCollectionFilter->filterOutUserTransfersWithExistingQuicksightUser(
-            $userCollectionTransfer->getUsers(),
-        );
-        $userTransfersIndexedByUsername = $this->getUserTransfersIndexedByUsername($filteredUserTransfers);
+        $userTransfers = $this->userReader->getUsersApplicableForQuicksightUserRegistration()->getUsers()->getArrayCopy();
+
+        if ($filterOutExistingQuicksightUsers) {
+            $userTransfers = $this->userCollectionFilter->filterOutUserTransfersWithExistingQuicksightUser(
+                $userTransfers,
+            );
+        }
+
+        $userTransfersIndexedByUsername = $this->getUserTransfersIndexedByUsername($userTransfers);
 
         $matchedQuicksightUserTransfers = [];
         foreach ($filteredQuicksightUserTransfers as $quicksightUserTransfer) {
@@ -79,7 +86,7 @@ class QuicksightUserMatcher implements QuicksightUserMatcherInterface
     }
 
     /**
-     * @param array<int|string, \Generated\Shared\Transfer\UserTransfer> $userTransfers
+     * @param list<\Generated\Shared\Transfer\UserTransfer> $userTransfers
      *
      * @return array<string, \Generated\Shared\Transfer\UserTransfer>
      */
