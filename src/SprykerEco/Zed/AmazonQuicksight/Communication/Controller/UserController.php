@@ -63,7 +63,7 @@ class UserController extends AbstractController
             return $this->getRedirectResponseReferer($request);
         }
 
-        $quicksightUserCollectionResponseTransfer = $this->getFacade()->createMatchedQuicksightUsers();
+        $quicksightUserCollectionResponseTransfer = $this->getFacade()->saveMatchedQuicksightUsers();
 
         if ($quicksightUserCollectionResponseTransfer->getErrors()->count() === 0) {
             $this->addSuccessMessage(static::SUCCESS_MESSAGE_USERS_SYNCHRONIZED);
