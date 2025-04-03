@@ -8,7 +8,13 @@
 namespace SprykerEco\Zed\AmazonQuicksight\Business\ApiClient;
 
 use Aws\QuickSight\Exception\QuickSightException;
+use Generated\Shared\Transfer\AmazonQInQuickSightTransfer;
+use Generated\Shared\Transfer\DataQnATransfer;
+use Generated\Shared\Transfer\DataStoriesTransfer;
 use Generated\Shared\Transfer\ErrorTransfer;
+use Generated\Shared\Transfer\ExecutiveSummaryTransfer;
+use Generated\Shared\Transfer\FeatureConfigurationsTransfer;
+use Generated\Shared\Transfer\GenerativeAuthoringTransfer;
 use Generated\Shared\Transfer\QuicksightConsoleTransfer;
 use Generated\Shared\Transfer\QuicksightDeleteUserRequestTransfer;
 use Generated\Shared\Transfer\QuicksightDeleteUserResponseTransfer;
@@ -226,6 +232,14 @@ class UserAmazonQuicksightApiClient implements UserAmazonQuicksightApiClientInte
             ->setExperienceConfiguration((new QuicksightExperienceConfigurationTransfer())->setQuickSightConsole(
                 (new QuicksightConsoleTransfer())->setInitialPath(
                     $this->amazonQuicksightConfig->getQuicksightConsoleInitialPath(),
+                )->setFeatureConfigurations(
+                    (new FeatureConfigurationsTransfer())->setAmazonQInQuickSight(
+                        (new AmazonQInQuickSightTransfer())
+                            ->setDataQnA((new DataQnATransfer())->setEnabled(true))
+                            ->setDataStories((new DataStoriesTransfer())->setEnabled(true))
+                            ->setExecutiveSummary((new ExecutiveSummaryTransfer())->setEnabled(true))
+                            ->setGenerativeAuthoring((new GenerativeAuthoringTransfer())->setEnabled(true))
+                    )
                 ),
             ));
     }

@@ -3,6 +3,6 @@
     "name": "spryker-zed-quicksight-analytics",
     "version": "0.1.0",
     "dependencies": {
-        "amazon-quicksight-embedding-sdk": "2.7.0"
+        "amazon-quicksight-embedding-sdk": "2.10.0"
     }
 }
