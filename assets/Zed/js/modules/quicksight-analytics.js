@@ -45,6 +45,11 @@ $(document).ready(function () {
                         break;
                     }
                 }
+            },
+            toolbarOptions: {
+                executiveSummary: true,
+                dataQnA: true,
+                buildVisual: true,
             }
         };
         const embeddedConsoleExperience = await embeddingContext.embedConsole(frameOptions, contentOptions);
