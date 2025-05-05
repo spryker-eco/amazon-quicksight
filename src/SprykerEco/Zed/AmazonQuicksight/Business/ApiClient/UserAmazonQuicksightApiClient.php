@@ -232,14 +232,6 @@ class UserAmazonQuicksightApiClient implements UserAmazonQuicksightApiClientInte
             ->setExperienceConfiguration((new QuicksightExperienceConfigurationTransfer())->setQuickSightConsole(
                 (new QuicksightConsoleTransfer())->setInitialPath(
                     $this->amazonQuicksightConfig->getQuicksightConsoleInitialPath(),
-                )->setFeatureConfigurations(
-                    (new FeatureConfigurationsTransfer())->setAmazonQInQuickSight(
-                        (new AmazonQInQuickSightTransfer())
-                            ->setDataQnA((new DataQnATransfer())->setEnabled(true))
-                            ->setDataStories((new DataStoriesTransfer())->setEnabled(true))
-                            ->setExecutiveSummary((new ExecutiveSummaryTransfer())->setEnabled(true))
-                            ->setGenerativeAuthoring((new GenerativeAuthoringTransfer())->setEnabled(true))
-                    )
                 ),
             ));
     }

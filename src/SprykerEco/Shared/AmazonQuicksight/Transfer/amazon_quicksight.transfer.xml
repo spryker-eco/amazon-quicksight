@@ -92,34 +92,6 @@
 
     <transfer name="QuicksightConsole" strict="true">
         <property name="initialPath" type="string"/>
-        <property name="featureConfigurations" type="FeatureConfigurations"/>
-    </transfer>
-
-    <transfer name="FeatureConfigurations" strict="true">
-        <property name="amazonQInQuickSight" type="AmazonQInQuickSight"/>
-    </transfer>
-
-    <transfer name="AmazonQInQuickSight" strict="true">
-        <property name="dataQnA" type="DataQnA"/>
-        <property name="dataStories" type="DataStories"/>
-        <property name="executiveSummary" type="ExecutiveSummary"/>
-        <property name="generativeAuthoring" type="GenerativeAuthoring"/>
-    </transfer>
-
-    <transfer name="DataQnA" strict="true">
-        <property name="enabled" type="bool"/>
-    </transfer>
-
-    <transfer name="DataStories" strict="true">
-        <property name="enabled" type="bool"/>
-    </transfer>
-
-    <transfer name="ExecutiveSummary" strict="true">
-        <property name="enabled" type="bool"/>
-    </transfer>
-
-    <transfer name="GenerativeAuthoring" strict="true">
-        <property name="enabled" type="bool"/>
     </transfer>
 
     <transfer name="QuicksightGenerateEmbedUrlResponse" strict="true">
