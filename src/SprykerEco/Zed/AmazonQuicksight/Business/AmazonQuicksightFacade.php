@@ -81,13 +81,29 @@ class AmazonQuicksightFacade extends AbstractFacade implements AmazonQuicksightF
      *
      * @api
      *
+     * @deprecated Use {@link \SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightFacade::saveMatchedQuicksightUsers()} instead.
+     *
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
      */
     public function createMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer
     {
         return $this->getFactory()
-            ->createQuicksightUserCreator()
-            ->createMatchedQuicksightUsers();
+            ->createQuicksightUserSaver()
+            ->saveMatchedQuicksightUsers(true);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @api
+     *
+     * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
+     */
+    public function saveMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer
+    {
+        return $this->getFactory()
+            ->createQuicksightUserSaver()
+            ->saveMatchedQuicksightUsers();
     }
 
     /**

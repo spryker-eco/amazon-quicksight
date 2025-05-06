@@ -17,4 +17,11 @@ interface QuicksightUserReaderInterface
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionTransfer
      */
     public function getQuicksightUserCollectionByUserTransfers(array $userTransfers): QuicksightUserCollectionTransfer;
+
+    /**
+     * @param list<int> $userIds
+     *
+     * @return \Generated\Shared\Transfer\QuicksightUserCollectionTransfer
+     */
+    public function getQuicksightUserCollectionByUserIds(array $userIds): QuicksightUserCollectionTransfer;
 }

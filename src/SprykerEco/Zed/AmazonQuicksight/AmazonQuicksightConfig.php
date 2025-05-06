@@ -21,7 +21,17 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     /**
      * @var string
      */
+    protected const QUICKSIGHT_USER_ROLE_READER_PRO = 'READER_PRO';
+
+    /**
+     * @var string
+     */
     protected const QUICKSIGHT_USER_ROLE_AUTHOR = 'AUTHOR';
+
+    /**
+     * @var string
+     */
+    protected const QUICKSIGHT_USER_ROLE_AUTHOR_PRO = 'AUTHOR_PRO';
 
     /**
      * @uses \Orm\Zed\User\Persistence\Map\SpyUserTableMap::COL_STATUS_ACTIVE
@@ -162,6 +172,26 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     protected const STS_CLIENT_VERSION = '2011-06-15';
 
     /**
+     * @var bool
+     */
+    protected const IS_DATA_QNA_ENABLED = true;
+
+    /**
+     * @var bool
+     */
+    protected const IS_DATA_STORIES_ENABLED = true;
+
+    /**
+     * @var bool
+     */
+    protected const IS_EXECUTIVE_SUMMARY_ENABLED = true;
+
+    /**
+     * @var bool
+     */
+    protected const IS_GENERATIVE_AUTHORING_ENABLED = true;
+
+    /**
      * Specification:
      * - Returns the list of available Quicksight user roles.
      * - The list of available roles can be found here: {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_User.html#QS-Type-User-Role}.
@@ -174,7 +204,9 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     {
         return [
             static::QUICKSIGHT_USER_ROLE_READER,
+            static::QUICKSIGHT_USER_ROLE_READER_PRO,
             static::QUICKSIGHT_USER_ROLE_AUTHOR,
+            static::QUICKSIGHT_USER_ROLE_AUTHOR_PRO,
         ];
     }
 
@@ -191,6 +223,7 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     {
         return [
             static::QUICKSIGHT_USER_ROLE_AUTHOR,
+            static::QUICKSIGHT_USER_ROLE_AUTHOR_PRO,
         ];
     }
 
@@ -606,5 +639,57 @@ class AmazonQuicksightConfig extends AbstractBundleConfig
     public function getStsClientRoleSessionName(): string
     {
         return static::STS_CLIENT_ROLE_SESSION_NAME;
+    }
+
+    /**
+     * Specification:
+     * - Defines if the data QnA feature is enabled.
+     *
+     * @api
+     *
+     * @return bool
+     */
+    public function isDataQnAEnabled(): bool
+    {
+        return static::IS_DATA_QNA_ENABLED;
+    }
+
+    /**
+     * Specification:
+     * - Defines if the data stories feature is enabled.
+     *
+     * @api
+     *
+     * @return bool
+     */
+    public function isDataStoriesEnabled(): bool
+    {
+        return static::IS_DATA_STORIES_ENABLED;
+    }
+
+    /**
+     * Specification:
+     * - Defines if the executive summary feature is enabled.
+     *
+     * @api
+     *
+     * @return bool
+     */
+    public function isExecutiveSummaryEnabled(): bool
+    {
+        return static::IS_EXECUTIVE_SUMMARY_ENABLED;
+    }
+
+    /**
+     * Specification:
+     * - Defines if the generative authoring feature is enabled.
+     *
+     * @api
+     *
+     * @return bool
+     */
+    public function isGenerativeAuthoringEnabled(): bool
+    {
+        return static::IS_GENERATIVE_AUTHORING_ENABLED;
     }
 }

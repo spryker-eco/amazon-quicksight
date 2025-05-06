@@ -39,6 +39,29 @@ class QuicksightUserReader implements QuicksightUserReaderInterface
             $quicksightUserConditionsTransfer->addIdUser($userTransfer->getIdUserOrFail());
         }
 
+        return $this->getQuicksightUserCollectionByCondition($quicksightUserConditionsTransfer);
+    }
+
+    /**
+     * @param list<int> $userIds
+     *
+     * @return \Generated\Shared\Transfer\QuicksightUserCollectionTransfer
+     */
+    public function getQuicksightUserCollectionByUserIds(array $userIds): QuicksightUserCollectionTransfer
+    {
+        $quicksightUserConditionsTransfer = (new QuicksightUserConditionsTransfer())->setUserIds($userIds);
+
+        return $this->getQuicksightUserCollectionByCondition($quicksightUserConditionsTransfer);
+    }
+
+    /**
+     * @param \Generated\Shared\Transfer\QuicksightUserConditionsTransfer $quicksightUserConditionsTransfer
+     *
+     * @return \Generated\Shared\Transfer\QuicksightUserCollectionTransfer
+     */
+    protected function getQuicksightUserCollectionByCondition(
+        QuicksightUserConditionsTransfer $quicksightUserConditionsTransfer
+    ): QuicksightUserCollectionTransfer {
         $quicksightUserCriteriaTransfer = (new QuicksightUserCriteriaTransfer())
             ->setQuicksightUserConditions($quicksightUserConditionsTransfer);
 

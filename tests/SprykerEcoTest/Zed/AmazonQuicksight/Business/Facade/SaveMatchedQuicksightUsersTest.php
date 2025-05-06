@@ -24,10 +24,10 @@ use SprykerEcoTest\Zed\AmazonQuicksight\AmazonQuicksightBusinessTester;
  * @group AmazonQuicksight
  * @group Business
  * @group Facade
- * @group CreateMatchedQuicksightUsersTest
+ * @group SaveMatchedQuicksightUsersTest
  * Add your own group annotations below this line
  */
-class CreateMatchedQuicksightUsersTest extends Unit
+class SaveMatchedQuicksightUsersTest extends Unit
 {
     /**
      * @uses \SprykerEco\Zed\AmazonQuicksight\Business\ApiClient\UserAmazonQuicksightApiClient::RESPONSE_KEY_USER_LIST
@@ -105,7 +105,7 @@ class CreateMatchedQuicksightUsersTest extends Unit
         );
 
         // Act
-        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->createMatchedQuicksightUsers();
+        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->saveMatchedQuicksightUsers();
 
         // Assert
         $this->assertCount(0, $quicksightUserCollectionResponseTransfer->getErrors());
@@ -122,7 +122,7 @@ class CreateMatchedQuicksightUsersTest extends Unit
     /**
      * @return void
      */
-    public function testShouldNotUpdateExistingQuicksightUserThatMatchesPersistedUserEmail(): void
+    public function testShouldUpdateExistingQuicksightUserThatMatchesPersistedUserEmail(): void
     {
         // Arrange
         $userTransfer = $this->tester->haveUser();
@@ -134,17 +134,19 @@ class CreateMatchedQuicksightUsersTest extends Unit
         $this->tester->setDependency(
             AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
             $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(
-                $this->createListUsersSuccessfulResponse([$quicksightUserTransfer->setRole(static::QUICKSIGHT_USER_ROLE_AUTHOR)]),
+                $this->createListUsersSuccessfulResponse([
+                    $quicksightUserTransfer->setRole(static::QUICKSIGHT_USER_ROLE_AUTHOR),
+                ]),
                 'listUsers',
             ),
         );
 
         // Act
-        $this->tester->getFacade()->createMatchedQuicksightUsers();
+        $this->tester->getFacade()->saveMatchedQuicksightUsers();
 
         // Assert
         $this->assertSame(
-            static::QUICKSIGHT_USER_ROLE_READER,
+            static::QUICKSIGHT_USER_ROLE_AUTHOR,
             $this->tester->findQuicksightUserByArn($quicksightUserTransfer->getArnOrFail())->getRole(),
         );
     }
@@ -166,35 +168,7 @@ class CreateMatchedQuicksightUsersTest extends Unit
         );
 
         // Act
-        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->createMatchedQuicksightUsers();
-
-        // Assert
-        $this->assertCount(0, $quicksightUserCollectionResponseTransfer->getErrors());
-        $this->assertCount(0, $quicksightUserCollectionResponseTransfer->getQuicksightUsers());
-    }
-
-    /**
-     * @return void
-     */
-    public function testShouldReturnEmptyCollectionWhenMatchedUserAlreadyHavePersistedQuicksightUser(): void
-    {
-        // Arrange
-        $userTransfer = $this->tester->haveUser();
-        $quicksightUserTransfer = $this->tester->haveQuicksightUser($userTransfer, [
-            QuicksightUserTransfer::USER_NAME => $userTransfer->getUsernameOrFail(),
-            QuicksightUserTransfer::ROLE => static::QUICKSIGHT_USER_ROLE_READER,
-        ]);
-
-        $this->tester->setDependency(
-            AmazonQuicksightDependencyProvider::AWS_QUICKSIGHT_CLIENT,
-            $this->tester->getAwsQuicksightClientMockWithSuccessfulResponse(
-                $this->createListUsersSuccessfulResponse([$quicksightUserTransfer]),
-                'listUsers',
-            ),
-        );
-
-        // Act
-        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->createMatchedQuicksightUsers();
+        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->saveMatchedQuicksightUsers();
 
         // Assert
         $this->assertCount(0, $quicksightUserCollectionResponseTransfer->getErrors());
@@ -222,7 +196,7 @@ class CreateMatchedQuicksightUsersTest extends Unit
         );
 
         // Act
-        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->createMatchedQuicksightUsers();
+        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->saveMatchedQuicksightUsers();
 
         // Assert
         $this->assertCount(0, $quicksightUserCollectionResponseTransfer->getErrors());
@@ -251,7 +225,7 @@ class CreateMatchedQuicksightUsersTest extends Unit
         );
 
         // Act
-        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->createMatchedQuicksightUsers();
+        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->saveMatchedQuicksightUsers();
 
         // Assert
         $this->assertCount(0, $quicksightUserCollectionResponseTransfer->getErrors());
@@ -275,7 +249,7 @@ class CreateMatchedQuicksightUsersTest extends Unit
         );
 
         // Act
-        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->createMatchedQuicksightUsers();
+        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->saveMatchedQuicksightUsers();
 
         // Assert
         $this->assertCount(1, $quicksightUserCollectionResponseTransfer->getErrors());
@@ -303,7 +277,7 @@ class CreateMatchedQuicksightUsersTest extends Unit
         );
 
         // Act
-        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->createMatchedQuicksightUsers();
+        $quicksightUserCollectionResponseTransfer = $this->tester->getFacade()->saveMatchedQuicksightUsers();
 
         // Assert
         $this->assertCount(1, $quicksightUserCollectionResponseTransfer->getErrors());

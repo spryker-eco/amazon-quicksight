@@ -92,9 +92,27 @@ interface AmazonQuicksightFacadeInterface
      *
      * @api
      *
+     * @deprecated Use {@link \SprykerEco\Zed\AmazonQuicksight\Business\AmazonQuicksightFacadeInterface::saveMatchedQuicksightUsers()} instead.
+     *
      * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
      */
     public function createMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer;
+
+    /**
+     * Specification:
+     * - Sends request to AWS API to get list of registered Quicksight users. For more information see {@link https://docs.aws.amazon.com/quicksight/latest/APIReference/API_ListUsers.html}.
+     * - Filters out Quicksight users with unsupported roles using {@link \SprykerEco\Zed\AmazonQuicksight\AmazonQuicksightConfig::getQuicksightUserRoles()}.
+     * - Fetches user transfers from persistence.
+     * - Matches registered on Quicksight side Quicksight users with users from persistence by username.
+     * - Persists matched Quicksight users.
+     * - Adds errors to `QuicksightUserCollectionResponseTransfer.errors` if any occurs.
+     * - Returns `QuicksightUserCollectionResponseTransfer` with persisted Quicksight users and errors if any occurs.
+     *
+     * @api
+     *
+     * @return \Generated\Shared\Transfer\QuicksightUserCollectionResponseTransfer
+     */
+    public function saveMatchedQuicksightUsers(): QuicksightUserCollectionResponseTransfer;
 
     /**
      * Specification:
